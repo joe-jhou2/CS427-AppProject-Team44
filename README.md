@@ -8,7 +8,7 @@ The code for CS427 Android app.
 | Name          | NetID         | GitHub ID   | Role          | Experience    |
 | ------------- | ------------- | ------------| ------------- | ------------- |
 |  Yibin Huang  |  yibinh2      | Erichuangyb | Developer     | Fair          |            
-|  Riley Morris |  rileydm2     | RileyMorris | Tech Leader   | Experienced   |
+|  Riley Morris |  rileydm2     | RileyMorris | Tech Leader   | Java, Python  |
 |  Zhao Li      |  zhaol4       | ericillinois| Developer     | Beginner      |
 |  Jeff Hank    |  jdhank2      | jeff-hank   | Developer     | coding years  |
 |  Justin Lin   |  ytl5         | justinnlin  | Developer     | python, C++   |
