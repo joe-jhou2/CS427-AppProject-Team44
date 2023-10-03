@@ -14,7 +14,7 @@ The code for CS427 Android app.
 |  Justin Lin   |  ytl5         | justinnlin  | Developer     | python, C++   |
 |  Luis Chavez  |  lwchave2     | luiswally   | Developer     | Matlab, CS    |
 |  Jue Hou      |  jueh4        | juehoujhou4 | Manager       | python,R,Java |
-|  Krystal Tsoi |  ktsoi3       | ktsoi3      | Developer     | JS,python,C++|
+|  Krystal Tsoi |  ktsoi3       | ktsoi3      | Developer     | JS,python,C++ |
 <br/>
 
 
@@ -25,8 +25,11 @@ Meeting time: Every week on Sun 6:00 PM Pacific Time
 (During the weeks when new tasks are released, we may convene earlier to allocate assignments)
 </br> 
 Meeting location (zoom link):https://illinois.zoom.us/j/86367971965?pwd=NmpMVUI1QkJSclVuUjlsMWxWaXpXdz09
-Please use your UIUC email login zoom. 
+</br> 
+Please use your UIUC email login zoom.
+</br>
 Meeting ID: 863 6797 1965
+</br>
 Passcode 320900
 </br> 
 </br>
@@ -38,14 +41,14 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
 | ---------------| --------------------------------| ----------------------|
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
+|    yibinh2     | Finish milestone1               | milestone2,req4       |
+|    rileydm2    | Finish milestone1               | lead milestone2,req3  |
+|    zhaol4      | Finish milestone1               | milestone2,req3       |
+|    jdhank2     | Finish milestone1               | milestone2,req3       |
+|    ytl5        | Finish milestone1               | milestone2,req4       |
+|    lwchave2    | Finish milestone1               | milestone2,req1       |
+|    jueh4       | Finish milestone1               | milestone2,req2       |
+|    ktsoi3      | Finish milestone1               | milestone2,req2       |
 </br>
 
 
