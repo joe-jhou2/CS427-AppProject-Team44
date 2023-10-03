@@ -3,6 +3,11 @@ The code for CS427 Android app.
 <br/>
 <br/>
 
+Project documents
+<br/>
+https://drive.google.com/drive/u/2/folders/1uyBQXUpRiI5NP4rH4lyn0NL2cK9AxRci
+<br/>
+
 <b>Team # member information</b>
 <br/>
 | Name          | NetID         | GitHub ID   | Role          | Experience    |
