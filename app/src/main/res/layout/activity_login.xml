@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textViewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Authentication Page" />
+
+    <LinearLayout
+        android:id="@+id/login"
+        android:layout_width="409dp"
+        android:layout_height="1000dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/signUpText"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Sign Up" />
+
+            <EditText
+                android:id="@+id/inputSignUpUsername"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:hint="username"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/inputSignUpPassword"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:hint="password"
+                android:inputType="text" />
+            <Button
+                android:id="@+id/buttonTemp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="LAYOUT SELECTION" />
+            <Button
+                android:id="@+id/buttonSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:text="sign up" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/signInText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sign In" />
+
+                <EditText
+                    android:id="@+id/inputSignInUsername"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:hint="username"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/inputSignInPassword"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:hint="password"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/buttonSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:text="sign in" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
