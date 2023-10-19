@@ -84,14 +84,14 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
 | ---------------| --------------------------------| ----------------------|
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
+|   yibinh2      |        complete milestone2      |   Milestone3, task1   |
+|   rileydm2     |        complete milestone2      | Milestone3,lead task2 |
+|   zhaol4       |        complete milestone2      |   Milestone3, task2   |
+|   jdhank2      |        complete milestone2      |   Milestone3, task2   |
+|   ytl5         |        complete milestone2      |   Milestone3, task1   |
+|   lwchave2     |        complete milestone2      | Milestone3,lead task1 |
+|   jueh4        |        complete milestone2      |   Milestone3, task3   |
+|   ktsoi3       |        complete milestone2      | Milestone3,lead task3 |
 </br>
 
 
