@@ -32,6 +32,10 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" >
+        </activity>
 <!--        <service>-->
 <!--            <intent-filter>-->
 <!--                <action android:name="android.accounts.AccountAuthenticator" />-->
