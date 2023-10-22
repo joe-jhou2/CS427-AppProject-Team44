@@ -1,5 +1,6 @@
 package edu.uiuc.cs427app;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,6 +13,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import edu.uiuc.cs427app.databinding.ActivityMainBinding;
 
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,7 +61,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.buttonAddLocation:
-                // Implement this action to add a new location to the list of locations
+                // TODO Implement this action to add a new location to the list of locations
+                // the below should be used on an Add City Activity add tied to a button
+                // "user" and "cityname" should be replaced with the proper strings
+
+                // class to add values in the database
+                ContentValues values = new ContentValues();
+
+                //creates key-value pairs for the db ... need username and city to add
+                values.put(DataStore.COL_USERNAME,  "user");
+                values.put(DataStore.COL_CITY, "cityname");
+
+                // inserting into database through content URI
+                getContentResolver().insert(DataStore.CONTENT_URI, values);
+
+                // displaying a toast message
+                Toast.makeText(getBaseContext(), "New City Saved", Toast.LENGTH_LONG).show();
                 break;
         }
     }
