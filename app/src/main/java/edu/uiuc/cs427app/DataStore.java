@@ -16,6 +16,11 @@ public class DataStore extends ContentProvider {
 
     public DataStore() {
     }
+
+    //TODO  -still need to handle queries to pref table
+    //      -pref table is created
+    //      -insert, delete, query all hard-wired to city_table
+
     // defining authority so that other application can access it
     static final String PROVIDER_NAME = "edu.uiuc.cs427app.provider";
 
@@ -125,16 +130,9 @@ public class DataStore extends ContentProvider {
     }
 
     // creating object of database
-    // to perform query
     private SQLiteDatabase db;
 
-    // declaring name of the database
-//    static final String DATABASE_NAME = "UserDB";
-
     static final String DATABASE_NAME = "Team44DB";
-
-    // declaring table name of the database
-//    static final String TABLE_NAME = "Users";
 
     static final String CITY_TABLE = "CITY_TABLE";
     static final String COL_ID = "ID";
