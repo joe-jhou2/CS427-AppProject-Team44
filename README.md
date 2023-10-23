@@ -12,7 +12,7 @@ https://drive.google.com/drive/u/2/folders/1uyBQXUpRiI5NP4rH4lyn0NL2cK9AxRci
 <br/>
 | Name          | NetID         | GitHub ID   | Role          | Experience    |
 | ------------- | ------------- | ------------| ------------- | ------------- |
-|  Yibin Huang  |  yibinh2      | Erichuangyb | Developer     | Fair          |            
+|  Yibin Huang  |  yibinh2      | Erichuangyb | Developer     | Java, Python  |            
 |  Riley Morris |  rileydm2     | RileyMorris | Tech Leader   | Java, Python  |
 |  Zhao Li      |  zhaol4       | ericillinois| Developer     | Beginner      |
 |  Jeff Hank    |  jdhank2      | jeff-hank   | Developer     | coding years  |
