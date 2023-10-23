@@ -1,5 +1,6 @@
 package edu.uiuc.cs427app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,14 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         //Implement this (create an Intent that goes to a new Activity, which shows the map)
+        //todo: need to further implement MapActivity.class
+        switch (view.getId()){
+            case R.id.mapButton:
+                Intent mapIntent = new Intent(DetailsActivity.this, MapActivity.class);
+                mapIntent.putExtra("city", getIntent().getStringExtra("city"));
+                startActivity(mapIntent);
+                break;
+        }
     }
 }
 
