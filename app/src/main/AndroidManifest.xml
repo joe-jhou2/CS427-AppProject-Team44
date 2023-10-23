@@ -15,34 +15,38 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFirstApp">
         <activity
+            android:name=".AddCityActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".DetailsActivity" android:exported="true"></activity>
+        <activity
+            android:name=".DetailsActivity"
+            android:exported="true" />
         <activity
             android:name=".CreateAccountActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="Settings" >
-        </activity>
-<!--        <service>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.accounts.AccountAuthenticator" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data android:name="android.accounts.AccountAuthenticator"-->
-<!--                android:resource="@xml/authenticator" />-->
-<!--        </service>-->
+            android:label="Settings"></activity>
+
+        <provider
+            android:name=".DataStore"
+            android:authorities="edu.uiuc.cs427app.provider"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
