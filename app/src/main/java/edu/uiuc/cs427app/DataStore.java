@@ -11,185 +11,319 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
+
 import java.util.HashMap;
 public class DataStore extends ContentProvider {
 
     public DataStore() {
     }
 
-    //TODO  -still need to handle queries to pref table
-    //      -pref table is created
-    //      -insert, delete, query all hard-wired to city_table
+    //TODO  -issue with inserting a preference for user that already exists
+    //      - need to check if exists and perform either an update or an insert and delete
+
 
     // defining authority so that other application can access it
     static final String PROVIDER_NAME = "edu.uiuc.cs427app.provider";
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME);
+    public static final String PATH_CITY = "city";
+    public static final String PATH_PREF = "pref";
 
-    // defining content URI
-    static final String URL = "content://" + PROVIDER_NAME + "/city_table";
 
-    // parsing the content URI
-    static final Uri CONTENT_URI = Uri.parse(URL);
-    static final int uriCode = 1;
-    static final UriMatcher uriMatcher;
-    private static HashMap<String, String> values;
+    public static final class CityEntry implements BaseColumns {
+        // Content URI represents the base location for the table
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CITY).build();
 
-    static {
+        // These are special type prefixes that specify if a URI returns a list or a specific item
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI  + "/" + PATH_CITY;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_CITY;
 
-        // to match the content URI
-        // every time user access table under content provider
-        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        // Define the table schema
+        public static final String TABLE_NAME = "CITY_TABLE";
+        public static final String COL_USERNAME = "USERNAME";
+        public static final String COL_CITY = "CITY";
+        public static final String COL_STATE = "STATE";
+        public static final String COL_LATITUDE = "LATITUDE";
+        public static final String COL_LONGITUDE = "LONGITUDE";
 
-        // to access whole table
-        uriMatcher.addURI(PROVIDER_NAME, "city_table", uriCode);
-
-        // to access a particular row
-        // of the table
-        uriMatcher.addURI(PROVIDER_NAME, "city_table/*", uriCode);
+        // Build a URI to find a specific city by it's identifier
+        public static Uri buildCityUri(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int count = 0;
-        switch (uriMatcher.match(uri)) {
-            case uriCode:
-                count = db.delete(CITY_TABLE, selection, selectionArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+    public static final class PrefEntry implements BaseColumns {
+        // Content URI represents the base location for the table
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PREF).build();
+
+        // These are special type prefixes that specify if a URI returns a list or a specific item
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI  + "/" + PATH_PREF;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_PREF;
+
+        // Define the table schema
+        public static final String TABLE_NAME = "PREF_TABLE";
+        public static final String COL_USERNAME = "USERNAME";
+        public static final String COL_THEMENAME = "THEMENAME";
+
+        // Build a URI to find a specific pref by it's identifier
+        public static Uri buildPrefUri(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
         }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return count;
+
+    }
+
+    private static final int CITY = 10;
+    private static final int CITY_ID = 11;
+    private static final int PREF = 20;
+    private static final int PREF_ID = 21;
+
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private DatabaseHelper dbOpenHelper;
+
+    @Override
+    public boolean onCreate() {
+        dbOpenHelper = new DatabaseHelper(getContext());
+        return true;
+    }
+
+    /**
+     * Builds a UriMatcher that is used to determine witch database request is being made.
+     */
+    public static UriMatcher buildUriMatcher(){
+        String content = PROVIDER_NAME;
+
+        // All paths to the UriMatcher have a corresponding code to return
+        // when a match is found (the ints above).
+        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        matcher.addURI(content, PATH_CITY, CITY);
+        matcher.addURI(content, PATH_CITY + "/#", CITY_ID);
+        matcher.addURI(content, PATH_PREF, PREF);
+        matcher.addURI(content, PATH_PREF + "/#", PREF_ID);
+
+        return matcher;
     }
 
     @Override
     public String getType(Uri uri) {
-        switch (uriMatcher.match(uri)) {
-            case uriCode:
-                return "vnd.android.cursor.dir/city_table";
+        switch(sUriMatcher.match(uri)){
+            case CITY:
+                return CityEntry.CONTENT_TYPE;
+            case CITY_ID:
+                return CityEntry.CONTENT_ITEM_TYPE;
+            case PREF:
+                return PrefEntry.CONTENT_TYPE;
+            case PREF_ID:
+                return PrefEntry.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalArgumentException("Unsupported URI: " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long rowID = db.insert(CITY_TABLE, "", values);
-        if (rowID > 0) {
-            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-            getContext().getContentResolver().notifyChange(_uri, null);
-            return _uri;
-        }
-        throw new SQLiteException("Failed to add a record into " + uri);
-    }
+        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        long _id;
+        Uri returnUri;
 
-
-    @Override
-    public boolean onCreate() {
-        Context context = getContext();
-        DatabaseHelper dbHelper = new DatabaseHelper(context);
-        db = dbHelper.getWritableDatabase();
-        if (db != null) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(CITY_TABLE);
-        switch (uriMatcher.match(uri)) {
-            case uriCode:
-                qb.setProjectionMap(values);
+        switch(sUriMatcher.match(uri)){
+            case CITY:
+                _id = db.insert(CityEntry.TABLE_NAME, null, values);
+                if(_id > 0){
+                    returnUri =  CityEntry.buildCityUri(_id);
+                } else{
+                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                }
+                break;
+            case PREF:
+                _id = db.insert(PrefEntry.TABLE_NAME, null, values);
+                if(_id > 0){
+                    returnUri = PrefEntry.buildPrefUri(_id);
+                } else{
+                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                }
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        if (sortOrder == null || sortOrder == "") {
-            sortOrder = COL_ID;
-        }
-        Cursor c = qb.query(db, projection, selection, selectionArgs, null,
-                null, sortOrder);
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-        return c;    }
 
-    @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
-        int count = 0;
-        switch (uriMatcher.match(uri)) {
-            case uriCode:
-                count = db.update(CITY_TABLE, values, selection, selectionArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
+        // Use this on the URI passed into the function to notify any observers that the uri has
+        // changed.
         getContext().getContentResolver().notifyChange(uri, null);
-        return count;
+        return returnUri;
     }
 
-    // creating object of database
-    private SQLiteDatabase db;
 
-    static final String DATABASE_NAME = "Team44DB";
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        int rows; // Number of rows effected
 
-    static final String CITY_TABLE = "CITY_TABLE";
-    static final String COL_ID = "ID";
-    static final String COL_USERNAME = "USERNAME";
-    static final String COL_CITY = "CITY";
-    static final String COL_STATE = "STATE";
-    static final String COL_LATITUDE = "LATITUDE";
-    static final String COL_LONGITUDE = "LONGITUDE";
+        switch(sUriMatcher.match(uri)){
+            case CITY:
+                rows = db.delete(CityEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case PREF:
+                rows = db.delete(PrefEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
 
-    static final String PREF_TABLE = "PREF_TABLE";
-    static final String COL_THEMENAME = "THEMENAME";
+        // Because null could delete all rows:
+        if(selection == null || rows != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
+        return rows;
+    }
 
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        int rows;
 
+        switch(sUriMatcher.match(uri)){
+            case CITY:
+                rows = db.delete(CityEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case PREF:
+                rows = db.delete(PrefEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        if(rows != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rows;
+    }
 
-    // declaring version of the database
-    static final int DATABASE_VERSION = 1;
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        Cursor retCursor;
+        switch(sUriMatcher.match(uri)){
+            case CITY:
+                retCursor = db.query(
+                        CityEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case CITY_ID:
+                long _id = ContentUris.parseId(uri);
+                retCursor = db.query(
+                        CityEntry.TABLE_NAME,
+                        projection,
+                        CityEntry._ID + " = ?",
+                        new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case PREF:
+                retCursor = db.query(
+                        PrefEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case PREF_ID:
+                _id = ContentUris.parseId(uri);
+                retCursor = db.query(
+                        PrefEntry.TABLE_NAME,
+                        projection,
+                        PrefEntry._ID + " = ?",
+                        new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
 
-    static final String CREATE_DB_CITY_TABLE = " CREATE TABLE " + CITY_TABLE
-            + " ("+COL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
-            + ", "+COL_USERNAME+" TEXT NOT NULL"
-            + ", "+COL_CITY+" TEXT NOT NULL"
-//            + ", "+COL_STATE+" TEXT NOT NULL"
-//            + ", "+COL_LATITUDE+" REAL NOT NULL"
-//            + ", "+COL_LONGITUDE+" REAL NOT NULL"
-            + ");";
-    static final String CREATE_DB_PREF_TABLE = " CREATE TABLE " + CITY_TABLE
-            + " ("+COL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
-            + ", "+COL_USERNAME+" TEXT NOT NULL"
-            + ", "+COL_THEMENAME+" TEXT NOT NULL"
-            + ");";
-
-
+        // Set the notification URI for the cursor to the one passed into the function. This
+        // causes the cursor to register a content observer to watch for changes that happen to
+        // this URI and any of it's descendants. By descendants, we mean any URI that begins
+        // with this path.
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return retCursor;
+    }
 
     // creating a database
     private static class DatabaseHelper extends SQLiteOpenHelper {
+        // declaring version of the database
+        private static final int DATABASE_VERSION = 1;
 
-        // defining a constructor
+        // declaring name of the database
+        private static final String DATABASE_NAME = "Team44DB";
+
+        // defining the structure of the City Table
+        static final String CREATE_DB_CITY_TABLE = " CREATE TABLE " + CityEntry.TABLE_NAME
+                + " ("+CityEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
+                + ", "+CityEntry.COL_USERNAME+" TEXT NOT NULL"
+                + ", "+CityEntry.COL_CITY+" TEXT NOT NULL"
+//                + ", "+CityEntry.COL_STATE+" TEXT NOT NULL"
+//                + ", "+CityEntry.COL_LATITUDE+" REAL NOT NULL"
+//                + ", "+CityEntry.COL_LONGITUDE+" REAL NOT NULL"
+                + ");";
+        // defining the structure of the Pref Table
+        static final String CREATE_DB_PREF_TABLE = " CREATE TABLE " + PrefEntry.TABLE_NAME
+                + " ("+PrefEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
+                + ", "+PrefEntry.COL_USERNAME+" TEXT UNIQUE NOT NULL"
+                + ", "+PrefEntry.COL_THEMENAME+" TEXT NOT NULL"
+                + ");";
+
+        /**
+         * Default constructor.
+         * @param context The application context using this database.
+         */
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
-        // creating a table in the database
+        /**
+         * Called when the database is first created.
+         * @param db The database being created, which all SQL statements will be executed on.
+         */
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_DB_CITY_TABLE);
             db.execSQL(CREATE_DB_PREF_TABLE);
         }
-
+        /**
+         * Called whenever DATABASE_VERSION is incremented. This is used whenever schema changes need
+         * to be made or new tables are added. It just deletes the tables.
+         * @param db The database being updated.
+         * @param oldVersion The previous version of the database.
+         * @param newVersion The new version of the database.
+         */
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // sql query to drop a table
             // having similar name
-            db.execSQL("DROP TABLE IF EXISTS " + CITY_TABLE);
-            db.execSQL("DROP TABLE IF EXISTS " + PREF_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + CityEntry.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + PrefEntry.TABLE_NAME);
             onCreate(db);
         }
     }
+
 
 }
