@@ -44,9 +44,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // TODO this is where we would implement our city latitude and longitude
+        //  can also change the market .title to the city name
+        //  default lat and lon is Chicago
+
+        String cityname = "Chicago, IL";
+
+        LatLng city = new LatLng(41.85003, -87.65005);
+        mMap.addMarker(new MarkerOptions().position(city).title(cityname));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(city));
     }
 }
