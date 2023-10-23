@@ -42,7 +42,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         //todo: need to further implement MapActivity.class
         switch (view.getId()){
             case R.id.mapButton:
-                Intent mapIntent = new Intent(DetailsActivity.this, MapActivity.class);
+                Intent mapIntent = new Intent(DetailsActivity.this, MapsActivity.class);
                 mapIntent.putExtra("city", getIntent().getStringExtra("city"));
                 startActivity(mapIntent);
                 break;
