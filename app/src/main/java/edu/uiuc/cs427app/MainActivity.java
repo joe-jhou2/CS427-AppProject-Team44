@@ -38,14 +38,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
         // buttons are added to layout programmatically
-        Button buttonChampaign = findViewById(R.id.buttonChampaign);
-        Button buttonChicago = findViewById(R.id.buttonChicago);
-        Button buttonLA = findViewById(R.id.buttonLA);
-        Button buttonNew = findViewById(R.id.buttonSaveCity);
-
-        buttonChampaign.setOnClickListener(this);
-        buttonChicago.setOnClickListener(this);
-        buttonLA.setOnClickListener(this);
+//        Button buttonChampaign = findViewById(R.id.buttonChampaign);
+//        Button buttonChicago = findViewById(R.id.buttonChicago);
+//        Button buttonLA = findViewById(R.id.buttonLA);
+          Button buttonNew = findViewById(R.id.buttonAddCity);
+//
+//        buttonChampaign.setOnClickListener(this);
+//        buttonChicago.setOnClickListener(this);
+//        buttonLA.setOnClickListener(this);
         buttonNew.setOnClickListener(this);
 
         //this code implements the dynamic list of cities and buttons
@@ -88,27 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Intent intent;
-        switch (view.getId()) {
-            case R.id.buttonChampaign:
-                intent = new Intent(this, DetailsActivity.class);
-                intent.putExtra("city", "Champaign");
-                startActivity(intent);
-                break;
-            case R.id.buttonChicago:
-                intent = new Intent(this, DetailsActivity.class);
-                intent.putExtra("city", "Chicago");
-                startActivity(intent);
-                break;
-            case R.id.buttonLA:
-                intent = new Intent(this, DetailsActivity.class);
-                intent.putExtra("city", "Los Angeles");
-                startActivity(intent);
-                break;
-            case R.id.buttonSaveCity:
-                // TODO Implement this action to add a new location to the list of locations
-                intent = new Intent(this, AddCityActivity.class);
-                startActivity(intent);
-                break;
+        if (view.getId() == R.id.buttonAddCity) {
+            intent = new Intent(this, AddCityActivity.class);
+            intent.putExtra("username", username);
+            startActivity(intent);
         }
     }
 }
