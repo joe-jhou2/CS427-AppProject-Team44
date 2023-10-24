@@ -1,5 +1,6 @@
 package edu.uiuc.cs427app;
 
+import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,12 +23,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    private String username = "user";  //TODO this need to be replaced with actual username
+    private Account account;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Process the Intent payload that has opened this Activity and show the information accordingly
+        account = getIntent().getParcelableExtra("account");
+        username = account.name;
 
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that

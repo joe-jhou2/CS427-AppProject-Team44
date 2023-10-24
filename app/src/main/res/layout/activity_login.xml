@@ -6,23 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textViewHeader"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Authentication Page" />
-
     <LinearLayout
         android:id="@+id/login"
-        android:layout_width="409dp"
-        android:layout_height="1000dp"
+        android:layout_width="0dp"
+        android:layout_height="625dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="100dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textViewHeader"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Authentication Page" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="300dp"
             android:orientation="vertical">
 
             <TextView
@@ -44,11 +48,13 @@
                 android:layout_height="50dp"
                 android:hint="password"
                 android:inputType="text" />
+
             <Button
                 android:id="@+id/buttonTemp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="LAYOUT SELECTION" />
+
             <Button
                 android:id="@+id/buttonSignUp"
                 android:layout_width="match_parent"
@@ -76,14 +82,14 @@
                 <EditText
                     android:id="@+id/inputSignInUsername"
                     android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:hint="username"
                     android:inputType="text" />
 
                 <EditText
                     android:id="@+id/inputSignInPassword"
                     android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:hint="password"
                     android:inputType="text" />
             </LinearLayout>
@@ -92,6 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
                 android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/buttonSignIn"
                     android:layout_width="match_parent"
