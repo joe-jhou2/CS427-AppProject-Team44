@@ -25,10 +25,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private String mPassword;
     private AccountManager mAccountManager;
     private Account mCurrentAccount;
-    private EditText mNewAccountNameView;
-    private EditText mNewAccountPassView;
-    private EditText mExistAccountNameView;
-    private EditText mExistAccountPassView;
+    private EditText mAccountNameView;
+    private EditText mAccountPassView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +35,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         // Identifying UI components to be used as input for AccountManager
         // and buttons to initiate account creation / login
-        mNewAccountNameView = findViewById(R.id.inputSignUpUsername);
-        mNewAccountPassView = findViewById(R.id.inputSignUpPassword);
-        mExistAccountNameView = findViewById(R.id.inputSignInUsername);
-        mExistAccountPassView = findViewById(R.id.inputSignInPassword);
+        mAccountNameView = findViewById(R.id.inputUsername);
+        mAccountPassView = findViewById(R.id.inputPassword);
         Button buttonSignUp = findViewById(R.id.buttonSignUp);
         Button buttonSignIn = findViewById(R.id.buttonSignIn);
 
@@ -68,8 +64,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     }
 
     private void createAccount() {
-        mUsername = mNewAccountNameView.getText().toString();
-        mPassword = mNewAccountPassView.getText().toString();
+        mUsername = mAccountNameView.getText().toString();
+        mPassword = mAccountPassView.getText().toString();
         mCurrentAccount = new Account(mUsername, this.getString(R.string.account_type));
 
         if (mAccountManager.addAccountExplicitly(mCurrentAccount, mPassword, null)) {
@@ -88,8 +84,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     }
 
     private void signIn() {
-        mUsername = mExistAccountNameView.getText().toString();
-        mPassword = mExistAccountPassView.getText().toString();
+        mUsername = mAccountNameView.getText().toString();
+        mPassword = mAccountPassView.getText().toString();
 
         //TODO: unify this account validation process with AppAccountAuthenticator.validateLocally()
         Account[] accounts = mAccountManager.getAccountsByType(this.getString(R.string.account_type));
@@ -114,6 +110,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("account", mCurrentAccount);
             startActivity(intent);
+            Log.d("SignInInfo", "Successfully logged into Account: " + mCurrentAccount.name);
         } else {
             Toast.makeText(this, "Sign in failed. Check username and password.", Toast.LENGTH_LONG).show();
         }
