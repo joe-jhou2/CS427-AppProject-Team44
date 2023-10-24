@@ -20,7 +20,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
         // Process the Intent payload that has opened this Activity and show the information accordingly
         String cityName = getIntent().getStringExtra("city");
-        String welcome = "Welcome to the "+cityName;
+        String welcome = "Welcome to "+cityName;
         String cityWeatherInfo = "Detailed information about the weather of "+cityName;
 
         // Initializing the GUI elements

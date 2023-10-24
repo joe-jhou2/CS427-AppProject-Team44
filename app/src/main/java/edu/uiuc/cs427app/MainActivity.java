@@ -2,6 +2,7 @@ package edu.uiuc.cs427app;
 
 import android.accounts.Account;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,8 +17,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import edu.uiuc.cs427app.databinding.ActivityMainBinding;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,17 +41,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
         // buttons are added to layout programmatically
-//        Button buttonChampaign = findViewById(R.id.buttonChampaign);
-//        Button buttonChicago = findViewById(R.id.buttonChicago);
-//        Button buttonLA = findViewById(R.id.buttonLA);
-          Button buttonNew = findViewById(R.id.buttonAddCity);
-//
-//        buttonChampaign.setOnClickListener(this);
-//        buttonChicago.setOnClickListener(this);
-//        buttonLA.setOnClickListener(this);
+
+        Button buttonNew = findViewById(R.id.buttonAddCity);
         buttonNew.setOnClickListener(this);
 
-        //this code implements the dynamic list of cities and buttons
+        // This code implements the dynamic list of cities and buttons
         String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
         Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null, selection, null, null);
 
@@ -60,24 +57,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @SuppressLint("Range") String cityname = cursor.getString(cursor.getColumnIndex(DataStore.CityEntry.COL_CITY));
                 LinearLayout row = new LinearLayout(this);
                 TextView city = new TextView(this);
-                Button button = new Button(this);
 
-                //this creates the onClick listener tied to the button so that when clicks it creates the
-                //proper intent with cityname for the CityDetailsActivity
-                button.setOnClickListener(new View.OnClickListener() {
+                // This creates the onClick listener tied to the button so that when clicks it creates the
+                // proper intent with cityname for the CityDetailsActivity
+                Button showDetails = new Button(this);
+
+                // Add a button to remove a given city
+                Button removeCity = new Button(this);
+
+                // Handles the redirection to city details
+                showDetails.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
                         Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
                         intent.putExtra("city", cityname);
                         startActivity(intent);
                     }
                 });
-                row.setOrientation(LinearLayout.HORIZONTAL);
+
+                // Remove the city from the DB under current user
+                removeCity.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v){
+                        // Create SQL query to do the job and perform delete
+                        String query = "USERNAME = '" + username + "' AND CITY = '" + cityname + "'";
+                        getContentResolver().delete(DataStore.CityEntry.CONTENT_URI, query, null);
+
+                        // Displaying a toast message
+                        Toast.makeText(getBaseContext(), cityname + " removed", Toast.LENGTH_LONG).show();
+
+                        // Refresh MainActivity
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+                // Configure buttons and text
                 city.setText(cityname);
                 city.setWidth(400);
                 city.setPadding(20,0,0,0);
-                button.setText("Show Details");
+                showDetails.setText("Show Details");
+                removeCity.setText("Remove City");
+
+                // Set up layout
+                row.setOrientation(LinearLayout.HORIZONTAL);
                 row.addView(city);
-                row.addView(button);
+                row.addView(showDetails);
+                row.addView(removeCity);
                 linlay.addView(row);
                 cursor.moveToNext();
             }
@@ -85,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    // Function to handle adding cities to the user's list
     @Override
     public void onClick(View view) {
         Intent intent;
