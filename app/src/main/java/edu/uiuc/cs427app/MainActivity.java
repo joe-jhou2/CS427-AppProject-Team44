@@ -1,6 +1,8 @@
 package edu.uiuc.cs427app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,11 +14,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import edu.uiuc.cs427app.databinding.ActivityMainBinding;
 
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    private String username = "user";  //TODO this need to be replaced with actual username
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonChicago.setOnClickListener(this);
         buttonLA.setOnClickListener(this);
         buttonNew.setOnClickListener(this);
+
+        //this code implements the dynamic list of cities and buttons
+        String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
+        Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null, selection, null, null);
+
+        LinearLayout linlay = findViewById(R.id.cityListLayout);
+        linlay.setOrientation(LinearLayout.VERTICAL);
+
+        if(cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                @SuppressLint("Range") String cityname = cursor.getString(cursor.getColumnIndex(DataStore.CityEntry.COL_CITY));
+                LinearLayout row = new LinearLayout(this);
+                TextView city = new TextView(this);
+                Button button = new Button(this);
+
+                //this creates the onClick listener tied to the button so that when clicks it creates the
+                //proper intent with cityname for the CityDetailsActivity
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v){
+                        Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
+                        intent.putExtra("city", cityname);
+                        startActivity(intent);
+                    }
+                });
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                city.setText(cityname);
+                city.setWidth(400);
+                city.setPadding(20,0,0,0);
+                button.setText("Show Details");
+                row.addView(city);
+                row.addView(button);
+                linlay.addView(row);
+                cursor.moveToNext();
+            }
+        }
 
     }
 

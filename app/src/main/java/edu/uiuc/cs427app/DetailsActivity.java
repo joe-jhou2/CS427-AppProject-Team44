@@ -19,7 +19,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_details);
 
         // Process the Intent payload that has opened this Activity and show the information accordingly
-        String cityName = getIntent().getStringExtra("city").toString();
+        String cityName = getIntent().getStringExtra("city");
         String welcome = "Welcome to the "+cityName;
         String cityWeatherInfo = "Detailed information about the weather of "+cityName;
 
