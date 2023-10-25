@@ -1,9 +1,3 @@
-package edu.uiuc.cs427app;
-
-import android.accounts.Account;
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -45,8 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button buttonNew = findViewById(R.id.buttonAddCity);
         buttonNew.setOnClickListener(this);
 
-        Button signOutButton = findViewById(R.id.settingsPage);
-        signOutButton.setOnClickListener(new View.OnClickListener() {
+        // Button navigate to the settings page
+        Button settingsButton = findViewById(R.id.settingsPage);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // If you're using shared preferences or any other method for session management, clear the session details here.
@@ -135,3 +130,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 }
+
