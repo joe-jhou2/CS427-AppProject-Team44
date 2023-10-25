@@ -39,11 +39,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         //Implement this (create an Intent that goes to a new Activity, which shows the map)
-        //todo: need to further implement MapActivity.class
         switch (view.getId()){
             case R.id.mapButton:
                 Intent mapIntent = new Intent(DetailsActivity.this, MapsActivity.class);
                 mapIntent.putExtra("city", getIntent().getStringExtra("city"));
+                //TODO uncomment these lines once latitude and longitude and stored with the city in DB
+//                mapIntent.putExtra("lat", latitude);
+//                mapIntent.putExtra("lon", longitude);
                 startActivity(mapIntent);
                 break;
         }

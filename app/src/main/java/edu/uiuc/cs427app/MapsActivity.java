@@ -2,6 +2,7 @@ package edu.uiuc.cs427app;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,6 +18,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+    String cityname;
+    double latitude = 40.11642; //Champaign
+    double longitude = -88.24338;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Intent intent = getIntent();
+        cityname = intent.getStringExtra("city");
+        //TODO uncomment these lines once latitude and longitude and stored with the city in DB
+//        latitude = intent.getDoubleExtra("lat",-34);
+//        longitude = intent.getDoubleExtra("lon",151);
+
     }
 
     /**
@@ -44,14 +55,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // TODO this is where we would implement our city latitude and longitude
-        //  can also change the market .title to the city name
-        //  default lat and lon is Chicago
-
-        String cityname = "Chicago, IL";
-
-        LatLng city = new LatLng(41.85003, -87.65005);
-        mMap.addMarker(new MarkerOptions().position(city).title(cityname));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(city));
+        LatLng citylocation = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(citylocation).title(cityname));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(citylocation));
     }
 }

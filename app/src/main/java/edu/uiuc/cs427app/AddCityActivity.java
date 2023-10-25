@@ -2,6 +2,7 @@ package edu.uiuc.cs427app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.accounts.Account;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 public class AddCityActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String username;
+    private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +24,12 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
         Button buttonSaveCity = findViewById(R.id.buttonSaveCity);
         buttonSaveCity.setOnClickListener(this);
 
-        Intent intent = getIntent();
-        username = intent.getStringExtra("username");
+//        Intent intent = getIntent();
+//        username = intent.getStringExtra("username");
+//        username = intent.getStringExtra("username");
+        account = getIntent().getParcelableExtra("account");
+        username = account.name;
+
     }
 
     @Override
@@ -45,6 +51,8 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
 
             //jump back to the Main Activity
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("account", account);
+            finish();
             startActivity(intent);
         }
     }

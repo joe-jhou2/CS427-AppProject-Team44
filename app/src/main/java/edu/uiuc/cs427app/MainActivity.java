@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cursor.moveToNext();
             }
         }
-
+        cursor.close();
     }
 
     // Function to handle adding cities to the user's list
@@ -115,7 +115,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent;
         if (view.getId() == R.id.buttonAddCity) {
             intent = new Intent(this, AddCityActivity.class);
-            intent.putExtra("username", username);
+//            intent.putExtra("username", username);
+            intent.putExtra("account", account);
+            finish();
             startActivity(intent);
         }
     }
