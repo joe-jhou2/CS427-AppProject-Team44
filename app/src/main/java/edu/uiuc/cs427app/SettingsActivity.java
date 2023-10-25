@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    Button changeThemeButton, signOutButton;
+    Button signOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
                 //showThemeDialog();
         //    }
         //});
+
+        signOutButton = findViewById(R.id.signOutButton);
 
         // Jump to the Authentication Page(Create AccountActivity in our case)
         signOutButton.setOnClickListener(new View.OnClickListener() {

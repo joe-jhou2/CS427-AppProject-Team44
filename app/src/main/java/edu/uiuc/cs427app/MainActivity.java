@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.content.SharedPreferences;
@@ -55,6 +56,9 @@ public class MainActivity extends ThemeActivity implements View.OnClickListener 
         account = getIntent().getParcelableExtra("account");
         username = account.name;
 
+        //changing the title at the top of the Activity
+        this.setTitle(getString(R.string.app_name)+" - "+username);
+
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
         // buttons are added to layout programmatically
@@ -62,10 +66,18 @@ public class MainActivity extends ThemeActivity implements View.OnClickListener 
         Button buttonNew = findViewById(R.id.buttonAddCity);
         buttonNew.setOnClickListener(this);
 
+
         //Button signOutButton = findViewById(R.id.settingsPage);
         //signOutButton.setOnClickListener(new View.OnClickListener() {
         //    @Override
         //    public void onClick(View v) {
+
+        // Button navigate to the settings page
+        Button settingsButton = findViewById(R.id.settingsPage);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
                 // If you're using shared preferences or any other method for session management, clear the session details here.
 
                 // Redirect to Authentication Page(Create AccountActivity in our case)
@@ -152,3 +164,4 @@ public class MainActivity extends ThemeActivity implements View.OnClickListener 
         }
     }
 }
+
