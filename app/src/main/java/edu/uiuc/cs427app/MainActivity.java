@@ -1,3 +1,10 @@
+package edu.uiuc.cs427app;
+
+import android.accounts.Account;
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Intent;
+
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -28,9 +35,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         // Process the Intent payload that has opened this Activity and show the information accordingly
         account = getIntent().getParcelableExtra("account");
         username = account.name;
+
+        //changing the title at the top of the Activity
+        this.setTitle(getString(R.string.app_name)+" - "+username);
 
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
