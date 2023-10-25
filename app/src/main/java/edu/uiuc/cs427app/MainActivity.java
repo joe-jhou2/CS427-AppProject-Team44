@@ -45,6 +45,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button buttonNew = findViewById(R.id.buttonAddCity);
         buttonNew.setOnClickListener(this);
 
+        Button signOutButton = findViewById(R.id.settingsPage);
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // If you're using shared preferences or any other method for session management, clear the session details here.
+
+                // Redirect to Authentication Page(Create AccountActivity in our case)
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // This makes sure the user can't navigate back to previous activities using the back button
+                startActivity(intent);
+            }
+        });
+
         // This code implements the dynamic list of cities and buttons
         String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
         Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null, selection, null, null);
@@ -122,4 +135,3 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 }
-
