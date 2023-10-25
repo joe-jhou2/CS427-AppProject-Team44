@@ -56,7 +56,7 @@ public class MainActivity extends ThemeActivity implements View.OnClickListener 
         account = getIntent().getParcelableExtra("account");
         username = account.name;
 
-        //changing the title at the top of the Activity
+        //changing the title at the top of the MainActivity
         this.setTitle(getString(R.string.app_name)+" - "+username);
 
         // Initializing the UI components
@@ -73,10 +73,10 @@ public class MainActivity extends ThemeActivity implements View.OnClickListener 
         //    public void onClick(View v) {
 
         // Button navigate to the settings page
-        Button settingsButton = findViewById(R.id.settingsPage);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        Button settingsButton = findViewById(R.id.settingsPage);
+//        settingsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 
                 // If you're using shared preferences or any other method for session management, clear the session details here.
 
