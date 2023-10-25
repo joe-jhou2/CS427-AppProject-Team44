@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/themeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Themes" />
+
     <LinearLayout
         android:id="@+id/login"
         android:layout_width="0dp"
@@ -44,7 +52,7 @@
                 android:inputType="text" />
 
             <Button
-                android:id="@+id/themeButton"
+                android:id="@+id/temp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="LAYOUT SELECTION" />

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public abstract class ThemeActivity extends AppCompatActivity {
 
     protected SharedPreferences sharedPreferences;
-    protected String lastAppliedTheme="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +24,15 @@ public abstract class ThemeActivity extends AppCompatActivity {
         switch(theme) {
             case "Theme.Day": default:
                 setTheme(R.style.Theme_Day);
-                lastAppliedTheme = "Theme.Day";
                 break;
             case "Theme.Night":
                 setTheme(R.style.Theme_Night);
-                lastAppliedTheme = "Theme.Night";
                 break;
             case "Theme.Dawn":
                 setTheme(R.style.Theme_Dawn);
-                lastAppliedTheme = "Theme.Dawn";
                 break;
             case "Theme.Dusk":
                 setTheme(R.style.Theme_Dusk);
-                lastAppliedTheme = "Theme.Dusk";
                 break;
         }
     }

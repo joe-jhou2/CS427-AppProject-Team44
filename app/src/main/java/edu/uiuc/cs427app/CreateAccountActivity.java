@@ -5,6 +5,7 @@ package edu.uiuc.cs427app;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,11 +28,24 @@ public class CreateAccountActivity extends ThemeActivity implements View.OnClick
     private Account mCurrentAccount;
     private EditText mAccountNameView;
     private EditText mAccountPassView;
-    private String lastAppliedTheme="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean signedOut = getIntent().getBooleanExtra("signedOut", false);
+
+        if (signedOut) {
+            // Reset theme to default
+            SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("theme", "Theme.Day");
+            editor.apply();
+        }
+
+        applyTheme();  // Apply the theme
+
         setContentView(R.layout.activity_login);
 
         // Identifying UI components to be used as input for AccountManager
