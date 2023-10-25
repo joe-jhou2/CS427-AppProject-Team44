@@ -1,7 +1,6 @@
 package edu.uiuc.cs427app;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,16 +15,17 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        changeThemeButton = findViewById(R.id.changeThemeButton);
+        //changeThemeButton = findViewById(R.id.changeThemeButton);
         signOutButton = findViewById(R.id.signOutButton);
 
         // Created a button for changing theme
-        changeThemeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //changeThemeButton.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
                 // Logic to change theme
-            }
-        });
+                //showThemeDialog();
+        //    }
+        //});
 
         // Jump to the Authentication Page(Create AccountActivity in our case)
         signOutButton.setOnClickListener(new View.OnClickListener() {

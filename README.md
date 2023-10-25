@@ -103,14 +103,14 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
 | ---------------| --------------------------------| ----------------------|
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
+|   yibinh2      |        Milestone3, task1        |       finish up       |
+|   rileydm2     |        Milestone3, lead task2   |       finish up       |
+|   zhaol4       |        Milestone3, task2        |       finish up       |
+|   jdhank2      |        Milestone3, task2        |       finish up       |
+|   ytl5         |        Milestone3, task1        |       finish up       |
+|   lwchave2     |        Milestone3, lead task1   |       finish up       |
+|   jueh4        |        Milestone3, task3        |       finish up       |
+|   ktsoi3       |        Milestone3, lead task3   |       finish up       |
 </br>
 
 

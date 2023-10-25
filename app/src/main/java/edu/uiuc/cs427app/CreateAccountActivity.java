@@ -20,13 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 //        1. Collects credentials from the user                 createAccount()
 //        2. Authenticates the credentials with the server      signIn()*
 //        3. Stores the credentials on the device               createAccount()
-public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateAccountActivity extends ThemeActivity implements View.OnClickListener {
     private String mUsername;
     private String mPassword;
     private AccountManager mAccountManager;
     private Account mCurrentAccount;
     private EditText mAccountNameView;
     private EditText mAccountPassView;
+    private String lastAppliedTheme="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,15 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         }
 
         mAccountManager = AccountManager.get(this);
+
+        Button changeThemeButton = findViewById(R.id.themeButton);
+        changeThemeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showThemeDialog();
+            }
+        });
+
     }
 
 //    TODO - add descriptions (typical)

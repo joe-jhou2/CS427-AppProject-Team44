@@ -6,7 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-
+import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends ThemeActivity implements View.OnClickListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
@@ -32,7 +32,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize Shared Preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+
+        // Apply saved theme
+        applyTheme();
+        // showThemeDialog();
+
         setContentView(R.layout.activity_main);
+
+        // Create button reference and set its click listener
+        Button changeThemeButton = findViewById(R.id.themeButton);
+        changeThemeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showThemeDialog();
+            }
+        });
 
         // Process the Intent payload that has opened this Activity and show the information accordingly
         account = getIntent().getParcelableExtra("account");
@@ -45,18 +62,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button buttonNew = findViewById(R.id.buttonAddCity);
         buttonNew.setOnClickListener(this);
 
-        Button signOutButton = findViewById(R.id.settingsPage);
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //Button signOutButton = findViewById(R.id.settingsPage);
+        //signOutButton.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
                 // If you're using shared preferences or any other method for session management, clear the session details here.
 
                 // Redirect to Authentication Page(Create AccountActivity in our case)
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // This makes sure the user can't navigate back to previous activities using the back button
-                startActivity(intent);
-            }
-        });
+        //        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // This makes sure the user can't navigate back to previous activities using the back button
+        //        startActivity(intent);
+        //    }
+        //});
 
         // This code implements the dynamic list of cities and buttons
         String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
