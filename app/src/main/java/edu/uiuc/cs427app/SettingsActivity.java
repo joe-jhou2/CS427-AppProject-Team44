@@ -9,23 +9,15 @@ import android.widget.Button;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    Button changeThemeButton, signOutButton;
+    Button signOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        changeThemeButton = findViewById(R.id.changeThemeButton);
-        signOutButton = findViewById(R.id.signOutButton);
 
-        // Created a button for changing theme
-        changeThemeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Logic to change theme
-            }
-        });
+        signOutButton = findViewById(R.id.signOutButton);
 
         // Jump to the Authentication Page(Create AccountActivity in our case)
         signOutButton.setOnClickListener(new View.OnClickListener() {
