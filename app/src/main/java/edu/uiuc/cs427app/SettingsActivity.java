@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends ThemeActivity {
     protected SharedPreferences sharedPreferences;
     Button signOutButton;
 

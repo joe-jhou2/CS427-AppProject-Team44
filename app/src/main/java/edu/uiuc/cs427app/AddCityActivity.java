@@ -1,5 +1,7 @@
 package edu.uiuc.cs427app;
 
+import static androidx.core.graphics.drawable.DrawableCompat.applyTheme;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.accounts.Account;
@@ -11,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AddCityActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddCityActivity extends ThemeActivity implements View.OnClickListener {
 
     private String username;
     private Account account;
@@ -19,6 +21,7 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //applyTheme();
         setContentView(R.layout.activity_add_city);
 
         Button buttonSaveCity = findViewById(R.id.buttonSaveCity);
@@ -56,14 +59,5 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(intent);
         }
     }
-
-
-
-
-
-
-
-
-
 
 }
