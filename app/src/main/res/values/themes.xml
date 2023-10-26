@@ -57,7 +57,7 @@
         <item name = "android:textColor">@color/white</item>
     </style>
 
-    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="MyDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <!-- Customize your dialog here. Example: change the background color -->
         <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/black</item>
