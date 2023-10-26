@@ -39,6 +39,9 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
         account = getIntent().getParcelableExtra("account");
         username = account.name;
 
+        //add username in the MapActivity screen
+        this.setTitle(getString(R.string.app_name)+"-"+username);
+
         // Apply the theme based on the user's preference
         ThemeUtils.applyTheme(account, this);
 
