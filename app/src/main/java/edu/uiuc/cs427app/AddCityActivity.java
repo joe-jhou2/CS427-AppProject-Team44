@@ -40,7 +40,7 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
         username = account.name;
 
         // Apply the theme based on the user's preference
-        ThemeUtils.applyTheme(account, sharedPreferences, this);
+        ThemeUtils.applyTheme(account, this);
 
         setContentView(R.layout.activity_add_city);
 

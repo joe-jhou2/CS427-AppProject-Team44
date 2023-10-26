@@ -27,7 +27,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         account = getIntent().getParcelableExtra("account");
 
         // Apply the theme based on the user's preference
-        ThemeUtils.applyTheme(account, sharedPreferences, this);
+        ThemeUtils.applyTheme(account, this);
         setContentView(R.layout.activity_details);
 
         // Process the Intent payload that has opened this Activity and show the information accordingly
