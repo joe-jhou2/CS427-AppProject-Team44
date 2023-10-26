@@ -281,8 +281,8 @@ public class DataStore extends ContentProvider {
                 + ", "+CityEntry.COL_USERNAME+" TEXT NOT NULL"
                 + ", "+CityEntry.COL_CITY+" TEXT NOT NULL"
 //                + ", "+CityEntry.COL_STATE+" TEXT NOT NULL"
-//                + ", "+CityEntry.COL_LATITUDE+" REAL NOT NULL"
-//                + ", "+CityEntry.COL_LONGITUDE+" REAL NOT NULL"
+                + ", "+CityEntry.COL_LATITUDE+" REAL NOT NULL"
+                + ", "+CityEntry.COL_LONGITUDE+" REAL NOT NULL"
                 + ");";
         // defining the structure of the Pref Table
         static final String CREATE_DB_PREF_TABLE = " CREATE TABLE " + PrefEntry.TABLE_NAME
