@@ -21,30 +21,25 @@ import androidx.appcompat.app.AppCompatActivity;
 //        1. Collects credentials from the user                 createAccount()
 //        2. Authenticates the credentials with the server      signIn()*
 //        3. Stores the credentials on the device               createAccount()
-public class CreateAccountActivity extends ThemeActivity implements View.OnClickListener {
+public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener {
     private String mUsername;
     private String mPassword;
     private AccountManager mAccountManager;
     private Account mCurrentAccount;
     private EditText mAccountNameView;
     private EditText mAccountPassView;
-
+    protected SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean signedOut = getIntent().getBooleanExtra("signedOut", false);
+        sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+        mCurrentAccount = getIntent().getParcelableExtra("currentAccount");
+        mAccountManager = AccountManager.get(this);
 
-        if (signedOut) {
-            // Reset theme to default
-            SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("theme", "Theme.Day");
-            editor.apply();
-        }
-
-        applyTheme();  // Apply the theme
+        // Apply the theme based on the user's preference
+        ThemeUtils.applyTheme(mCurrentAccount, sharedPreferences, this);
 
         setContentView(R.layout.activity_login);
 
@@ -63,14 +58,6 @@ public class CreateAccountActivity extends ThemeActivity implements View.OnClick
         }
 
         mAccountManager = AccountManager.get(this);
-
-        Button changeThemeButton = findViewById(R.id.themeButton);
-        changeThemeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showThemeDialog();
-            }
-        });
 
     }
 
@@ -95,6 +82,12 @@ public class CreateAccountActivity extends ThemeActivity implements View.OnClick
         if (mAccountManager.addAccountExplicitly(mCurrentAccount, mPassword, null)) {
             Toast.makeText(this, "Account created! Please sign in with your username and password.", Toast.LENGTH_LONG).show();
             Log.v("AccountCreate", "account created, username="+ mUsername); // Account creation succeeded
+
+            Intent intent = new Intent(CreateAccountActivity.this, SettingsActivity.class);
+            intent.putExtra("currentAccount", mCurrentAccount);
+            startActivity(intent);
+            return;  // Optional: to prevent further code execution in this method
+
         } else {
             Toast.makeText(this, "Account already exists! Please sign in with your username and password.", Toast.LENGTH_LONG).show();
             Log.v("AccountCreate", "account NOT created, username="+ mUsername);// Account creation failed
@@ -139,7 +132,5 @@ public class CreateAccountActivity extends ThemeActivity implements View.OnClick
             Toast.makeText(this, "Sign in failed. Check username and password.", Toast.LENGTH_LONG).show();
         }
     }
-
-
 }
 

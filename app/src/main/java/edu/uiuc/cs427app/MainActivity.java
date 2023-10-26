@@ -1,6 +1,7 @@
 package edu.uiuc.cs427app;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -23,38 +24,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends ThemeActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private Account account;
     private String username;
+    protected SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize Shared Preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
-
-        // Apply saved theme
-        applyTheme();
-        // showThemeDialog();
-
-        setContentView(R.layout.activity_main);
-
-        // Create button reference and set its click listener
-        Button changeThemeButton = findViewById(R.id.themeButton);
-        changeThemeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showThemeDialog();
-            }
-        });
+        // Initialize Shared Preferences and apply the saved theme
+        sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
 
         // Process the Intent payload that has opened this Activity and show the information accordingly
         account = getIntent().getParcelableExtra("account");
         username = account.name;
+
+        // Apply the theme based on the user's preference
+        ThemeUtils.applyTheme(account, sharedPreferences, this);
+
+        // set the content view
+        setContentView(R.layout.activity_main);
 
         //changing the title at the top of the MainActivity
         this.setTitle(getString(R.string.app_name)+" - "+username);
@@ -62,30 +55,23 @@ public class MainActivity extends ThemeActivity implements View.OnClickListener 
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
         // buttons are added to layout programmatically
-
         Button buttonNew = findViewById(R.id.buttonAddCity);
         buttonNew.setOnClickListener(this);
 
+        Button settingsButton = findViewById(R.id.settingsPage);
 
-        //Button signOutButton = findViewById(R.id.settingsPage);
-        //signOutButton.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-
-        // Button navigate to the settings page
-//        Button settingsButton = findViewById(R.id.settingsPage);
-//        settingsButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
                 // If you're using shared preferences or any other method for session management, clear the session details here.
 
                 // Redirect to Authentication Page(Create AccountActivity in our case)
-        //        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-        //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // This makes sure the user can't navigate back to previous activities using the back button
-        //        startActivity(intent);
-        //    }
-        //});
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // This makes sure the user can't navigate back to previous activities using the back button
+                startActivity(intent);
+            }
+        });
 
         // This code implements the dynamic list of cities and buttons
         String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
@@ -150,6 +136,8 @@ public class MainActivity extends ThemeActivity implements View.OnClickListener 
         }
         cursor.close();
     }
+
+    //Sets the activity's theme based on the user's saved preference.
 
     // Function to handle adding cities to the user's list
     @Override

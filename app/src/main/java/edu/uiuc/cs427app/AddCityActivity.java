@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AddCityActivity extends ThemeActivity implements View.OnClickListener {
+public class AddCityActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String username;
     private Account account;
