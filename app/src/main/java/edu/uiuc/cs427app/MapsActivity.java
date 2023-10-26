@@ -36,9 +36,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent intent = getIntent();
         cityname = intent.getStringExtra("city");
-        //TODO uncomment these lines once latitude and longitude and stored with the city in DB
-//        latitude = intent.getDoubleExtra("lat",-34);
-//        longitude = intent.getDoubleExtra("lon",151);
+        latitude = intent.getDoubleExtra("lat",-34);
+        longitude = intent.getDoubleExtra("lon",151);
 
     }
 
