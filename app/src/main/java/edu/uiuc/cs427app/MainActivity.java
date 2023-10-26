@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Redirect to Authentication Page(Create AccountActivity in our case)
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // This makes sure the user can't navigate back to previous activities using the back button
                 startActivity(intent);
             }
         });
