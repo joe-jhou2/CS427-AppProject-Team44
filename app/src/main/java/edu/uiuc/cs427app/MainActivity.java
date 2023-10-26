@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         account = getIntent().getParcelableExtra("account");
         username = account.name;
 
-        //changing the title at the top of the MainActivity
-        this.setTitle(getString(R.string.app_name)+" - "+username);
+        //Showing username in the main screen
+        this.setTitle(getString(R.string.app_name)+"-"+username);
 
         final String apiKey = "AIzaSyBkx7JHMWNPp838wtFANglZzGEr0tFmr9E";
 
