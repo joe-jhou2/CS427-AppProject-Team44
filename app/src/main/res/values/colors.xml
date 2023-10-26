@@ -19,4 +19,5 @@
     <color name="green_400">#66BB6A</color>
     <color name="green_500">#4CAF50</color>
     <color name="green_700">#388E3C</color>
+    <attr name = "myBackgroundGradient" format = "integer"/>
 </resources>

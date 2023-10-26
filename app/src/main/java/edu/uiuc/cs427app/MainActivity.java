@@ -7,6 +7,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.libraries.places.api.Places;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,6 +61,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //changing the title at the top of the MainActivity
         this.setTitle(getString(R.string.app_name)+" - "+username);
 
+        final String apiKey = "AIzaSyBkx7JHMWNPp838wtFANglZzGEr0tFmr9E";
+
+        if (apiKey.equals("")) {
+            Toast.makeText(this, getString(R.string.error_api_key), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Setup Places Client
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), apiKey);
+        }
+
+
+
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
         // buttons are added to layout programmatically
@@ -88,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 @SuppressLint("Range") String cityname = cursor.getString(cursor.getColumnIndex(DataStore.CityEntry.COL_CITY));
+                @SuppressLint("Range") double latitude = cursor.getDouble(cursor.getColumnIndex(DataStore.CityEntry.COL_LATITUDE));
+                @SuppressLint("Range") double longitude = cursor.getDouble(cursor.getColumnIndex(DataStore.CityEntry.COL_LONGITUDE));
                 LinearLayout row = new LinearLayout(this);
                 TextView city = new TextView(this);
 
@@ -103,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(View v){
                         Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
                         intent.putExtra("city", cityname);
+                        intent.putExtra("account", account);
+                        intent.putExtra("lat",latitude);
+                        intent.putExtra("lon",longitude);
                         startActivity(intent);
                     }
                 });
@@ -140,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         cursor.close();
+
     }
 
     private Account getAccountFromPreferences() {
