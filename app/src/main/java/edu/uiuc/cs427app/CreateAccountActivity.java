@@ -34,12 +34,11 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
-        mCurrentAccount = getIntent().getParcelableExtra("currentAccount");
         mAccountManager = AccountManager.get(this);
+        mCurrentAccount = getIntent().getParcelableExtra("currentAccount");
 
-        // Apply the theme based on the user's preference
-        ThemeUtils.applyTheme(mCurrentAccount, sharedPreferences, this);
+        // Set default theme for the login activity
+        setTheme(R.style.Theme_Day);
 
         setContentView(R.layout.activity_login);
 
@@ -47,6 +46,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         // and buttons to initiate account creation / login
         mAccountNameView = findViewById(R.id.inputUsername);
         mAccountPassView = findViewById(R.id.inputPassword);
+        Button themeButton = findViewById(R.id.themeButton); // Get the theme button
         Button buttonSignUp = findViewById(R.id.buttonSignUp);
         Button buttonSignIn = findViewById(R.id.buttonSignIn);
 
@@ -83,10 +83,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             Toast.makeText(this, "Account created! Please sign in with your username and password.", Toast.LENGTH_LONG).show();
             Log.v("AccountCreate", "account created, username="+ mUsername); // Account creation succeeded
 
-            Intent intent = new Intent(CreateAccountActivity.this, SettingsActivity.class);
-            intent.putExtra("currentAccount", mCurrentAccount);
-            startActivity(intent);
-            return;  // Optional: to prevent further code execution in this method
+            ThemeUtils.showThemeDialog(CreateAccountActivity.this, mCurrentAccount);
+            Toast.makeText(this, "Account created! Choose your theme and then sign in with your username and password.", Toast.LENGTH_LONG).show();
+            return;
 
         } else {
             Toast.makeText(this, "Account already exists! Please sign in with your username and password.", Toast.LENGTH_LONG).show();
@@ -123,6 +122,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             }
         }
         if (isSuccessful) {
+            saveAccountInfoToPreferences(mCurrentAccount); // Save account to SharedPreferences
+
             // Login worked -- go to MainActivity
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("account", mCurrentAccount);
@@ -131,6 +132,14 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         } else {
             Toast.makeText(this, "Sign in failed. Check username and password.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void saveAccountInfoToPreferences(Account account) {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("account_name", account.name);
+        // Add more info if necessary
+        editor.apply();
     }
 }
 

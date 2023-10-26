@@ -9,20 +9,22 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 
 public class ThemeUtils {
-    public static void applyTheme(Account currentAccount, SharedPreferences sharedPreferences, Context context) {
+    private static final String THEME_PREFERENCES = "theme_preferences";
+    private static final String DEFAULT_THEME = "Theme.Day";
+
+    public static void applyTheme(Account currentAccount, Context context) {
+        String themeKey;
         if (currentAccount != null) {
-            String themeKey = AccountManager.get(context).getUserData(currentAccount, "theme");
-            if (themeKey == null) themeKey = "Theme.Day"; // default
+            themeKey = getThemePreferenceForAccount(context, currentAccount.name);
             ThemePreference themePreference = ThemePreference.fromKey(themeKey);
             context.setTheme(themePreference.styleRes);
         }
     }
 
     // Method to show a dialog allowing the user to choose a theme.
-    public static void showThemeDialog(final Activity activity) {
+    public static void showThemeDialog(final Activity activity, final Account currentAccount) {
         String[] themes = {"Day", "Night", "Dawn", "Dusk"};
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("app_preferences", Context.MODE_PRIVATE);
-        String currentThemeKey = sharedPreferences.getString("theme", "");
+        String currentThemeKey = getThemePreferenceForAccount(activity, currentAccount.name);
         final ThemePreference currentTheme = ThemePreference.fromKey(currentThemeKey);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -31,18 +33,22 @@ public class ThemeUtils {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ThemePreference selectedTheme = ThemePreference.fromIndex(which);
-                        saveThemePreference(activity, selectedTheme.key);
-                        activity.recreate();
+                        saveThemePreferenceForAccount(activity, currentAccount.name, selectedTheme.key);
                         dialog.dismiss();
                     }
                 });
         builder.create().show();
     }
 
-    public static void saveThemePreference(Activity activity, String themeKey) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("app_preferences", Context.MODE_PRIVATE);
+    private static String getThemePreferenceForAccount(Context context, String username) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(THEME_PREFERENCES, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(username, DEFAULT_THEME);
+    }
+
+    private static void saveThemePreferenceForAccount(Context context, String username, String themeKey) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(THEME_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("theme", themeKey);
+        editor.putString(username, themeKey);
         editor.apply();
     }
 
@@ -82,6 +88,10 @@ public class ThemeUtils {
             }
             return DAY; // Return the DAY theme as a default.
         }
+    }
+
+    public interface ThemeSelectionCallback {
+        void onThemeSelected();
     }
 }
 

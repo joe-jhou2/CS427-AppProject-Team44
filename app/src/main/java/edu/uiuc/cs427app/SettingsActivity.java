@@ -20,23 +20,23 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Theme logic
         sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
-        // Process the Intent payload that has opened this Activity and show the information accordingly
-        account = getIntent().getParcelableExtra("account");
+
+        // retrieve account object
+        Account currentAccount = getAccountFromPreferences();
+        // Apply the theme based on the user's preference
+        ThemeUtils.applyTheme(currentAccount, this);
 
         setContentView(R.layout.activity_settings);
 
         changeThemeButton = findViewById(R.id.themeButton);
         signOutButton = findViewById(R.id.signOutButton);
 
-        // Apply the theme based on the user's preference
-        ThemeUtils.applyTheme(account, sharedPreferences, this);
-
         // Created a button for changing theme
         changeThemeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Show the theme selection dialog
-                ThemeUtils.showThemeDialog(SettingsActivity.this);
+                ThemeUtils.showThemeDialog(SettingsActivity.this, currentAccount);
             }
         });
 
@@ -51,5 +51,15 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private Account getAccountFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+        String accountName = sharedPreferences.getString("account_name", null);
+        // Retrieve more info if necessary
+        if (accountName != null) {
+            return new Account(accountName, getString(R.string.account_type));
+        }
+        return null;
     }
 }

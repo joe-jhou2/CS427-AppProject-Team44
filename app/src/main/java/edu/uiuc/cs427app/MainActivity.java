@@ -17,7 +17,8 @@ import android.view.View;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import edu.uiuc.cs427app.databinding.ActivityMainBinding;
-
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Account account;
     private String username;
     protected SharedPreferences sharedPreferences;
+    private Account mCurrentAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +41,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Initialize Shared Preferences and apply the saved theme
         sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
 
-        // Process the Intent payload that has opened this Activity and show the information accordingly
-        account = getIntent().getParcelableExtra("account");
-        username = account.name;
+        // retrieve account object
+        Account currentAccount = getAccountFromPreferences();
 
         // Apply the theme based on the user's preference
-        ThemeUtils.applyTheme(account, sharedPreferences, this);
+        ThemeUtils.applyTheme(currentAccount, this);
 
         // set the content view
         setContentView(R.layout.activity_main);
+
+        // Process the Intent payload that has opened this Activity and show the information accordingly
+        account = getIntent().getParcelableExtra("account");
+        username = account.name;
 
         //changing the title at the top of the MainActivity
         this.setTitle(getString(R.string.app_name)+" - "+username);
@@ -135,6 +140,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         cursor.close();
+    }
+
+    private Account getAccountFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+        String accountName = sharedPreferences.getString("account_name", null);
+        // Retrieve more info if necessary
+        if (accountName != null) {
+            return new Account(accountName, getString(R.string.account_type));
+        }
+        return null;
     }
 
     //Sets the activity's theme based on the user's saved preference.
