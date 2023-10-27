@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent = new Intent(this, AddCityActivity.class);
 //            intent.putExtra("username", username);
             intent.putExtra("account", account);
-            finish();
             startActivity(intent);
         }
     }
