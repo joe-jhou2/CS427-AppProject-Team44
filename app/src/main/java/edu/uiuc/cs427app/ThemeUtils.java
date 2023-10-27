@@ -48,7 +48,7 @@ public class ThemeUtils {
         return sharedPreferences.getString(username, DEFAULT_THEME);
     }
 
-    private static void saveThemePreferenceForAccount(Context context, String username, String themeKey) {
+    public static void saveThemePreferenceForAccount(Context context, String username, String themeKey) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(THEME_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(username, themeKey);
