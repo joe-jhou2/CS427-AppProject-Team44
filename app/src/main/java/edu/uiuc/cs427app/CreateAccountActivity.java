@@ -195,7 +195,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             }
         }
         if (isSuccessful) {
-            ThemeUtils.saveThemePreferenceForAccount(CreateAccountActivity.this, mCurrentAccount.name, themeKey);
+            if (themeKey != null)
+                ThemeUtils.saveThemePreferenceForAccount(CreateAccountActivity.this, mCurrentAccount.name, themeKey);
+            Log.d("SignInInfo", "Saving themeKey: " + themeKey + " for account: "+mCurrentAccount.name);
             saveAccountInfoToPreferences(mCurrentAccount); // Save account to SharedPreferences
             ThemeUtils.applyTheme(mCurrentAccount, this);
 
