@@ -9,6 +9,7 @@ import android.accounts.Account;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -101,18 +102,27 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
             values.put(DataStore.CityEntry.COL_LATITUDE, latitude);
             values.put(DataStore.CityEntry.COL_LONGITUDE, longitude);
 
-            // inserting into database through content URI
-            getContentResolver().insert(DataStore.CityEntry.CONTENT_URI, values);
+            String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
+                              +DataStore.CityEntry.COL_CITY+" = '"+cityname+"'";
+            Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null, selection, null, null);
 
-            // displaying a toast message
-            Toast.makeText(getBaseContext(), cityname+" Saved", Toast.LENGTH_LONG).show();
+            //only insert the city if not already in the list, i.e. the query result is empty
+            if (cursor.getCount()==0){
+                // inserting into database through content URI
+                getContentResolver().insert(DataStore.CityEntry.CONTENT_URI, values);
 
-            //jump back to the Main Activity
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("account", account);
-            finish();
-            startActivity(intent);
+                // displaying a toast message
+                Toast.makeText(getBaseContext(), cityname+" Saved", Toast.LENGTH_LONG).show();
+
+                //jump back to the Main Activity
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("account", account);
+                finish();
+                startActivity(intent);
+
+            } else {
+                Toast.makeText(getBaseContext(), cityname+" is a duplicate. Choose a new city.", Toast.LENGTH_LONG).show();
+            }
         }
     }
-
 }
