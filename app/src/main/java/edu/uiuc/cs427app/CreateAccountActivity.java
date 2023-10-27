@@ -37,8 +37,16 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         mAccountManager = AccountManager.get(this);
         mCurrentAccount = getIntent().getParcelableExtra("currentAccount");
 
-        // Set default theme for the login activity
-        setTheme(R.style.Theme_Day);
+        if (savedInstanceState != null) {
+            // retrieve account object
+            Account currentAccount = getAccountFromPreferences();
+
+            // Apply the theme based on the user's preference
+            ThemeUtils.applyTheme(currentAccount, this);
+        } else {
+            // Set default theme for the login activity
+            setTheme(R.style.Theme_Day);
+        }
 
         setContentView(R.layout.activity_login);
 
@@ -46,9 +54,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         // and buttons to initiate account creation / login
         mAccountNameView = findViewById(R.id.inputUsername);
         mAccountPassView = findViewById(R.id.inputPassword);
-        Button themeButton = findViewById(R.id.themeButton); // Get the theme button
         Button buttonSignUp = findViewById(R.id.buttonSignUp);
         Button buttonSignIn = findViewById(R.id.buttonSignIn);
+        Button themeButton = findViewById(R.id.themeButton); // Get the theme button
 
         if (buttonSignUp != null) {
             buttonSignUp.setOnClickListener(this);
@@ -56,9 +64,24 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         if (buttonSignIn != null) {
             buttonSignIn.setOnClickListener(this);
         }
+        if (themeButton != null) {
+            themeButton.setOnClickListener(this);
+        }
 
         mAccountManager = AccountManager.get(this);
 
+        // pass saved fields from savedInstanced to new Instaced of this activity
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            mUsername = savedInstanceState.getString("saved_username");
+            mPassword = savedInstanceState.getString("saved_password");
+        } else {
+            // consider moving mUsername and mPassowrd initializing here
+        }
+        if (mUsername != null && mPassword != null) {
+            mAccountNameView.setText(mUsername);
+            mAccountPassView.setText(mPassword);
+        }
     }
 
 //    TODO - add descriptions (typical)
@@ -70,6 +93,11 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.buttonSignIn:
                 signIn();
+                break;
+            case R.id.themeButton:
+                Log.d("Theme Dialog", "processed layout selection");
+                ThemeUtils.showThemeDialog(CreateAccountActivity.this, mCurrentAccount);
+                saveAccountInfoToPreferences(mCurrentAccount);
                 break;
         }
     }
@@ -140,6 +168,24 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         editor.putString("account_name", account.name);
         // Add more info if necessary
         editor.apply();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("saved_username", mUsername);
+        outState.putString("saved_password", mPassword);
+    }
+
+    private Account getAccountFromPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+        String accountName = sharedPreferences.getString("account_name", null);
+        // Retrieve more info if necessary
+        if (accountName != null) {
+            return new Account(accountName, getString(R.string.account_type));
+        }
+        return null;
     }
 }
 

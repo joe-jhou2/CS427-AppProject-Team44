@@ -7,6 +7,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class ThemeUtils {
     private static final String THEME_PREFERENCES = "theme_preferences";
@@ -35,6 +36,8 @@ public class ThemeUtils {
                         ThemePreference selectedTheme = ThemePreference.fromIndex(which);
                         saveThemePreferenceForAccount(activity, currentAccount.name, selectedTheme.key);
                         dialog.dismiss();
+                        activity.recreate();
+                        Log.d("Theme Dialogz", "theme dialog dismissed.");
                     }
                 });
         builder.create().show();
