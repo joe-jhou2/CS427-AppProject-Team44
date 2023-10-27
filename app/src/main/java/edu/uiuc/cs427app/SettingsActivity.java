@@ -62,4 +62,22 @@ public class SettingsActivity extends AppCompatActivity {
         }
         return null;
     }
+
+    @Override
+    public void onBackPressed() {
+        // Clear the previous activities upon 'back'
+        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+
+        // Clear previous activities with preset settings that may have been superseded
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Pass the current account to a clean instance of the MainActivity
+        Account currentAccount = getAccountFromPreferences();
+        intent.putExtra("account", currentAccount);
+
+        startActivity(intent);
+
+        finish();
+    }
+
 }
