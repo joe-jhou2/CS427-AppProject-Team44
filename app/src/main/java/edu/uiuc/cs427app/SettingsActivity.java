@@ -65,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Clear the previous activities upon 'back'
+        // Clear the previous activities upon 'back button'
         Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
 
         // Clear previous activities with preset settings that may have been superseded
