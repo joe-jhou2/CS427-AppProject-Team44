@@ -2,7 +2,6 @@ package edu.uiuc.cs427app;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 
@@ -104,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                @SuppressLint("Range") String cityname = cursor.getString(cursor.getColumnIndex(DataStore.CityEntry.COL_CITY));
-                @SuppressLint("Range") double latitude = cursor.getDouble(cursor.getColumnIndex(DataStore.CityEntry.COL_LATITUDE));
-                @SuppressLint("Range") double longitude = cursor.getDouble(cursor.getColumnIndex(DataStore.CityEntry.COL_LONGITUDE));
+                String cityname = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_CITY));
+                double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LATITUDE));
+                double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LONGITUDE));
                 LinearLayout row = new LinearLayout(this);
                 TextView city = new TextView(this);
 
@@ -133,8 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 removeCity.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
                         // Create SQL query to do the job and perform delete
-                        String query = "USERNAME = '" + username + "' AND CITY = '" + cityname + "'";
-                        getContentResolver().delete(DataStore.CityEntry.CONTENT_URI, query, null);
+                        String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
+                                +DataStore.CityEntry.COL_CITY+" = '"+cityname+"'";
+                        //String query = "USERNAME = '" + username + "' AND CITY = '" + cityname + "'";
+                        getContentResolver().delete(DataStore.CityEntry.CONTENT_URI, selection, null);
 
                         // Displaying a toast message
                         Toast.makeText(getBaseContext(), cityname + " removed", Toast.LENGTH_LONG).show();

@@ -77,9 +77,7 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                         + "Longitude: "
                         + place.getLatLng().longitude;
                 Toast.makeText(getBaseContext(), msg, Toast.LENGTH_LONG).show();
-
                 Log.d(TAG, msg);
-
             }
 
             @Override
@@ -123,6 +121,7 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 Toast.makeText(getBaseContext(), cityname+" is a duplicate. Choose a new city.", Toast.LENGTH_LONG).show();
             }
+            cursor.close();
         }
     }
 }
