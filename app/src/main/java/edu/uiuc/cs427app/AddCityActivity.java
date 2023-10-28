@@ -1,7 +1,5 @@
 package edu.uiuc.cs427app;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.accounts.Account;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -12,10 +10,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 import java.util.Arrays;
 
 public class AddCityActivity extends AppCompatActivity implements View.OnClickListener {

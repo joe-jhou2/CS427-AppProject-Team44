@@ -2,35 +2,23 @@ package edu.uiuc.cs427app;
 
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.ContentValues;
 import android.content.Intent;
-
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
-import android.view.ContextThemeWrapper;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.view.View;
-
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.navigation.ui.AppBarConfiguration;
-
-import edu.uiuc.cs427app.databinding.ActivityMainBinding;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.ui.AppBarConfiguration;
+
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.button.MaterialButton;
+
+import edu.uiuc.cs427app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Account account;
     private String username;
     protected SharedPreferences sharedPreferences;
-    private Account mCurrentAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), apiKey);
         }
-
 
 
         // Initializing the UI components
@@ -179,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 row.addView(city);
                 row.addView(showDetails);
-                row.addView(spacer);
+                row.addView(spacer); //adding a blank textview to space out the buttons
                 //row.addView(showMap);
                 row.addView(removeCity);
                 linlay.addView(row);
