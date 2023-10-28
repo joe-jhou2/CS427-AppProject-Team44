@@ -1,10 +1,7 @@
 package edu.uiuc.cs427app;
 
-import static androidx.core.graphics.drawable.DrawableCompat.applyTheme;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.accounts.Account;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -14,14 +11,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-
 import java.util.Arrays;
 
 public class AddCityActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,27 +39,30 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
 
         setContentView(R.layout.activity_add_city);
 
+        //set up button and listener to save the city once selected
         Button buttonSaveCity = findViewById(R.id.buttonSaveCity);
         buttonSaveCity.setOnClickListener(this);
 
-        // Initialize the AutocompleteSupportFragment.
+        // Initialize the AutocompleteSupportFragment to search for the city name
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        // Specify the types of place data to return.
+        // Only return name, lat/lon, and address data
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
 
-        // Restrict the Countries
-        //autocompleteFragment.setCountries(Arrays.asList("US"));
-
-        // Restrict to Cities
+        // Restrict the Places to "Cities"
         autocompleteFragment.setTypesFilter(Arrays.asList("(cities)"));
 
-        // Set up a PlaceSelectionListener to handle the response.
+        // Set up a PlaceSelectionListener to handle the response and store the info
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
+            /**
+             * Called whenever city is selected from the search autocomplete list.
+             * @param place the city returned from the autocomplete list
+             */
             @Override
             public void onPlaceSelected(@NonNull Place place) {
+                //get the data from the place object
                 cityname = place.getAddress();
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
@@ -80,6 +77,10 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d(TAG, msg);
             }
 
+            /**
+             * Called whenever there is an error in choosing a city from the autocomplete list.
+             * @param status the error returned
+             */
             @Override
             public void onError(@NonNull Status status) {
                 Log.d(TAG, "An error occurred: " + status);
@@ -89,22 +90,21 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-
+        //save the city data to the db
         if (view.getId()==R.id.buttonSaveCity) {
-            //save the city to the db
+            //setup up the ContentValues object with city data to send to the db
             ContentValues values = new ContentValues();
-
-            // fetching text from user
             values.put(DataStore.CityEntry.COL_USERNAME, username);
             values.put(DataStore.CityEntry.COL_CITY, cityname);
             values.put(DataStore.CityEntry.COL_LATITUDE, latitude);
             values.put(DataStore.CityEntry.COL_LONGITUDE, longitude);
 
+            //query the db to see if the city is already there for the given user
             String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
                               +DataStore.CityEntry.COL_CITY+" = '"+cityname+"'";
             Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null, selection, null, null);
 
-            //only insert the city if not already in the list, i.e. the query result is empty
+            //only insert the city if not already in the users citylist, i.e. the query result is empty
             if (cursor.getCount()==0){
                 // inserting into database through content URI
                 getContentResolver().insert(DataStore.CityEntry.CONTENT_URI, values);
@@ -113,15 +113,17 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(getBaseContext(), cityname+" Saved", Toast.LENGTH_LONG).show();
 
                 //jump back to the Main Activity
+                cursor.close();
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("account", account);
                 finish();
                 startActivity(intent);
 
             } else {
+                //pop a message about the duplicate city
                 Toast.makeText(getBaseContext(), cityname+" is a duplicate. Choose a new city.", Toast.LENGTH_LONG).show();
             }
-            cursor.close();
+
         }
     }
 }

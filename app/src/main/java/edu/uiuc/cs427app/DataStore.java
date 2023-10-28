@@ -7,13 +7,10 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import java.util.HashMap;
 public class DataStore extends ContentProvider {
 
     public DataStore() {
@@ -75,7 +72,6 @@ public class DataStore extends ContentProvider {
         public static Uri buildPrefUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
-
     }
 
     private static final int CITY = 10;
@@ -93,7 +89,7 @@ public class DataStore extends ContentProvider {
     }
 
     /**
-     * Builds a UriMatcher that is used to determine witch database request is being made.
+     * Builds a UriMatcher that is used to determine which database request is being made.
      */
     public static UriMatcher buildUriMatcher(){
         String content = PROVIDER_NAME;
@@ -203,7 +199,15 @@ public class DataStore extends ContentProvider {
         }
         return rows;
     }
-
+    /** TODO finish this comment
+     * Called whenever DATABASE_VERSION is incremented. This is used whenever schema changes need
+     * to be made or new tables are added. It just deletes the tables.
+     * @param uri The database being updated.
+     * @param projection The previous version of the database.
+     * @param selection The new version of the database.
+     * @param selectionArgs The new version of the database.
+     * @param sortOrder The new version of the database.
+     */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -267,7 +271,10 @@ public class DataStore extends ContentProvider {
         return retCursor;
     }
 
-    // creating a database
+    /**
+     *  Helper class to define database table structure and methods to create a db.
+     *  Uses the column names from the contract classes above
+     */
     private static class DatabaseHelper extends SQLiteOpenHelper {
         // declaring version of the database
         private static final int DATABASE_VERSION = 1;

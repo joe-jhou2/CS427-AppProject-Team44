@@ -1,5 +1,6 @@
 package edu.uiuc.cs427app;
 
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentValues;
@@ -13,8 +14,10 @@ import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import edu.uiuc.cs427app.databinding.ActivityMainBinding;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.libraries.places.api.Places;
+import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -86,7 +90,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
 
-                // If you're using shared preferences or any other method for session management, clear the session details here.
+                // If you're using shared preferences or any other method for session management,
+                // clear the session details here.
 
                 // Redirect to Authentication Page(Create AccountActivity in our case)
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -96,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // This code implements the dynamic list of cities and buttons
         String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
-        Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null, selection, null, null);
+        Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null,
+                                                        selection, null, null);
 
         LinearLayout linlay = findViewById(R.id.cityListLayout);
         linlay.setOrientation(LinearLayout.VERTICAL);
@@ -108,13 +114,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LONGITUDE));
                 LinearLayout row = new LinearLayout(this);
                 TextView city = new TextView(this);
+                TextView spacer = new TextView(this);
 
                 // This creates the onClick listener tied to the button so that when clicks it creates the
                 // proper intent with cityname for the CityDetailsActivity
-                Button showDetails = new Button(this);
-
-                // Add a button to remove a given city
-                Button removeCity = new Button(this);
+                Button showDetails = new MaterialButton(this);
+                Button showMap = new MaterialButton(this);
+                Button removeCity = new MaterialButton(this);
 
                 // Handles the redirection to city details
                 showDetails.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +133,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent);
                     }
                 });
+
+                showMap.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v){
+                        Intent intent = new Intent(MainActivity.this , MapsActivity.class);
+                        intent.putExtra("city", cityname);
+                        intent.putExtra("lat",latitude);
+                        intent.putExtra("lon",longitude);
+                        startActivity(intent);
+                    }
+                });
+
 
                 // Remove the city from the DB under current user
                 removeCity.setOnClickListener(new View.OnClickListener() {
@@ -148,15 +165,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Configure buttons and text
                 city.setText(cityname);
-                city.setWidth(400);
-                city.setPadding(20,0,0,0);
-                showDetails.setText("Show Details");
-                removeCity.setText("Remove City");
+                city.setWidth(500);
+
+                showDetails.setText("Details");
+                //showDetails.setText("Weather");
+                showMap.setText("Map");
+                removeCity.setText("Delete");
+                spacer.setWidth(30);
 
                 // Set up layout
                 row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setPadding(20,0,0,0);
+
                 row.addView(city);
                 row.addView(showDetails);
+                row.addView(spacer);
+                //row.addView(showMap);
                 row.addView(removeCity);
                 linlay.addView(row);
                 cursor.moveToNext();

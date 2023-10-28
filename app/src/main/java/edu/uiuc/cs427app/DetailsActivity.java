@@ -5,16 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-
-
 
 public class DetailsActivity extends AppCompatActivity implements View.OnClickListener{
     private Account account;
@@ -41,8 +34,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
         welcomeMessage.setText(welcome);
         cityInfoMessage.setText(cityWeatherInfo);
-        // Get the weather information from a Service that connects to a weather server and show the results
 
+        // TODO Get the weather information from a Service that connects to a weather server and show the results
+
+        //set up map button and listener
         Button buttonMap = findViewById(R.id.mapButton);
         buttonMap.setOnClickListener(this);
 
@@ -50,15 +45,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        //Implement this (create an Intent that goes to a new Activity, which shows the map)
-        switch (view.getId()){
-            case R.id.mapButton:
-                Intent mapIntent = new Intent(DetailsActivity.this, MapsActivity.class);
-                mapIntent.putExtra("city", getIntent().getStringExtra("city"));
-                mapIntent.putExtra("lat", getIntent().getDoubleExtra("lat",0.0));
-                mapIntent.putExtra("lon", getIntent().getDoubleExtra("lon",0.0));
-                startActivity(mapIntent);
-                break;
+        //send the cityname, lat, and lon to the map
+        if (view.getId() == R.id.mapButton) {
+            Intent mapIntent = new Intent(DetailsActivity.this, MapsActivity.class);
+            mapIntent.putExtra("city", getIntent().getStringExtra("city"));
+            mapIntent.putExtra("lat", getIntent().getDoubleExtra("lat", 0.0));
+            mapIntent.putExtra("lon", getIntent().getDoubleExtra("lon", 0.0));
+            startActivity(mapIntent);
         }
     }
 }
