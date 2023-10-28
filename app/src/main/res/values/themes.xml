@@ -37,7 +37,7 @@
         <item name = "android:editTextColor">@color/white</item>
         <item name = "android:textColorHint">@color/white</item>
     </style>
-    <style name="Theme.Day" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Day" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ffdb00</item>
         <item name="colorPrimaryVariant">#fff099</item>
@@ -49,6 +49,7 @@
         <item name = "android:textColor">@color/black</item>
         <item name = "android:editTextColor">@color/black</item>
         <item name = "android:textColorHint">@color/black</item>
+        <item name = "titleTextColor">@color/black</item>
     </style>
     <style name="Theme.Night" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
