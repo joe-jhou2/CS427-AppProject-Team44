@@ -74,6 +74,5 @@
     <style name="Button.Primary" parent="android:style/Widget.Button">
         <item name="android:background">@color/white</item>
         <item name="android:layout_margin">10dp</item>
-
     </style>
 </resources>

@@ -14,12 +14,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import edu.uiuc.cs427app.databinding.ActivityMapsBinding;
 
+// uses Google Map fragment to display a city map
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     String cityname;
-    double latitude = 40.11642; //Champaign
+    double latitude = 40.11642; //default value is Champaign
     double longitude = -88.24338;
 
     @Override
@@ -52,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        //set the map lat/lon, add a market with cityname, and move the camera to the city
         LatLng citylocation = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(citylocation).title(cityname));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(citylocation));

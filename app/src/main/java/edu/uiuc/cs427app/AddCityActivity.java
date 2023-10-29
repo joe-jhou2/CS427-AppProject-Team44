@@ -31,6 +31,8 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
     private double latitude;
     private double longitude;
 
+    // uses Google Places autocomplete restricted to cities when user is searching
+    // once selected it saves the cityname and lat/lon to the db
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,8 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
 
         // Restrict the Places to "Cities"
         autocompleteFragment.setTypesFilter(Arrays.asList("(cities)"));
+
+        autocompleteFragment.setHint("Search for City");
 
         // Set up a PlaceSelectionListener to handle the response and store the info
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -115,7 +119,7 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                 // displaying a toast message
                 Toast.makeText(getBaseContext(), cityname+" Saved", Toast.LENGTH_LONG).show();
 
-                //jump back to the Main Activity
+                //release the cursor and jump back to the Main Activity
                 cursor.close();
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("account", account);

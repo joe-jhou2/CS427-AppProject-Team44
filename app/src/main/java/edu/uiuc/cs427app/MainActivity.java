@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -104,9 +105,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // This creates the onClick listener tied to the button so that when clicks it creates the
                 // proper intent with cityname for the CityDetailsActivity
-                Button showDetails = new MaterialButton(this);
-                Button showMap = new MaterialButton(this);
-                Button removeCity = new MaterialButton(this);
+                Button showDetails  = new MaterialButton(this);
+                Button showMap      = new MaterialButton(this);
+                Button removeCity   = new MaterialButton(this);
+
+                MaterialButton showWeather = new MaterialButton(this,null, com.google.android.material.R.attr.materialButtonStyle);
 
                 // Handles the redirection to city details
                 showDetails.setOnClickListener(new View.OnClickListener() {
@@ -159,11 +162,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 removeCity.setText("Delete");
                 spacer.setWidth(30);
 
+                showMap.setTooltipText("Show Map");
+                showWeather.setTooltipText("Show Weather");
+                removeCity.setTooltipText("Delete City");
+
+                showWeather.setIconResource(R.drawable.weather_cloudy);
+                showWeather.setWidth(50);
+                showWeather.setIconPadding(0);
+                showWeather.setPaddingRelative(0, 0, 0, 0);
+                showWeather.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_TOP);
+                showWeather.setMinWidth(0);
+
                 // Set up layout
                 row.setOrientation(LinearLayout.HORIZONTAL);
                 row.setPadding(20,0,0,0);
 
+
                 row.addView(city);
+                //row.addView(showWeather);
                 row.addView(showDetails);
                 row.addView(spacer); //adding a blank textview to space out the buttons
                 //row.addView(showMap);

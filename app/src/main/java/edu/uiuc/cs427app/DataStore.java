@@ -20,13 +20,18 @@ public class DataStore extends ContentProvider {
     //      - need to check if exists and perform either an update or an insert and delete
 
 
-    // defining authority so that other application can access it
+    // defining authority so that other application can access the content provider
+    // however "exported" is set to false in the Manifest for this app, most of the
+    // functionality is not needed since we aren't exporting data and the app would
+    // work just fine with direct calls to the SQLite db
     static final String PROVIDER_NAME = "edu.uiuc.cs427app.provider";
     private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + PROVIDER_NAME);
+
+    //paths that can be appended to the URI, representing different tables
     public static final String PATH_CITY = "city";
     public static final String PATH_PREF = "pref";
 
-
+    //defines the URI and table/column names for the city information
     public static final class CityEntry implements BaseColumns {
         // Content URI represents the base location for the table
         public static final Uri CONTENT_URI =
@@ -52,6 +57,8 @@ public class DataStore extends ContentProvider {
         }
     }
 
+    //defines the URI and table/column names for the user preference information
+    //we ended up not using this functionality
     public static final class PrefEntry implements BaseColumns {
         // Content URI represents the base location for the table
         public static final Uri CONTENT_URI =
@@ -74,14 +81,21 @@ public class DataStore extends ContentProvider {
         }
     }
 
+    //define the different ID's used in the URI matcher so the matcher can build
+    //the appropriate database table
     private static final int CITY = 10;
     private static final int CITY_ID = 11;
     private static final int PREF = 20;
     private static final int PREF_ID = 21;
-
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+
+    // initializes the dbOpenHelper object which creates/returns the db for calls
     private DatabaseHelper dbOpenHelper;
 
+
+    /**
+     * creates a new DB helper object which is used to access the db.
+     */
     @Override
     public boolean onCreate() {
         dbOpenHelper = new DatabaseHelper(getContext());
@@ -104,7 +118,11 @@ public class DataStore extends ContentProvider {
 
         return matcher;
     }
-
+    /**
+     * Builds a UriMatcher that is used to determine which database request is being made.
+     * @ param uri
+     * @ return string used for db calls
+     */
     @Override
     public String getType(Uri uri) {
         switch(sUriMatcher.match(uri)){
@@ -121,6 +139,12 @@ public class DataStore extends ContentProvider {
         }
     }
 
+    /**
+     * A wrapper for a database DELETE.
+     * @param uri The URI with content scheme.
+     * @param values key/value pair data to update in db.
+     * @return result URI
+     */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -154,7 +178,13 @@ public class DataStore extends ContentProvider {
         return returnUri;
     }
 
-
+    /**
+     * A wrapper for a database DELETE.
+     * @param uri The URI with content scheme.
+     * @param selection a filter, formatted as a SQL WHERE clause
+     * @param selectionArgs used to replace ?'s in selection.
+     * @return the number of rows deleted
+     */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -178,7 +208,14 @@ public class DataStore extends ContentProvider {
 
         return rows;
     }
-
+    /**
+     * A wrapper for a database UPDATE.
+     * @param uri The URI with content scheme.
+     * @param values key/value pair data to update in db.
+     * @param selection a filter, formatted as a SQL WHERE clause
+     * @param selectionArgs used to replace ?'s in selection.
+     * @return the number of rows updated
+     */
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -186,10 +223,10 @@ public class DataStore extends ContentProvider {
 
         switch(sUriMatcher.match(uri)){
             case CITY:
-                rows = db.delete(CityEntry.TABLE_NAME, selection, selectionArgs);
+                rows = db.update(CityEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case PREF:
-                rows = db.delete(PrefEntry.TABLE_NAME, selection, selectionArgs);
+                rows = db.update(PrefEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -199,14 +236,14 @@ public class DataStore extends ContentProvider {
         }
         return rows;
     }
-    /** TODO finish this comment
-     * Called whenever DATABASE_VERSION is incremented. This is used whenever schema changes need
-     * to be made or new tables are added. It just deletes the tables.
-     * @param uri The database being updated.
-     * @param projection The previous version of the database.
-     * @param selection The new version of the database.
-     * @param selectionArgs The new version of the database.
-     * @param sortOrder The new version of the database.
+    /**
+     * A wrapper for a database QUERY.
+     * @param uri The URI with content scheme.
+     * @param projection a list of database columns to return.
+     * @param selection a filter, formatted as a SQL WHERE clause
+     * @param selectionArgs used to replace ?'s in selection.
+     * @param sortOrder how to order rows, formatted as SQL ORDER BY clause.
+     * @return a cursor with the result rows from query
      */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {

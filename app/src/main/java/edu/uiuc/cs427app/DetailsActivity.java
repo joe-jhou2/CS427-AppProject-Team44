@@ -32,7 +32,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         // Initializing the GUI elements
         TextView welcomeMessage = findViewById(R.id.welcomeText);
         TextView cityInfoMessage = findViewById(R.id.cityInfo);
-
         welcomeMessage.setText(welcome);
         cityInfoMessage.setText(cityWeatherInfo);
 
@@ -46,7 +45,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        //send the cityname, lat, and lon to the map
+        //send the cityname, lat, and lon to the MapActivity
         if (view.getId() == R.id.mapButton) {
             Intent mapIntent = new Intent(DetailsActivity.this, MapsActivity.class);
             mapIntent.putExtra("city", getIntent().getStringExtra("city"));
