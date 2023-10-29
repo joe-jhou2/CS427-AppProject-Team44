@@ -55,10 +55,13 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
         // Only return name, lat/lon, and address data
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
 
+        //format the search box
+        autocompleteFragment.getView().setBackgroundColor(getColor(R.color.white));
+        autocompleteFragment.setHint("Search for City");
+
         // Restrict the Places to "Cities"
         autocompleteFragment.setTypesFilter(Arrays.asList("(cities)"));
 
-        autocompleteFragment.setHint("Search for City");
 
         // Set up a PlaceSelectionListener to handle the response and store the info
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
