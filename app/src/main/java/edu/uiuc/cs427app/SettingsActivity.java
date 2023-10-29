@@ -54,8 +54,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private Account getAccountFromPreferences() {
+        // Get user preferences from user profile
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+
+        // get user name
         String accountName = sharedPreferences.getString("account_name", null);
+        
         // Retrieve more info if necessary
         if (accountName != null) {
             return new Account(accountName, getString(R.string.account_type));
