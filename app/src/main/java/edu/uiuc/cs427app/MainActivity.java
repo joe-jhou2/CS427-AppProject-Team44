@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Places.initialize(getApplicationContext(), apiKey);
         }
 
-
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
         // buttons are added to layout programmatically
@@ -192,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Sets the activity's theme based on the user's saved preference.
     private Account getAccountFromPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         String accountName = sharedPreferences.getString("account_name", null);
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return null;
     }
 
-    //Sets the activity's theme based on the user's saved preference.
+
 
     // Function to handle adding cities to the user's list
     @Override
