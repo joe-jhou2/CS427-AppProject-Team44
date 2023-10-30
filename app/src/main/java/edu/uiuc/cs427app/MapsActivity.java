@@ -1,9 +1,9 @@
 package edu.uiuc.cs427app;
 
-import androidx.fragment.app.FragmentActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,12 +14,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import edu.uiuc.cs427app.databinding.ActivityMapsBinding;
 
+// uses Google Map fragment to display a city map
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     String cityname;
-    double latitude = 40.11642; //Champaign
+    double latitude = 40.11642; //default value is Champaign
     double longitude = -88.24338;
 
     @Override
@@ -34,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //process the city information in the intent package
         Intent intent = getIntent();
         cityname = intent.getStringExtra("city");
         latitude = intent.getDoubleExtra("lat",-34);
@@ -43,17 +45,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * This callback is triggered when the map is ready to be used. We add a marker with the cityname
+     * and move the map view camera to the city's latitude and longitude coords. Map preferences are
+     * saved in activity_maps.xml
+     * @param googleMap  the map to be drawn
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        //set the map lat/lon, add a market with cityname, and move the camera to the city
         LatLng citylocation = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(citylocation).title(cityname));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(citylocation));

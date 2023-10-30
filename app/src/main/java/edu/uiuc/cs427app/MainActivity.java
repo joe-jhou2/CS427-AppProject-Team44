@@ -1,33 +1,25 @@
 package edu.uiuc.cs427app;
 
+
 import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Intent;
-
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.view.View;
-
-import androidx.navigation.ui.AppBarConfiguration;
-
-import edu.uiuc.cs427app.databinding.ActivityMainBinding;
-import android.accounts.Account;
-import android.accounts.AccountManager;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.ui.AppBarConfiguration;
+
 import com.google.android.libraries.places.api.Places;
+import com.google.android.material.button.MaterialButton;
+
+import edu.uiuc.cs427app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Account account;
     private String username;
     protected SharedPreferences sharedPreferences;
-    private Account mCurrentAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Places.initialize(getApplicationContext(), apiKey);
         }
 
-
-
         // Initializing the UI components
         // The list of locations should be customized per user (change the implementation so that
         // buttons are added to layout programmatically
@@ -87,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
 
-                // If you're using shared preferences or any other method for session management, clear the session details here.
+                // If you're using shared preferences or any other method for session management,
+                // clear the session details here.
 
                 // Redirect to Authentication Page(Create AccountActivity in our case)
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -97,25 +87,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // This code implements the dynamic list of cities and buttons
         String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
-        Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null, selection, null, null);
+        Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null,
+                                                        selection, null, null);
 
         LinearLayout linlay = findViewById(R.id.cityListLayout);
         linlay.setOrientation(LinearLayout.VERTICAL);
 
         if(cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                @SuppressLint("Range") String cityname = cursor.getString(cursor.getColumnIndex(DataStore.CityEntry.COL_CITY));
-                @SuppressLint("Range") double latitude = cursor.getDouble(cursor.getColumnIndex(DataStore.CityEntry.COL_LATITUDE));
-                @SuppressLint("Range") double longitude = cursor.getDouble(cursor.getColumnIndex(DataStore.CityEntry.COL_LONGITUDE));
+                String cityname = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_CITY));
+                double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LATITUDE));
+                double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LONGITUDE));
                 LinearLayout row = new LinearLayout(this);
                 TextView city = new TextView(this);
+                TextView spacer = new TextView(this);
 
                 // This creates the onClick listener tied to the button so that when clicks it creates the
                 // proper intent with cityname for the CityDetailsActivity
-                Button showDetails = new Button(this);
+                Button showDetails  = new MaterialButton(this);
+                Button showMap      = new MaterialButton(this);
+                Button removeCity   = new MaterialButton(this);
 
-                // Add a button to remove a given city
-                Button removeCity = new Button(this);
+                MaterialButton showWeather = new MaterialButton(this,null, com.google.android.material.R.attr.materialButtonStyle);
 
                 // Handles the redirection to city details
                 showDetails.setOnClickListener(new View.OnClickListener() {
@@ -129,12 +122,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
+                showMap.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v){
+                        Intent intent = new Intent(MainActivity.this , MapsActivity.class);
+                        intent.putExtra("city", cityname);
+                        intent.putExtra("lat",latitude);
+                        intent.putExtra("lon",longitude);
+                        startActivity(intent);
+                    }
+                });
+
+
                 // Remove the city from the DB under current user
                 removeCity.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
                         // Create SQL query to do the job and perform delete
-                        String query = "USERNAME = '" + username + "' AND CITY = '" + cityname + "'";
-                        getContentResolver().delete(DataStore.CityEntry.CONTENT_URI, query, null);
+                        String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
+                                +DataStore.CityEntry.COL_CITY+" = '"+cityname+"'";
+                        //String query = "USERNAME = '" + username + "' AND CITY = '" + cityname + "'";
+                        getContentResolver().delete(DataStore.CityEntry.CONTENT_URI, selection, null);
 
                         // Displaying a toast message
                         Toast.makeText(getBaseContext(), cityname + " removed", Toast.LENGTH_LONG).show();
@@ -147,15 +153,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Configure buttons and text
                 city.setText(cityname);
-                city.setWidth(400);
-                city.setPadding(20,0,0,0);
-                showDetails.setText("Show Details");
-                removeCity.setText("Remove City");
+                city.setWidth(500);
+
+                showDetails.setText("Details");
+                //showDetails.setText("Weather");
+                showMap.setText("Map");
+                removeCity.setText("Delete");
+                spacer.setWidth(30);
+
+                showMap.setTooltipText("Show Map");
+                showWeather.setTooltipText("Show Weather");
+                removeCity.setTooltipText("Delete City");
+
+                showWeather.setIconResource(R.drawable.weather_cloudy);
+                showWeather.setWidth(50);
+                showWeather.setIconPadding(0);
+                showWeather.setPaddingRelative(0, 0, 0, 0);
+                showWeather.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_TOP);
+                showWeather.setMinWidth(0);
 
                 // Set up layout
                 row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setPadding(20,0,0,0);
+
+
                 row.addView(city);
+                //row.addView(showWeather);
                 row.addView(showDetails);
+                row.addView(spacer); //adding a blank textview to space out the buttons
+                //row.addView(showMap);
                 row.addView(removeCity);
                 linlay.addView(row);
                 cursor.moveToNext();
@@ -165,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Sets the activity's theme based on the user's saved preference.
     private Account getAccountFromPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         String accountName = sharedPreferences.getString("account_name", null);
@@ -175,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return null;
     }
 
-    //Sets the activity's theme based on the user's saved preference.
+
 
     // Function to handle adding cities to the user's list
     @Override
@@ -185,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent = new Intent(this, AddCityActivity.class);
 //            intent.putExtra("username", username);
             intent.putExtra("account", account);
-            finish();
             startActivity(intent);
         }
     }

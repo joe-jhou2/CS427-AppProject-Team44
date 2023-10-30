@@ -8,14 +8,14 @@ Project documents
 https://drive.google.com/drive/u/2/folders/1uyBQXUpRiI5NP4rH4lyn0NL2cK9AxRci
 <br/>
 
-<b>Team # member information</b>
+<b>Team #44 member information</b>
 <br/>
 | Name          | NetID         | GitHub ID   | Role          | Experience    |
 | ------------- | ------------- | ------------| ------------- | ------------- |
 |  Yibin Huang  |  yibinh2      | Erichuangyb | Developer     | Java, Python  |            
 |  Riley Morris |  rileydm2     | RileyMorris | Tech Leader   | Java, Python  |
 |  Zhao Li      |  zhaol4       | ericillinois| Developer     | Beginner      |
-|  Jeff Hank    |  jdhank2      | jeff-hank   | Developer     | coding years  |
+|  Jeff Hank    |  jdhank2      | jeff-hank   | Developer     | C++,Java,Pyth |
 |  Justin Lin   |  ytl5         | justinnlin  | Developer     | python, C++   |
 |  Luis Chavez  |  lwchave2     | luiswally   | Developer     | Matlab, CS    |
 |  Jue Hou      |  jueh4        | juehoujhou4 | Manager       | python,R,Java |
@@ -62,6 +62,7 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
+Oct-8-2023
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
 | ---------------| --------------------------------| ----------------------|
@@ -81,17 +82,18 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
+Oct-15-2023
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
 | ---------------| --------------------------------| ----------------------|
 |   yibinh2      |        complete milestone2      |   Milestone3, task1   |
 |   rileydm2     |        complete milestone2      | Milestone3,lead task2 |
-|   zhaol4       |        complete milestone2      |   Milestone3, task2   |
+|   zhaol4       |        complete milestone2      |  Milestone3, task2    |
 |   jdhank2      |        complete milestone2      |   Milestone3, task2   |
 |   ytl5         |        complete milestone2      |   Milestone3, task1   |
 |   lwchave2     |        complete milestone2      | Milestone3,lead task1 |
 |   jueh4        |        complete milestone2      |   Milestone3, task3   |
-|   ktsoi3       |        complete milestone2      | Milestone3,lead task3 |
+|   ktsoi3       |        complete milestone2      | Milestone3,lead task3 |  
 </br>
 
 
@@ -100,17 +102,18 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
+Oct-22-2023
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
-| ---------------| --------------------------------| ----------------------|
-|   yibinh2      |        Milestone3, task1        |       finish up       |
-|   rileydm2     |        Milestone3, lead task2   |       finish up       |
-|   zhaol4       |        Milestone3, task2        |       finish up       |
-|   jdhank2      |        Milestone3, task2        |       finish up       |
-|   ytl5         |        Milestone3, task1        |       finish up       |
-|   lwchave2     |        Milestone3, lead task1   |       finish up       |
-|   jueh4        |        Milestone3, task3        |       finish up       |
-|   ktsoi3       |        Milestone3, lead task3   |       finish up       |
+| ---------------| --------------------------------| --------------------------------------------------------------------------------------------------------|
+|   yibinh2      |        Milestone3, task1        | basic activity class for setting page, log off and change theme buttons                                 |
+|   rileydm2     |        Milestone3, lead task2   | add button and functionality to remove city from users list                                             |
+|   zhaol4       |        Milestone3, task2        | Milestone3, task2                                                                                       |
+|   jdhank2      |        Milestone3, task2        | add city function, weather and map activity, and many details                                           |
+|   ytl5         |        Milestone3, task1        | Milestone3, task1                                                                                       |
+|   lwchave2     |        Milestone3, lead task1   | add user login and authentication page, backend and frontend. fix some logics and touch up many details |
+|   jueh4        |        Milestone3, task3        | add theme changing function and call it from different activities, fix some details                     |
+|   ktsoi3       |        Milestone3, lead task3   | design 4 different schemes, gradient color background, theme consistency across different activities    |
 </br>
 
 
@@ -119,17 +122,18 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
+Oct-29-203
 </br>
-| NetID          | Progress from last week         | Tasks for next week   |
-| ---------------| --------------------------------| ----------------------|
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
+| NetID          | Progress from last week                | Tasks for next week   |
+| ---------------| ---------------------------------------| ----------------------|
+|   yibinh2      | Milestone3, task1, detail above        |                       |
+|   rileydm2     | Milestone3, lead task2, detail above   |                       |
+|   zhaol4       | Milestone3, task2, detail above        |                       |
+|   jdhank2      | Milestone3, task2, detail above        |                       |
+|   ytl5         | Milestone3, task1, detail above        |                       |
+|   lwchave2     | Milestone3, lead task1, detail above   |                       |
+|   jueh4        | Milestone3, task3, detail above        |                       |
+|   ktsoi3       | Milestone3, lead task3, detail above   |                       |
 </br>
 
 

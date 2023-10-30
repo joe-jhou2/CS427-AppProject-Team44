@@ -54,12 +54,34 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private Account getAccountFromPreferences() {
+        // Get user preferences from user profile
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
+
+        // get user name
         String accountName = sharedPreferences.getString("account_name", null);
+        
         // Retrieve more info if necessary
         if (accountName != null) {
             return new Account(accountName, getString(R.string.account_type));
         }
         return null;
     }
+
+    @Override
+    public void onBackPressed() {
+        // Clear the previous activities upon 'back button'
+        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+
+        // Clear previous activities with preset settings that may have been superseded
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Pass the current account to a clean instance of the MainActivity
+        Account currentAccount = getAccountFromPreferences();
+        intent.putExtra("account", currentAccount);
+
+        startActivity(intent);
+
+        finish();
+    }
+
 }
