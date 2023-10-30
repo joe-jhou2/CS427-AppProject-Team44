@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         // get user name
         String accountName = sharedPreferences.getString("account_name", null);
-        
+
         // Retrieve more info if necessary
         if (accountName != null) {
             return new Account(accountName, getString(R.string.account_type));

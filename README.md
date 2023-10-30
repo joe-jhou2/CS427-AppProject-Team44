@@ -126,14 +126,14 @@ Oct-29-203
 </br>
 | NetID          | Progress from last week                | Tasks for next week   |
 | ---------------| ---------------------------------------| ----------------------|
-|   yibinh2      | Milestone3, task1, detail above        |                       |
-|   rileydm2     | Milestone3, lead task2, detail above   |                       |
-|   zhaol4       | Milestone3, task2, detail above        |                       |
-|   jdhank2      | Milestone3, task2, detail above        |                       |
-|   ytl5         | Milestone3, task1, detail above        |                       |
-|   lwchave2     | Milestone3, lead task1, detail above   |                       |
-|   jueh4        | Milestone3, task3, detail above        |                       |
-|   ktsoi3       | Milestone3, lead task3, detail above   |                       |
+|   yibinh2      | Milestone3, task1, detail above        | weather page, backend |
+|   rileydm2     | Milestone3, lead task2, detail above   | weather page, leader  |
+|   zhaol4       | Milestone3, task2, detail above        | weather page, backend |
+|   jdhank2      | Milestone3, task2, detail above        | map page              |
+|   ytl5         | Milestone3, task1, detail above        | weather page, backend |
+|   lwchave2     | Milestone3, lead task1, detail above   | weather page, leader  |
+|   jueh4        | Milestone3, task3, detail above        | weather page, frontend|
+|   ktsoi3       | Milestone3, lead task3, detail above   | weather page, frontend|
 </br>
 
 
