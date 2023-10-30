@@ -110,7 +110,7 @@ Oct-22-2023
 |   rileydm2     |        Milestone3, lead task2   | add button and functionality to remove city from users list                                             |
 |   zhaol4       |        Milestone3, task2        | Milestone3, task2                                                                                       |
 |   jdhank2      |        Milestone3, task2        | add city function, weather and map activity, and many details                                           |
-|   ytl5         |        Milestone3, task1        | Milestone3, task1                                                                                       |
+|   ytl5         |        Milestone3, task1        | Milestone3,  add username in the MapActivity screen and show username in main screen                    |
 |   lwchave2     |        Milestone3, lead task1   | add user login and authentication page, backend and frontend. fix some logics and touch up many details |
 |   jueh4        |        Milestone3, task3        | add theme changing function and call it from different activities, fix some details                     |
 |   ktsoi3       |        Milestone3, lead task3   | design 4 different schemes, gradient color background, theme consistency across different activities    |
