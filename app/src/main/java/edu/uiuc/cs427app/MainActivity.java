@@ -108,9 +108,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Button showMap      = new MaterialButton(this);
                 Button removeCity   = new MaterialButton(this);
 
-                MaterialButton showWeather = new MaterialButton(this,null, com.google.android.material.R.attr.materialButtonStyle);
+                //MaterialButton showWeather = new MaterialButton(this,null, com.google.android.material.R.attr.materialButtonStyle);
 
                 // Handles the redirection to city details
+                //TODO change this to redirect to a WeatherActivity for Milestone 4
                 showDetails.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
                         Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
+                //redirects to MapActivity
                 showMap.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
                         Intent intent = new Intent(MainActivity.this , MapsActivity.class);
@@ -162,27 +164,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 spacer.setWidth(30);
 
                 showMap.setTooltipText("Show Map");
-                showWeather.setTooltipText("Show Weather");
+                //showWeather.setTooltipText("Show Weather");
                 removeCity.setTooltipText("Delete City");
 
-                showWeather.setIconResource(R.drawable.weather_cloudy);
-                showWeather.setWidth(50);
-                showWeather.setIconPadding(0);
-                showWeather.setPaddingRelative(0, 0, 0, 0);
-                showWeather.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_TOP);
-                showWeather.setMinWidth(0);
+                //experimenting with adding icons to buttons or icon-only buttons
+//                showWeather.setIconResource(R.drawable.weather_cloudy);
+//                showWeather.setWidth(50);
+//                showWeather.setIconPadding(0);
+//                showWeather.setPaddingRelative(0, 0, 0, 0);
+//                showWeather.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_TOP);
+//                showWeather.setMinWidth(0);
 
                 // Set up layout
                 row.setOrientation(LinearLayout.HORIZONTAL);
                 row.setPadding(20,0,0,0);
 
-
+                //add items to the horizontal layout
                 row.addView(city);
                 //row.addView(showWeather);
                 row.addView(showDetails);
                 row.addView(spacer); //adding a blank textview to space out the buttons
-                //row.addView(showMap);
-                row.addView(removeCity);
+                //row.addView(showMap); //TODO uncomment this to add a direct button to maps
+                row.addView(removeCity); //TODO replace delete city function with a dialog like for themes
                 linlay.addView(row);
                 cursor.moveToNext();
             }
