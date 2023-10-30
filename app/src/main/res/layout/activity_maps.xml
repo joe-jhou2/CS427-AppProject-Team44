@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MapsActivity"
-    map:cameraZoom="11"
-    map:mapType="normal"
-    map:uiCompass="false"
-    map:uiRotateGestures="true"
-    map:uiScrollGestures="true"
-    map:uiTiltGestures="true"
-    map:uiZoomControls="true"
-    map:uiZoomGestures="true"/>
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="192dp">
+
+        <TextView
+            android:id="@+id/cityNameLatLon"
+            android:paddingStart="20dp"
+            android:background="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+        <fragment
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            map:cameraZoom="11"
+            map:mapType="normal"
+            map:uiCompass="false"
+            map:uiRotateGestures="true"
+            map:uiScrollGestures="true"
+            map:uiTiltGestures="true"
+            map:uiZoomControls="true"
+            map:uiZoomGestures="true"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

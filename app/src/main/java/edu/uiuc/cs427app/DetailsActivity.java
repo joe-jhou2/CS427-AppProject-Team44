@@ -51,6 +51,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             mapIntent.putExtra("city", getIntent().getStringExtra("city"));
             mapIntent.putExtra("lat", getIntent().getDoubleExtra("lat", 0.0));
             mapIntent.putExtra("lon", getIntent().getDoubleExtra("lon", 0.0));
+            mapIntent.putExtra("account", account);
             startActivity(mapIntent);
         }
     }
