@@ -17,7 +17,7 @@ https://drive.google.com/drive/u/2/folders/1uyBQXUpRiI5NP4rH4lyn0NL2cK9AxRci
 |  Zhao Li      |  zhaol4       | ericillinois| Developer     | Beginner      |
 |  Jeff Hank    |  jdhank2      | jeff-hank   | Developer     | C++,Java,Pyth |
 |  Justin Lin   |  ytl5         | justinnlin  | Developer     | python, C++   |
-|  Luis Chavez  |  lwchave2     | luiswally   | Developer     | Matlab, CS    |
+|  Luis Chavez  |  lwchave2     | luiswally   | Developer     | Java, Python  |
 |  Jue Hou      |  jueh4        | juehoujhou4 | Manager       | python,R,Java |
 |  Krystal Tsoi |  ktsoi3       | ktsoi3      | Developer     | JS,python,C++ |
 <br/>
