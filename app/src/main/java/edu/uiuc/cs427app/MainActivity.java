@@ -112,6 +112,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Handles the redirection to city details
                 //TODO change this to redirect to a WeatherActivity for Milestone 4
+                showDetails.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v){
+                        Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
+                        intent.putExtra("city", cityname);
+                        intent.putExtra("account", account);
+                        intent.putExtra("lat",latitude);
+                        intent.putExtra("lon",longitude);
+                        startActivity(intent);
+                    }
+                });
                 showDetails.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
                         Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
