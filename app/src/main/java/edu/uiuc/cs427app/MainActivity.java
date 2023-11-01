@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         intent.putExtra("city", cityname);
                         intent.putExtra("lat",latitude);
                         intent.putExtra("lon",longitude);
+                        intent.putExtra("account", account);
                         startActivity(intent);
                     }
                 });
