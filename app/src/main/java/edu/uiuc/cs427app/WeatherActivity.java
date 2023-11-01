@@ -55,9 +55,9 @@ public class WeatherActivity extends AppCompatActivity {
 
         String solo_name = cityName.split(",", 2)[0];
 
-        TextView weatherInfo = findViewById(R.id.temperature);
-        TextView windInfo = findViewById(R.id.wind);
-        TextView humidInfo = findViewById(R.id.humid);
+        TextView weatherInfo = findViewById(R.id.CityTemperature);
+        TextView windInfo = findViewById(R.id.CityWind);
+        TextView humidInfo = findViewById(R.id.CityHumidity);
 
         new Thread(new Runnable() {
             @Override
