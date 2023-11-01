@@ -50,7 +50,7 @@
             android:id="@+id/buttonAddCity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add a location" />
+            android:text="Edit Locations" />
 
         <Button
             android:id="@+id/settingsPage"

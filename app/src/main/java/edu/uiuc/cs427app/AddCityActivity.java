@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +20,9 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AddCityActivity extends AppCompatActivity implements View.OnClickListener {
@@ -30,6 +34,8 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
     private String cityname;
     private double latitude;
     private double longitude;
+
+    private ArrayList<String> city_list = new ArrayList<>();
 
     // uses Google Places autocomplete restricted to cities when user is searching
     // once selected it saves the cityname and lat/lon to the db
@@ -96,6 +102,66 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d(TAG, "An error occurred: " + status);
             }
         });
+
+        // This code implements the dynamic list of cities and buttons for deletion
+        String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
+        Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null,
+                selection, null, null);
+
+        LinearLayout linlay = findViewById(R.id.deleteCityListLayout);
+        linlay.setOrientation(LinearLayout.VERTICAL);
+
+        if(cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                String cityname = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_CITY));
+                double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LATITUDE));
+                double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LONGITUDE));
+                city_list.add(cityname);
+                LinearLayout row = new LinearLayout(this);
+                TextView city = new TextView(this);
+                TextView spacer = new TextView(this);
+
+                // This creates the onClick listener tied to the button so that when clicks it creates the
+                // proper intent with cityname for the CityDetailsActivity
+                Button removeCity   = new MaterialButton(this);
+
+                // Deletes city
+                removeCity.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v){
+                        // Create SQL query to do the job and perform delete
+                        String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
+                                +DataStore.CityEntry.COL_CITY+" = '"+cityname+"'";
+                        //String query = "USERNAME = '" + username + "' AND CITY = '" + cityname + "'";
+                        getContentResolver().delete(DataStore.CityEntry.CONTENT_URI, selection, null);
+                        // Displaying a toast message
+                        Toast.makeText(getBaseContext(), cityname + " removed", Toast.LENGTH_LONG).show();
+                        // Refresh AddCityActivity
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+                // Configure buttons and text
+                city.setText(cityname);
+                city.setWidth(675);
+
+                removeCity.setText("Delete");
+
+                removeCity.setTooltipText("Delete City");
+
+                // Set up layout
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setPadding(80,0,0,0);
+
+                //add items to the horizontal layout
+                row.addView(city);
+                row.addView(removeCity);
+
+                linlay.addView(row);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
     }
 
     @Override
