@@ -108,20 +108,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Button showMap      = new MaterialButton(this);
                 Button removeCity   = new MaterialButton(this);
 
-                //MaterialButton showWeather = new MaterialButton(this,null, com.google.android.material.R.attr.materialButtonStyle);
+                Button showWeather = new MaterialButton(this);
 
-                // Handles the redirection to city details
-                //TODO change this to redirect to a WeatherActivity for Milestone 4
-                showDetails.setOnClickListener(new View.OnClickListener(){
+                // Handles the redirection to city weather detials
+                showWeather.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
                         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
                         intent.putExtra("city", cityname);
                         intent.putExtra("account", account);
-                        intent.putExtra("lat",latitude);
-                        intent.putExtra("lon",longitude);
                         startActivity(intent);
                     }
                 });
+                // Handles the redirection to city details
                 showDetails.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v){
                         Intent intent = new Intent(MainActivity.this , DetailsActivity.class);
@@ -168,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 city.setWidth(500);
 
                 showDetails.setText("Details");
-                //showDetails.setText("Weather");
+                showWeather.setText("Weather");
                 showMap.setText("Map");
                 removeCity.setText("Delete");
                 spacer.setWidth(30);
@@ -191,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //add items to the horizontal layout
                 row.addView(city);
-                //row.addView(showWeather);
+                row.addView(showWeather);
                 row.addView(showDetails);
                 row.addView(spacer); //adding a blank textview to space out the buttons
                 //row.addView(showMap); //TODO uncomment this to add a direct button to maps

@@ -36,6 +36,9 @@
             android:name=".DetailsActivity"
             android:exported="true" />
         <activity
+            android:name=".WeatherActivity"
+            android:exported="true" />
+        <activity
             android:name=".CreateAccountActivity"
             android:exported="true">
             <intent-filter>
