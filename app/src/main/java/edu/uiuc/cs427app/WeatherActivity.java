@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 //import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -44,7 +46,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         String cityName = getIntent().getStringExtra("city");
         String welcome = "Weather in " + cityName;
-        String date_and_time = "9:00 AM, October 31st, 2023";
+        String date_and_time = new java.util.Date().toString();
 
         TextView welcomeMessage = findViewById(R.id.welcomeText);
         TextView date = findViewById(R.id.date_and_time);
@@ -54,6 +56,8 @@ public class WeatherActivity extends AppCompatActivity {
         String solo_name = cityName.split(",", 2)[0];
 
         TextView weatherInfo = findViewById(R.id.temperature);
+        TextView windInfo = findViewById(R.id.wind);
+        TextView humidInfo = findViewById(R.id.humid);
 
         new Thread(new Runnable() {
             @Override
@@ -75,12 +79,19 @@ public class WeatherActivity extends AppCompatActivity {
                         String city = json.getJSONObject("location").getString("name");
                         String temperature = json.getJSONObject("current").getString("temp_c");
                         String weatherDescription = json.getJSONObject("current").getJSONObject("condition").getString("text");
+                        System.out.println(weatherDescription);
+                        String wind = json.getJSONObject("current").getString("wind_mph").toString();
+                        System.out.println(wind);
+                        String humidity = json.getJSONObject("current").getString("humidity").toString();
+                        System.out.println(humidity);
 
                         // Now, use Handler to post the UI update back on the main thread
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 weatherInfo.setText("Weather in " + city + ": " + weatherDescription + ", " + temperature + "°C");
+                                windInfo.setText("Wind of " + wind + " mph");
+                                humidInfo.setText("Humidity " + humidity  + "%");
                             }
                         });
                     } else {
