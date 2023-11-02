@@ -96,8 +96,7 @@
                     android:text="Wind"
                     android:layout_toEndOf="@id/windIcon"
                     android:layout_alignTop="@id/windIcon"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textSize="15sp" />
 
                 <!-- Wind speed data in the center -->
                 <TextView
@@ -136,11 +135,10 @@
                     android:id="@+id/humidityLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="HUMIDITY"
+                    android:text="Humidity"
                     android:layout_toEndOf="@id/humidityIcon"
                     android:layout_alignTop="@id/humidityIcon"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textSize="15sp" />
 
                 <!-- Humidity data in the center -->
                 <TextView
@@ -172,8 +170,7 @@
                 android:layout_column="0"
                 android:text="Metric 1"
                 android:textAlignment="textStart"
-                android:textSize="25sp"
-                android:textStyle="bold"
+                android:textSize="15sp"
                 android:background="@drawable/rounded_box"
                 android:padding="4dp"
                 android:layout_marginTop="0dp"
@@ -189,8 +186,7 @@
                 android:layout_column="1"
                 android:text="Metric 2"
                 android:textAlignment="textStart"
-                android:textSize="25sp"
-                android:textStyle="bold"
+                android:textSize="15sp"
                 android:background="@drawable/rounded_box"
                 android:padding="4dp"
                 android:layout_marginTop="0dp"
