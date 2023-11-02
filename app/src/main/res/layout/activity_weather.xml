@@ -126,7 +126,7 @@
                     android:id="@+id/humidityIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_humidity_24px_black"
+                    android:src="?attr/humidityIcon"
                     android:layout_alignParentTop="true"
                     android:paddingEnd="8dp" />
 
