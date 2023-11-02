@@ -66,39 +66,103 @@
             android:layout_width="match_parent"
             android:layout_height="300dp">
 
-            <TextView
-                android:id="@+id/CityWind"
+            <!-- Wind -->
+            <RelativeLayout
                 android:layout_width="194dp"
                 android:layout_height="148dp"
                 android:layout_row="0"
                 android:layout_column="0"
-                android:text="WIND\n8 MPH \n compass image"
-                android:textAlignment="textStart"
-                android:textSize="25sp"
-                android:textStyle="bold"
                 android:background="@drawable/rounded_box"
                 android:padding="4dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginRight="1dp"
                 android:layout_marginBottom="1dp"
-                android:layout_marginLeft="1dp"/>
+                android:layout_marginLeft="1dp">
 
-            <TextView
-                android:id="@+id/CityHumidity"
+                <!-- Wind Icon -->
+                <ImageView
+                    android:id="@+id/windIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_wind_24px_black"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- Wind Label next to Icon -->
+                <TextView
+                    android:id="@+id/windLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wind"
+                    android:layout_toEndOf="@id/windIcon"
+                    android:layout_alignTop="@id/windIcon"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <!-- Wind speed data in the center -->
+                <TextView
+                    android:id="@+id/windData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8 MPH"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="194dp"
                 android:layout_height="148dp"
                 android:layout_row="0"
                 android:layout_column="1"
-                android:text="HUMIDITY\n81%\ndew point is 30° now."
-                android:textAlignment="textStart"
-                android:textSize="25sp"
-                android:textStyle="bold"
                 android:background="@drawable/rounded_box"
                 android:padding="4dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginRight="1dp"
                 android:layout_marginBottom="1dp"
-                android:layout_marginLeft="0dp"/>
+                android:layout_marginLeft="0dp">
+
+                <!-- Humidity Icon (assuming you have one) -->
+                <ImageView
+                    android:id="@+id/humidityIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/humidity"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- Humidity Label next to Icon -->
+                <TextView
+                    android:id="@+id/humidityLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HUMIDITY"
+                    android:layout_toEndOf="@id/humidityIcon"
+                    android:layout_alignTop="@id/humidityIcon"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <!-- Humidity data in the center -->
+                <TextView
+                    android:id="@+id/humidityData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="81%"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <!-- Dew point below the Humidity data -->
+                <TextView
+                    android:id="@+id/dewPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dew point is 30° now."
+                    android:layout_below="@id/humidityData"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/CityMetric1"
