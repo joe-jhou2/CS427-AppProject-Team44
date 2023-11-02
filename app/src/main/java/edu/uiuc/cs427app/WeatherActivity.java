@@ -27,6 +27,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -48,9 +52,9 @@ public class WeatherActivity extends AppCompatActivity {
         String welcome = "Weather in " + cityName;
         String date_and_time = new java.util.Date().toString();
 
-        TextView welcomeMessage = findViewById(R.id.welcomeText);
+        // TextView welcomeMessage = findViewById(R.id.welcomeText);
         TextView date = findViewById(R.id.date_and_time);
-        welcomeMessage.setText(welcome);
+        // welcomeMessage.setText(welcome);
         date.setText(date_and_time);
 
         String solo_name = cityName.split(",", 2)[0];
