@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ThemeIcons">
+        <attr name="windIcon" format="reference" />
         <attr name="humidityIcon" format="reference" />
+        <attr name="PrecipitationIcon" format="reference" />
+        <attr name="UVIcon" format="reference" />
     </declare-styleable>
 </resources>

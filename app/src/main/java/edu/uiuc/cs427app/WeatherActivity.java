@@ -64,6 +64,7 @@ public class WeatherActivity extends AppCompatActivity {
         TextView weatherType = findViewById(R.id.CityWeather);
         TextView windInfo = findViewById(R.id.windData);
         TextView humidInfo = findViewById(R.id.humidityData);
+        TextView dewInfo = findViewById(R.id.dewPointData);
 
         new Thread(new Runnable() {
             @Override
@@ -97,6 +98,8 @@ public class WeatherActivity extends AppCompatActivity {
                         System.out.println(wind);
                         String humidity = json.getJSONObject("current").getString("humidity").toString();
                         System.out.println(humidity);
+                        String dewPoint = json.getJSONObject("hour").getString("dewpoint_c").toString();
+                        System.out.println(dewPoint);
 
                         // Now, use Handler to post the UI update back on the main thread
                         handler.post(new Runnable() {
@@ -108,6 +111,7 @@ public class WeatherActivity extends AppCompatActivity {
                                 weatherType.setText(weatherDescription);
                                 windInfo.setText(wind + " mph");
                                 humidInfo.setText(humidity  + "%");
+                                dewInfo.setText(dewPoint + "°C");
                             }
                         });
                     } else {
