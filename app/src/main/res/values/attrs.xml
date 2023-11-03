@@ -5,5 +5,6 @@
         <attr name="humidityIcon" format="reference" />
         <attr name="PrecipitationIcon" format="reference" />
         <attr name="UVIcon" format="reference" />
+        <attr name="AirIcon" format="reference" />
     </declare-styleable>
 </resources>

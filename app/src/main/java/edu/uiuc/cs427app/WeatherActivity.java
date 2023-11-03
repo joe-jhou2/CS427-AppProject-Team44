@@ -66,7 +66,9 @@ public class WeatherActivity extends AppCompatActivity {
         TextView humidInfo = findViewById(R.id.humidityData);
         TextView dewInfo = findViewById(R.id.dewPointData);
         TextView PrecipitationInfo = findViewById(R.id.PrecipitationData);
+        TextView PrecipitationChanceInfo = findViewById(R.id.PrecipitationChanceData);
         TextView UVInfo = findViewById(R.id.UVData);
+        TextView AirInfo = findViewById(R.id.AirData);
 
         new Thread(new Runnable() {
             @Override
@@ -96,16 +98,27 @@ public class WeatherActivity extends AppCompatActivity {
 
                         String weatherDescription = json.getJSONObject("current").getJSONObject("condition").getString("text");
                         System.out.println(weatherDescription);
+
                         String wind = json.getJSONObject("current").getString("wind_mph").toString();
                         System.out.println(wind);
+
                         String humidity = json.getJSONObject("current").getString("humidity").toString();
                         System.out.println(humidity);
+
                         String dewPoint = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("dewpoint_c").toString();
                         System.out.println(dewPoint);
-                        String Precipitation = json.getJSONObject("current").getString("precip_in").toString();
-                        System.out.println(Precipitation);
+
                         String UV = json.getJSONObject("current").getString("uv").toString();
                         System.out.println(UV);
+
+                        //String Air = json.getJSONObject("current").getJSONObject("air_quality").getString("pm2_5");
+                        //System.out.println(Air);
+
+                        String Precipitation = json.getJSONObject("current").getString("precip_in").toString();
+                        System.out.println(Precipitation);
+
+                        String PrecipitationChance = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("chance_of_rain").toString();
+                        System.out.println(PrecipitationChance);
 
                         // Now, use Handler to post the UI update back on the main thread
                         handler.post(new Runnable() {
@@ -118,8 +131,10 @@ public class WeatherActivity extends AppCompatActivity {
                                 windInfo.setText(wind + " mph");
                                 humidInfo.setText(humidity  + "%");
                                 dewInfo.setText("dew point is " + dewPoint + "°C now");
-                                PrecipitationInfo.setText(Precipitation + "inch");
                                 UVInfo.setText(UV);
+                                //AirInfo.setText(Air);
+                                PrecipitationInfo.setText(Precipitation + "inch");
+                                PrecipitationChanceInfo.setText(PrecipitationChance + "%");
                             }
                         });
                     } else {
