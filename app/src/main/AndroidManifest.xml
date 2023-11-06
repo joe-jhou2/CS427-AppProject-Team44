@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -34,6 +36,9 @@
             android:exported="true"/>
         <activity
             android:name=".DetailsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WeatherActivity"
             android:exported="true" />
         <activity
             android:name=".CreateAccountActivity"

@@ -34,14 +34,17 @@
                 android:id="@+id/inputUsername"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:hint="username"
+                android:layout_gravity="center"
+                android:hint="Username *"
                 android:inputType="text" />
 
             <EditText
                 android:id="@+id/inputPassword"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:hint="password"
+                android:layout_gravity="center"
+
+                android:hint="Password *"
                 android:inputType="text" />
 
             <Button

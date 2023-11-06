@@ -12,9 +12,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="192dp">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="89dp"
+            android:text="     Add a City:"
+            android:gravity = "bottom"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="9dp"
+            />
 
         <fragment
             android:id="@+id/autocomplete_fragment"
@@ -30,5 +44,23 @@
             android:layout_height="wrap_content"
             android:text="Save City"
             app:layout_constraintTop_toBottomOf="@+id/CityName" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="89dp"
+            android:text="      Delete Cities:"
+            android:gravity = "bottom"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/deleteCityListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

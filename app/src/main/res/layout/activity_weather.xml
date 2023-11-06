@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?myBackgroundGradient"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/weather"
+        android:layout_width="0dp"
+        android:layout_height="730dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/date_and_time"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/CityName"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="City"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/CityTemperature"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="100°"
+            android:textAlignment="center"
+            android:textSize="90sp" />
+
+        <TextView
+            android:id="@+id/CityWeather"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Foggy"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/CityTemperatureRange"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="H:100° L:-77°"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="450dp">
+
+            <!-- Wind -->
+            <RelativeLayout
+                android:layout_width="194dp"
+                android:layout_height="140dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:background="@drawable/rounded_box"
+                android:padding="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp">
+
+                <!-- Wind Icon -->
+                <ImageView
+                    android:id="@+id/windIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="?attr/windIcon"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- Wind Label next to Icon -->
+                <TextView
+                    android:id="@+id/windLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wind"
+                    android:layout_toEndOf="@id/windIcon"
+                    android:layout_alignTop="@id/windIcon"
+                    android:textSize="15sp" />
+
+                <!-- Wind speed data in the center -->
+                <TextView
+                    android:id="@+id/windData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8 MPH"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <!-- Humidity -->
+            <RelativeLayout
+                android:layout_width="194dp"
+                android:layout_height="140dp"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:background="@drawable/rounded_box"
+                android:padding="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="0dp">
+
+                <!-- Humidity Icon -->
+                <ImageView
+                    android:id="@+id/humidityIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="?attr/humidityIcon"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- Humidity Label next to Icon -->
+                <TextView
+                    android:id="@+id/humidityLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Humidity"
+                    android:layout_toEndOf="@id/humidityIcon"
+                    android:layout_alignTop="@id/humidityIcon"
+                    android:textSize="15sp" />
+
+                <!-- Humidity data in the center -->
+                <TextView
+                    android:id="@+id/humidityData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="81%"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <!-- Dew point below the Humidity data -->
+                <TextView
+                    android:id="@+id/dewPointData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dew point is XXXX now."
+                    android:layout_below="@id/humidityData"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <!-- UV -->
+            <RelativeLayout
+                android:layout_width="194dp"
+                android:layout_height="140dp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:background="@drawable/rounded_box"
+                android:padding="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp">
+
+                <!-- UV Icon -->
+                <ImageView
+                    android:id="@+id/UVIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="?attr/UVIcon"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- UV Label next to Icon -->
+                <TextView
+                    android:id="@+id/UVLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UV INDEX"
+                    android:layout_toEndOf="@id/UVIcon"
+                    android:layout_alignTop="@id/UVIcon"
+                    android:textSize="15sp" />
+
+                <!-- UV data in the center -->
+                <TextView
+                    android:id="@+id/UVData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <!-- Air Quality -->
+            <RelativeLayout
+                android:layout_width="194dp"
+                android:layout_height="140dp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:background="@drawable/rounded_box"
+                android:padding="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp">
+
+                <!-- Air Quality Icon -->
+                <ImageView
+                    android:id="@+id/AirIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="?attr/AirIcon"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- Air Quality Label next to Icon -->
+                <TextView
+                    android:id="@+id/AirLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Air Quality Index"
+                    android:layout_toEndOf="@id/AirIcon"
+                    android:layout_alignTop="@id/AirIcon"
+                    android:textSize="15sp" />
+
+                <!-- Air data in the center -->
+                <TextView
+                    android:id="@+id/AirData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PM2.5 is xxx"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <!-- notes below Air data -->
+                <TextView
+                    android:id="@+id/AirNote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PM2.5"
+                    android:layout_below="@id/AirData"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+            <!-- Precipitation -->
+            <RelativeLayout
+                android:layout_width="194dp"
+                android:layout_height="140dp"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:background="@drawable/rounded_box"
+                android:padding="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp">
+
+                <!-- Precipitation Icon -->
+                <ImageView
+                    android:id="@+id/PrecipitationIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="?attr/PrecipitationIcon"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- Precipitation Label next to Icon -->
+                <TextView
+                    android:id="@+id/PrecipitationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Precipitation"
+                    android:layout_toEndOf="@id/PrecipitationIcon"
+                    android:layout_alignTop="@id/PrecipitationIcon"
+                    android:textSize="15sp" />
+
+                <!-- Precipitation data in the center -->
+                <TextView
+                    android:id="@+id/PrecipitationData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8 mm"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <!-- notes below precipitation data -->
+                <TextView
+                    android:id="@+id/PrecipitationNote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="in next 1h"
+                    android:layout_below="@id/PrecipitationData"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <!-- Precipitation Chance -->
+            <RelativeLayout
+                android:layout_width="194dp"
+                android:layout_height="140dp"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:background="@drawable/rounded_box"
+                android:padding="4dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp">
+
+                <!-- Precipitation Icon -->
+                <ImageView
+                    android:id="@+id/PrecipitationChanceIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="?attr/PrecipitationIcon"
+                    android:layout_alignParentTop="true"
+                    android:paddingEnd="8dp" />
+
+                <!-- Precipitation Label next to Icon -->
+                <TextView
+                    android:id="@+id/PrecipitationChanceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Precipitation Chance"
+                    android:layout_toEndOf="@id/PrecipitationChanceIcon"
+                    android:layout_alignTop="@id/PrecipitationChanceIcon"
+                    android:textSize="15sp" />
+
+                <!-- Precipitation data in the center -->
+                <TextView
+                    android:id="@+id/PrecipitationChanceData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <!-- notes below precipitation data -->
+                <TextView
+                    android:id="@+id/PrecipitationChanceNote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="in next 1h"
+                    android:layout_below="@id/PrecipitationChanceData"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+
+        </GridLayout>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

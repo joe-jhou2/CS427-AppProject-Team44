@@ -9,8 +9,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name ="myBackgroundGradient">@color/white</item>
-
     </style>
+
     <style name="Theme.Dawn" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#e0ab8d</item>
@@ -19,24 +19,17 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name ="myBackgroundGradient">@drawable/dawn</item>
+        <item name ="myBackgroundGradient">@drawable/theme_dawn</item>
         <item name = "android:textColor">@color/white</item>
         <item name = "android:editTextColor">@color/white</item>
         <item name = "android:textColorHint">@color/white</item>
+        <item name ="humidityIcon">@drawable/icon_humidity_24px_black</item>
+        <item name = "windIcon">@drawable/icon_wind_24px_black</item>
+        <item name = "PrecipitationIcon">@drawable/icon_precipitation_24px_black</item>
+        <item name = "UVIcon">@drawable/icon_uv_24px_black</item>
+        <item name = "AirIcon">@drawable/icon_air_24px_black</item>
     </style>
-    <style name="Theme.Dusk" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#edc573</item>
-        <item name="colorPrimaryVariant">#d99771</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name ="myBackgroundGradient">@drawable/dusk</item>
-        <item name = "android:textColor">@color/white</item>
-        <item name = "android:editTextColor">@color/white</item>
-        <item name = "android:textColorHint">@color/white</item>
-    </style>
+
     <style name="Theme.Day" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ffdb00</item>
@@ -45,12 +38,37 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name ="myBackgroundGradient">@drawable/day</item>
+        <item name ="myBackgroundGradient">@drawable/theme_day</item>
         <item name = "android:textColor">@color/black</item>
         <item name = "android:editTextColor">@color/black</item>
         <item name = "android:textColorHint">@color/black</item>
         <item name = "titleTextColor">@color/black</item>
+        <item name= "humidityIcon">@drawable/icon_humidity_24px_black</item>
+        <item name= "windIcon">@drawable/icon_wind_24px_black</item>
+        <item name = "PrecipitationIcon">@drawable/icon_precipitation_24px_black</item>
+        <item name = "UVIcon">@drawable/icon_uv_24px_black</item>
+        <item name = "AirIcon">@drawable/icon_air_24px_black</item>
     </style>
+
+    <style name="Theme.Dusk" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#edc573</item>
+        <item name="colorPrimaryVariant">#d99771</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name = "myBackgroundGradient">@drawable/theme_dusk</item>
+        <item name = "android:textColor">@color/white</item>
+        <item name = "android:editTextColor">@color/white</item>
+        <item name = "android:textColorHint">@color/white</item>
+        <item name = "humidityIcon">@drawable/icon_humidity_24px_white</item>
+        <item name = "windIcon">@drawable/icon_wind_24px_white</item>
+        <item name = "PrecipitationIcon">@drawable/icon_precipitation_24px_white</item>
+        <item name = "UVIcon">@drawable/icon_uv_24px_white</item>
+        <item name = "AirIcon">@drawable/icon_air_24px_white</item>
+    </style>
+
     <style name="Theme.Night" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#3f135c</item>
@@ -59,10 +77,15 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name ="myBackgroundGradient">@drawable/night</item>
+        <item name = "myBackgroundGradient">@drawable/theme_night</item>
         <item name = "android:textColor">@color/white</item>
         <item name = "android:editTextColor">@color/white</item>
         <item name = "android:textColorHint">@color/white</item>
+        <item name = "humidityIcon">@drawable/icon_humidity_24px_white</item>
+        <item name = "windIcon">@drawable/icon_wind_24px_white</item>
+        <item name = "PrecipitationIcon">@drawable/icon_precipitation_24px_white</item>
+        <item name = "UVIcon">@drawable/icon_uv_24px_white</item>
+        <item name = "AirIcon">@drawable/icon_air_24px_white</item>
     </style>
 
     <style name="MyDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">

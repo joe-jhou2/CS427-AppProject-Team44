@@ -1,7 +1,9 @@
 package edu.uiuc.cs427app;
 
+import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -9,8 +11,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
 import edu.uiuc.cs427app.databinding.ActivityMapsBinding;
 
@@ -27,6 +31,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Account account = getIntent().getParcelableExtra("account");
+        ThemeUtils.applyTheme(account, this);
+
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -41,6 +48,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         latitude = intent.getDoubleExtra("lat",-34);
         longitude = intent.getDoubleExtra("lon",151);
 
+        String msg = cityname + "\n" +
+                "Latitude: " +String.format("%.5f", latitude)
+                + "\n" +
+                "Longitude: "+String.format("%.5f", longitude);
+
+
+        TextView cityInfo = findViewById(R.id.cityNameLatLon);
+        cityInfo.setText(msg);
+
     }
 
     /**
@@ -54,8 +70,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         //set the map lat/lon, add a market with cityname, and move the camera to the city
+
         LatLng citylocation = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(citylocation).title(cityname));
+
+        String msg = cityname + "\n" +
+                     "Latitude: " +String.format("%.5f", latitude)
+                     + "\n" +
+                     "Longitude: "+String.format("%.5f", longitude);
+
+        IconGenerator iconFactory = new IconGenerator(this);
+        MarkerOptions markerOptions = new MarkerOptions().
+                icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(msg))).
+                position(citylocation).
+                anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+
+        //mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(citylocation));
     }
+
 }

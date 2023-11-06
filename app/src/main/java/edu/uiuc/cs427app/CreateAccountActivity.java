@@ -1,7 +1,6 @@
 package edu.uiuc.cs427app;
 
-// The manifest file uses this to get permission from app.
-// TODO: disclose privacy concerns to user given we are storing their data
+// TODO (post Milestone 3) privacy concerns -- disclose to users we are storing their data
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -16,30 +15,70 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-// TODO - add comments describing callbacks (typical)
-// - incorporate more robust authenticator using Cipher
-// This activity should do the following:
-//        1. Collects credentials from the user                 createAccount()
-//        2. Authenticates the credentials with the server      signIn()*
-//        3. Stores the credentials on the device               createAccount()
-
-// The authentication page or login page dynamical displays themes by using a dummy account "PREVIEW"
-// All settings (atm just a theme) taken by the dummy account are passed on to a newly created account ONLY.
-
+/**
+ * Activity that serves as an Authentication Page, first activity presented to user upon using
+ * application. Options to let new users sign up, returning users sign in, and select a theme upon
+ * entering the application are used.
+ *
+ * For users to preview themes, a preview account is used on the backend to allow for previews. If a
+ * theme preview is used the settings are passed onto any NEWLY created accounts or anyone SIGNING IN.
+ */
 public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener {
+    /**
+     * User's username input
+     */
     private String mUsername;
+    /**
+     * User's password input
+     */
     private String mPassword;
-    private String previewUsername = "PREVIEW";
-    private String previewPassword = "PREVIEW";
+
+    /**
+     * Preview account username
+     */
+    private static final String PREVIEW_USERNAME = "PREVIEW";
+    /**
+     * Preview account password
+     */
+    private static final String PREVIEW_PASSWORD = "PREVIEW";
+
+    /**
+     * A key for the theme, this is set by either a returning user's account
+     * settings OR upon using the layout selection.
+     */
     private String themeKey;
+
+    /**
+     * The previewAccount is a "constant" account that will have some settings
+     * changed to display a theme preview.
+     */
     private Account previewAccount;
 
+    /**
+     * Instance of the account manager for this activity.
+     */
     private AccountManager mAccountManager;
-    private Account mCurrentAccount;
-    private EditText mAccountNameView;
-    private EditText mAccountPassView;
-//    protected SharedPreferences sharedPreferences;
 
+    /**
+     * Instance of the current account
+     */
+    private Account mCurrentAccount;
+
+    /**
+     * Instance of the account's username input view
+     */
+    private EditText mAccountNameView;
+
+    /**
+     * Instance of the account's password input view
+     */
+    private EditText mAccountPassView;
+
+    /**
+     * Initializes the activity for the authentication page.
+     *
+     * @param savedInstanceState saved instance states passed upon a recreate() request
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,17 +86,11 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         // Initialize the app's account manager.
         mAccountManager = AccountManager.get(this);
 
-        // DELETE THIS -- doesn't do anything
-        mCurrentAccount = getIntent().getParcelableExtra("currentAccount");
-
-        // TODO consider making a helper method to help with this "initialization"
-        // For theme refresh -- consider making a helper method to help with this "initialization"
+        // TODO (post Milestone 3) helper method THEME REFRESH - create helper to handle this initialization
         // Checks if the login page was recreated -- if so, dynamically adjust the PREVIEW theme
         if (savedInstanceState != null) {
             // retrieve account object
             Account currentAccount = getAccountFromPreferences();
-            // retrieve account object
-//            Account currentAccount = previewAccount;
 
             // Apply the theme based on the user's preference
             ThemeUtils.applyTheme(currentAccount, this);
@@ -70,20 +103,17 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             setTheme(R.style.Theme_Day);
         }
 
-        // TODO consider making a helper method to help with this "initialization"
-        // For dummy account creation -- consider making a helper method to help with this "initialization"
-        // Checks if the login page was recreated -- if so, dynamically adjust the PREVIEW theme
+        // TODO (post Milestone 3) helper method DUMMY ACCOUNT - create helper to handle this initialization
+        // Checks if the dummy account is instanced - if so pull it from the account manager OR create it
         if (previewAccount != null) {
             // nothing to initialize
         } else {
             // Set default theme for the login activity
-            previewAccount = new Account(previewUsername, this.getString(R.string.account_type));
+            previewAccount = new Account(PREVIEW_USERNAME, this.getString(R.string.account_type));
 
-            if (mAccountManager.addAccountExplicitly(previewAccount, previewPassword, null)) {
-//                Toast.makeText(this, "DUMMY account created!", Toast.LENGTH_LONG).show();
+            if (mAccountManager.addAccountExplicitly(previewAccount, PREVIEW_PASSWORD, null)) {
                 Log.v("DummyAccount", "Dummy account created.");//
             } else {
-//                Toast.makeText(this, "Dummy account already exists!", Toast.LENGTH_LONG).show();
                 Log.v("DummyAccount", "Dummy account exists.");//
             }
         }
@@ -110,14 +140,14 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         }
 
 
-        // TODO consider making a helper method to help with this "initialization" of user/pass fields
-        // pass saved fields from savedInstanced to new Instaced of this activity
+        // TODO (post Milestone 3) helper method USER INPUT - create helper to handle this initialization
+        // Passed saved fields from savedInstanced to new Instance of this activity
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             mUsername = savedInstanceState.getString("saved_username");
             mPassword = savedInstanceState.getString("saved_password");
         } else {
-            // consider moving mUsername and mPassowrd initializing here
+            // consider moving mUsername and mPassword initializing here
         }
         if (mUsername != null && mPassword != null) {
             mAccountNameView.setText(mUsername);
@@ -125,7 +155,11 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-//    TODO - add descriptions (typical)
+    /**
+     * Upon clicking the specified buttons, the corresponding actions are carried out.
+     *
+     * @param view current view in activity
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -139,23 +173,42 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 Log.d("Theme Dialog", "processed layout selection");
                 ThemeUtils.showThemeDialog(CreateAccountActivity.this, previewAccount);
                 saveAccountInfoToPreferences(previewAccount);
-//                saveAccountInfoToPreferences(mCurrentAccount);//  move to signUP
                 break;
         }
     }
 
+    /**
+     * Upon closing this activity, specific instance states are passed across
+     * instances of this activity.
+     *
+     * @param outState bundle containing instances to be saved, i.e. passed on to next instance
+     *                 of this activity
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("saved_username", mUsername);
+        outState.putString("saved_password", mPassword);
+    }
+
+    /**
+     * Creates an account by reading the username and password input into the authentication page.
+     */
     private void createAccount() {
+        // Instance a new account to be added to the account manager
         mUsername = mAccountNameView.getText().toString();
         mPassword = mAccountPassView.getText().toString();
         mCurrentAccount = new Account(mUsername, this.getString(R.string.account_type));
 
+        // Checks if the account was successfully added to the account manager, if so,
         if (mAccountManager.addAccountExplicitly(mCurrentAccount, mPassword, null)) {
             Toast.makeText(this, "Account created! Please sign in with your username and password.", Toast.LENGTH_LONG).show();
             Log.v("AccountCreate", "account created, username="+ mUsername); // Account creation succeeded
+
             ThemeUtils.saveThemePreferenceForAccount(CreateAccountActivity.this, mCurrentAccount.name, themeKey);
             saveAccountInfoToPreferences(mCurrentAccount);
             ThemeUtils.applyTheme(mCurrentAccount, this);
-
 
             Toast.makeText(this, "Account created! Choose your theme and then sign in with your username and password.", Toast.LENGTH_LONG).show();
             return;
@@ -164,22 +217,24 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             Toast.makeText(this, "Account already exists! Please sign in with your username and password.", Toast.LENGTH_LONG).show();
             Log.v("AccountCreate", "account NOT created, username="+ mUsername);// Account creation failed
         }
-
-        // Log all accounts/passwords for testing purposes
-        Account[] accounts = mAccountManager.getAccounts();
-        for (Account account : accounts) {
-            Log.d("AccountInfo", "Account name: " + account.name + " - Account password: " + mAccountManager.getPassword(account) + " - Account type: " + account.type);
-        }
     }
 
+    /**
+     * Sign in to app using the input for username and password.
+     */
     private void signIn() {
         mUsername = mAccountNameView.getText().toString();
         mPassword = mAccountPassView.getText().toString();
 
-        //TODO: unify this account validation process with AppAccountAuthenticator.validateLocally()
+        // TODO (post Milestone 3) validation of accounts - use account validateLocally()
         Account[] accounts = mAccountManager.getAccountsByType(this.getString(R.string.account_type));
         boolean isSuccessful = false;
 
+
+        /**
+         * Pull a list of accounts and search for the matching username. Once the username is
+         * matched, compare the password provided to the actual password.
+         */
         for (Account account : accounts) {
             if (account.name.equals(mUsername)) {
                 // Local authentication -- not real authentication or OAuth
@@ -194,6 +249,12 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 }
             }
         }
+
+        /**
+         * If the account credentials were verified the current theme is applied to the account and
+         * the user is signed into the app.
+         */
+        // TODO (post Milestone 3) helper method SIGN IN W/THEME APPLICATION - apply theme and sign into account
         if (isSuccessful) {
             if (themeKey != null)
                 ThemeUtils.saveThemePreferenceForAccount(CreateAccountActivity.this, mCurrentAccount.name, themeKey);
@@ -212,6 +273,11 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    /**
+     * Used to save account preferences for themes across difference users.
+     *
+     * @param account account to be saved and logged into preferences
+     */
     private void saveAccountInfoToPreferences(Account account) {
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -219,19 +285,24 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         // Add more info if necessary
         editor.apply();
     }
+
+    /**
+     * Pulls the theme preference from the shared preferences in the app.
+     *
+     * @param context this current context
+     * @param username account username
+     * @return key for the account's theme
+     */
     private static String getThemePreferenceForAccount(Context context, String username) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("theme_preferences", Context.MODE_PRIVATE);
         return sharedPreferences.getString(username, "Theme.Day");
     }
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        outState.putString("saved_username", mUsername);
-        outState.putString("saved_password", mPassword);
-//        outState.putParcelable("preview_account", previewAccount);
-    }
-
+    /**
+     * Retrieves the account from the shared preferences.
+     *
+     * @return account associated with the account name for the current user
+     */
     private Account getAccountFromPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         String accountName = sharedPreferences.getString("account_name", null);
