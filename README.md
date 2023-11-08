@@ -122,7 +122,7 @@ Oct-22-2023
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
-Oct-29-203
+Oct-29-2013
 </br>
 | NetID          | Progress from last week                | Tasks for next week   |
 | ---------------| ---------------------------------------| ----------------------|
@@ -142,17 +142,18 @@ Oct-29-203
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
+Nov-5-2013
 </br>
-| NetID          | Progress from last week         | Tasks for next week   |
-| ---------------| --------------------------------| ----------------------|
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
+| NetID          | Progress from last week                | Tasks for next week   |
+| ---------------| ---------------------------------------| ----------------------|
+|   yibinh2      | Milestone3, task1, detail above        | weather page, backend |
+|   rileydm2     | Milestone3, lead task2, detail above   | weather page, leader  |
+|   zhaol4       | Milestone3, task2, detail above        | weather page, backend |
+|   jdhank2      | Milestone3, task2, detail above        | map page              |
+|   ytl5         | Milestone3, task1, detail above        | weather page, backend |
+|   lwchave2     | Milestone3, lead task1, detail above   | weather page, leader  |
+|   jueh4        | Milestone3, task3, detail above        | weather page, frontend|
+|   ktsoi3       | Milestone3, lead task3, detail above   | weather page, frontend|
 </br>
 
 
