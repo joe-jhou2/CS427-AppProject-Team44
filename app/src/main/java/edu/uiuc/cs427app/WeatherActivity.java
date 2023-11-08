@@ -73,7 +73,7 @@ public class WeatherActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + solo_name + "&days=1";
+                String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + solo_name + "&days=1" + "&aqi=yes";
 
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
@@ -111,8 +111,8 @@ public class WeatherActivity extends AppCompatActivity {
                         String UV = json.getJSONObject("current").getString("uv").toString();
                         System.out.println(UV);
 
-                        //String Air = json.getJSONObject("current").getJSONObject("air_quality").getString("pm2_5");
-                        //System.out.println(Air);
+                        String Air = json.getJSONObject("current").getJSONObject("air_quality").getString("pm2_5");
+                        System.out.println(Air);
 
                         String Precipitation = json.getJSONObject("current").getString("precip_in").toString();
                         System.out.println(Precipitation);
@@ -132,7 +132,7 @@ public class WeatherActivity extends AppCompatActivity {
                                 humidInfo.setText(humidity  + "%");
                                 dewInfo.setText("dew point is " + dewPoint + "°C now");
                                 UVInfo.setText(UV);
-                                //AirInfo.setText(Air);
+                                AirInfo.setText(Air);
                                 PrecipitationInfo.setText(Precipitation + "inch");
                                 PrecipitationChanceInfo.setText(PrecipitationChance + "%");
                             }
