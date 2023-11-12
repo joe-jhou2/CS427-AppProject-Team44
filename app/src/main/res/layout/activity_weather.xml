@@ -30,7 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center_horizontal|center_vertical"
-            android:text="City"
             android:textAlignment="center"
             android:textSize="40sp"
             android:textStyle="bold" />
@@ -39,7 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:gravity="center_horizontal|center_vertical"
-            android:text="100°"
             android:textAlignment="center"
             android:textSize="90sp" />
 
@@ -48,7 +46,6 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Foggy"
             android:textAlignment="center"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -57,7 +54,6 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center_horizontal|center_vertical"
-            android:text="H:100° L:-77°"
             android:textAlignment="center"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -103,7 +99,6 @@
                     android:id="@+id/windData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8 MPH"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:layout_centerInParent="true" />
@@ -146,7 +141,6 @@
                     android:id="@+id/humidityData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="81%"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:layout_centerInParent="true" />
@@ -156,7 +150,6 @@
                     android:id="@+id/dewPointData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dew point is XXXX now."
                     android:layout_below="@id/humidityData"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp" />
@@ -189,7 +182,7 @@
                     android:id="@+id/UVLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="UV INDEX"
+                    android:text="UV Index"
                     android:layout_toEndOf="@id/UVIcon"
                     android:layout_alignTop="@id/UVIcon"
                     android:textSize="15sp" />
@@ -199,7 +192,6 @@
                     android:id="@+id/UVData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:layout_centerInParent="true" />
@@ -242,17 +234,15 @@
                     android:id="@+id/AirData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PM2.5 is xxx"
+                    android:layout_centerInParent="true"
                     android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:layout_centerInParent="true" />
+                    android:textStyle="bold" />
 
                 <!-- notes below Air data -->
                 <TextView
                     android:id="@+id/AirNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PM2.5"
                     android:layout_below="@id/AirData"
                     android:layout_centerHorizontal="true"
                     android:textSize="20sp" />
@@ -295,17 +285,15 @@
                     android:id="@+id/PrecipitationData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8 mm"
+                    android:layout_centerInParent="true"
                     android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:layout_centerInParent="true" />
+                    android:textStyle="bold" />
 
                 <!-- notes below precipitation data -->
                 <TextView
                     android:id="@+id/PrecipitationNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="in next 1h"
                     android:layout_below="@id/PrecipitationData"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp" />
@@ -348,7 +336,6 @@
                     android:id="@+id/PrecipitationChanceData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:layout_centerInParent="true" />
@@ -358,7 +345,6 @@
                     android:id="@+id/PrecipitationChanceNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="in next 1h"
                     android:layout_below="@id/PrecipitationChanceData"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp" />

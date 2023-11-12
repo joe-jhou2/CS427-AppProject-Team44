@@ -30,6 +30,7 @@ public class DataStore extends ContentProvider {
     //paths that can be appended to the URI, representing different tables
     public static final String PATH_CITY = "city";
     public static final String PATH_PREF = "pref";
+    public static final String PATH_WEATHER = "weather";
 
     //defines the URI and table/column names for the city information
     public static final class CityEntry implements BaseColumns {
@@ -81,12 +82,47 @@ public class DataStore extends ContentProvider {
         }
     }
 
+    //defines the URI and table/column names for the weather information
+    public static final class WeatherEntry implements BaseColumns {
+        // Content URI represents the base location for the table
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER).build();
+
+        // These are special type prefixes that specify if a URI returns a list or a specific item
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_URI  + "/" + PATH_WEATHER;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_URI + "/" + PATH_WEATHER;
+
+        // Define the table schema
+        public static final String TABLE_NAME = "WEATHER_TABLE";
+        public static final String COL_CITY = "CITY";
+        public static final String COL_TEMPERATURE = "TEMPERATURE";
+        public static final String COL_TEMPERATUREMAX = "TEMPERATUREMAX";
+        public static final String COL_TEMPERATUREMIN = "TEMPERATUREMIN";
+        public static final String COL_DESCRIPTION = "DESCRIPTION";
+        public static final String COL_WINDSPEED = "WINDSPEED";
+        public static final String COL_HUMIDITY = "HUMIDITY";
+        public static final String COL_DEWPOINT = "DEWPOINT";
+        public static final String COL_UV = "UV";
+        public static final String COL_AIRINDEX = "AIRINDEX";
+        public static final String COL_PRECIPITATION = "PRECIPITATION";
+        public static final String COL_PRECIPITATIONCHANCE = "PRECIPITATIONCHANCE";
+
+        // Build a URI to find a specific city by it's identifier
+        public static Uri buildWeatherUri(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
     //define the different ID's used in the URI matcher so the matcher can build
     //the appropriate database table
     private static final int CITY = 10;
     private static final int CITY_ID = 11;
     private static final int PREF = 20;
     private static final int PREF_ID = 21;
+    private static final int WEATHER = 30;
+    private static final int WEATHER_ID = 31;
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
     // initializes the dbOpenHelper object which creates/returns the db for calls
@@ -115,6 +151,8 @@ public class DataStore extends ContentProvider {
         matcher.addURI(content, PATH_CITY + "/#", CITY_ID);
         matcher.addURI(content, PATH_PREF, PREF);
         matcher.addURI(content, PATH_PREF + "/#", PREF_ID);
+        matcher.addURI(content, PATH_WEATHER, WEATHER);
+        matcher.addURI(content, PATH_WEATHER + "/#", WEATHER_ID);
 
         return matcher;
     }
@@ -134,6 +172,10 @@ public class DataStore extends ContentProvider {
                 return PrefEntry.CONTENT_TYPE;
             case PREF_ID:
                 return PrefEntry.CONTENT_ITEM_TYPE;
+            case WEATHER:
+                return WeatherEntry.CONTENT_TYPE;
+            case WEATHER_ID:
+                return WeatherEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -168,6 +210,14 @@ public class DataStore extends ContentProvider {
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
                 break;
+            case WEATHER:
+                _id = db.insert(WeatherEntry.TABLE_NAME, null, values);
+                if(_id > 0){
+                    returnUri = WeatherEntry.buildWeatherUri(_id);
+                } else{
+                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                }
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -196,6 +246,9 @@ public class DataStore extends ContentProvider {
                 break;
             case PREF:
                 rows = db.delete(PrefEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case WEATHER:
+                rows = db.delete(WeatherEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -227,6 +280,9 @@ public class DataStore extends ContentProvider {
                 break;
             case PREF:
                 rows = db.update(PrefEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case WEATHER:
+                rows = db.update(WeatherEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -296,6 +352,29 @@ public class DataStore extends ContentProvider {
                         sortOrder
                 );
                 break;
+            case WEATHER:
+                retCursor = db.query(
+                        WeatherEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case WEATHER_ID:
+                _id = ContentUris.parseId(uri);
+                retCursor = db.query(
+                        WeatherEntry.TABLE_NAME,
+                        projection,
+                        WeatherEntry._ID + " = ?",
+                        new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -324,7 +403,6 @@ public class DataStore extends ContentProvider {
                 + " ("+CityEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
                 + ", "+CityEntry.COL_USERNAME+" TEXT NOT NULL"
                 + ", "+CityEntry.COL_CITY+" TEXT NOT NULL"
-//                + ", "+CityEntry.COL_STATE+" TEXT NOT NULL"
                 + ", "+CityEntry.COL_LATITUDE+" REAL NOT NULL"
                 + ", "+CityEntry.COL_LONGITUDE+" REAL NOT NULL"
                 + ");";
@@ -333,6 +411,22 @@ public class DataStore extends ContentProvider {
                 + " ("+PrefEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
                 + ", "+PrefEntry.COL_USERNAME+" TEXT UNIQUE NOT NULL"
                 + ", "+PrefEntry.COL_THEMENAME+" TEXT NOT NULL"
+                + ");";
+        // defining the structure of the Weather Table
+        static final String CREATE_DB_WEATHER_TABLE = " CREATE TABLE " + WeatherEntry.TABLE_NAME
+                + " ("+WeatherEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT"
+                + ", "+WeatherEntry.COL_CITY+" TEXT NOT NULL"
+                + ", "+WeatherEntry.COL_TEMPERATURE+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_TEMPERATUREMAX+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_TEMPERATUREMIN+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_DESCRIPTION+" TEXT NOT NULL"
+                + ", "+WeatherEntry.COL_WINDSPEED+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_HUMIDITY+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_DEWPOINT+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_UV+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_AIRINDEX+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_PRECIPITATION+" REAL NOT NULL"
+                + ", "+WeatherEntry.COL_PRECIPITATIONCHANCE+" REAL NOT NULL"
                 + ");";
 
         /**
@@ -351,6 +445,7 @@ public class DataStore extends ContentProvider {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_DB_CITY_TABLE);
             db.execSQL(CREATE_DB_PREF_TABLE);
+            db.execSQL(CREATE_DB_WEATHER_TABLE);
         }
         /**
          * Called whenever DATABASE_VERSION is incremented. This is used whenever schema changes need
@@ -365,6 +460,7 @@ public class DataStore extends ContentProvider {
             // having similar name
             db.execSQL("DROP TABLE IF EXISTS " + CityEntry.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + PrefEntry.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + WeatherEntry.TABLE_NAME);
             onCreate(db);
         }
     }

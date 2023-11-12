@@ -1,17 +1,23 @@
 package edu.uiuc.cs427app;
 
 import android.accounts.Account;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 //import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -70,85 +76,127 @@ public class WeatherActivity extends AppCompatActivity {
         TextView UVInfo = findViewById(R.id.UVData);
         TextView AirInfo = findViewById(R.id.AirData);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + solo_name + "&days=1" + "&aqi=yes";
+        // testing setting weather data from fetcher
+        String selection = DataStore.WeatherEntry.COL_CITY+" = '"+cityName+"'";
+        Cursor cursor = getContentResolver().query(DataStore.WeatherEntry.CONTENT_URI, null,
+                selection, null, null);
 
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(apiUrl)
-                        .build();
+        if(cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                String cityStateName = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_CITY));
+                String city = cityStateName.split(",", 2)[0];
+                String temperature = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_TEMPERATURE));
+                String temperatureMax = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_TEMPERATUREMAX));
+                String temperatureMin = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_TEMPERATUREMIN));
+                String weatherDescription = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_DESCRIPTION));
+                String wind = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_WINDSPEED));
+                String humidity = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_HUMIDITY));
+                String dewPoint = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_DEWPOINT));
+                String UV = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_UV));
+                String Air = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_AIRINDEX));
+                String precipitation = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_PRECIPITATION));
+                String precipitationChance = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_PRECIPITATIONCHANCE));
 
-                try {
-                    Response response = client.newCall(request).execute();
-
-                    if (response.isSuccessful()) {
-                        String responseBody = response.body().string();
-
-                        JSONObject json = new JSONObject(responseBody);
-
-                        // Extract weather information from the JSON response
-                        String city = json.getJSONObject("location").getString("name");
-                        String temperature = json.getJSONObject("current").getString("temp_c");
-
-                        // This temperature range can exclude the current 'temperature' due to polling/predictions. Consider manually setting a min/max using the range and current temps
-                        String temperatureMax = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("day").getString("maxtemp_c");
-                        String temperatureMin = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("day").getString("mintemp_c");
-
-                        String weatherDescription = json.getJSONObject("current").getJSONObject("condition").getString("text");
-                        System.out.println(weatherDescription);
-
-                        String wind = json.getJSONObject("current").getString("wind_mph").toString();
-                        System.out.println(wind);
-
-                        String humidity = json.getJSONObject("current").getString("humidity").toString();
-                        System.out.println(humidity);
-
-                        String dewPoint = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("dewpoint_c").toString();
-                        System.out.println(dewPoint);
-
-                        String UV = json.getJSONObject("current").getString("uv").toString();
-                        System.out.println(UV);
-
-                        String Air = json.getJSONObject("current").getJSONObject("air_quality").getString("pm2_5");
-                        System.out.println(Air);
-
-                        String Precipitation = json.getJSONObject("current").getString("precip_in").toString();
-                        System.out.println(Precipitation);
-
-                        String PrecipitationChance = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("chance_of_rain").toString();
-                        System.out.println(PrecipitationChance);
-
-                        // Now, use Handler to post the UI update back on the main thread
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                cityNameView.setText(city);
-                                weatherTemp.setText(temperature + "°C");
-                                weatherTempRange.setText("H:" + temperatureMax + "°C" + " L:" + temperatureMax + "°C");
-                                weatherType.setText(weatherDescription);
-                                windInfo.setText(wind + " mph");
-                                humidInfo.setText(humidity  + "%");
-                                dewInfo.setText("dew point is " + dewPoint + "°C now");
-                                UVInfo.setText(UV);
-                                AirInfo.setText(Air);
-                                PrecipitationInfo.setText(Precipitation + "inch");
-                                PrecipitationChanceInfo.setText(PrecipitationChance + "%");
-                            }
-                        });
-                    } else {
-                        // Handle API request error
-                        // Optionally, use Handler to show an error message on the main thread
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("WeatherActivity", "Network error: " + e.getMessage());
-                    // Handle network or other errors
-                    // Optionally, use Handler to show an error message on the main thread
-                }
+                cityNameView.setText(city);
+                weatherTemp.setText(temperature + "°C");
+                weatherTempRange.setText("H:" + temperatureMax + "°C" + " L:" + temperatureMin + "°C");
+                weatherType.setText(weatherDescription);
+                windInfo.setText(wind + " mph");
+                humidInfo.setText(humidity  + "%");
+                dewInfo.setText("dew point is " + dewPoint + "°C now");
+                UVInfo.setText(UV);
+                AirInfo.setText(Air);
+                PrecipitationInfo.setText(precipitation + " inch");
+                PrecipitationChanceInfo.setText(precipitationChance + "%");
+                Log.v("Render Finish", "Weather metrics updated.");
+                cursor.moveToNext();
             }
-        }).start();
+        }
+        cursor.close();
+
+
+
+        // FETCH LIVE if poll was > 10 mins?
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + solo_name + "&days=1" + "&aqi=yes";
+//
+//                OkHttpClient client = new OkHttpClient();
+//                Request request = new Request.Builder()
+//                        .url(apiUrl)
+//                        .build();
+//
+//                try {
+//                    Response response = client.newCall(request).execute();
+//
+//                    if (response.isSuccessful()) {
+//                        String responseBody = response.body().string();
+//
+//                        JSONObject json = new JSONObject(responseBody);
+//
+//                        // Extract weather information from the JSON response
+//                        String city = json.getJSONObject("location").getString("name");
+//                        String temperature = json.getJSONObject("current").getString("temp_c");
+//
+//                        // This temperature range can exclude the current 'temperature' due to polling/predictions. Consider manually setting a min/max using the range and current temps
+//                        String temperatureMax = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("day").getString("maxtemp_c");
+//                        String temperatureMin = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("day").getString("mintemp_c");
+//
+//                        String weatherDescription = json.getJSONObject("current").getJSONObject("condition").getString("text");
+//                        System.out.println(weatherDescription);
+//
+//                        String wind = json.getJSONObject("current").getString("wind_mph").toString();
+//                        System.out.println(wind);
+//
+//                        String humidity = json.getJSONObject("current").getString("humidity").toString();
+//                        System.out.println(humidity);
+//
+//                        String dewPoint = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("dewpoint_c").toString();
+//                        System.out.println(dewPoint);
+//
+//                        String UV = json.getJSONObject("current").getString("uv").toString();
+//                        System.out.println(UV);
+//
+//                        String Air = json.getJSONObject("current").getJSONObject("air_quality").getString("pm2_5");
+//                        System.out.println(Air);
+//
+//                        String Precipitation = json.getJSONObject("current").getString("precip_in").toString();
+//                        System.out.println(Precipitation);
+//
+//                        String PrecipitationChance = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("chance_of_rain").toString();
+//                        System.out.println(PrecipitationChance);
+//
+//                        // Now, use Handler to post the UI update back on the main thread
+//                        handler.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                cityNameView.setText(city);
+//                                weatherTemp.setText(temperature + "°C");
+//                                weatherTempRange.setText("H:" + temperatureMax + "°C" + " L:" + temperatureMin + "°C");
+//                                weatherType.setText(weatherDescription);
+//                                windInfo.setText(wind + " mph");
+//                                humidInfo.setText(humidity  + "%");
+//                                dewInfo.setText("dew point is " + dewPoint + "°C now");
+//                                UVInfo.setText(UV);
+//                                AirInfo.setText(Air);
+//                                PrecipitationInfo.setText(Precipitation + " inch");
+//                                PrecipitationChanceInfo.setText(PrecipitationChance + "%");
+//                                Log.v("Render Finish", "Weather metrics updated.");
+//                            }
+//                        });
+//                    } else {
+//                        // Handle API request error
+//                        // Optionally, use Handler to show an error message on the main thread
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Log.e("WeatherActivity", "Network error: " + e.getMessage());
+//                    // Handle network or other errors
+//                    // Optionally, use Handler to show an error message on the main thread
+//                }
+//            }
+//        }).start();
     }
 
 }

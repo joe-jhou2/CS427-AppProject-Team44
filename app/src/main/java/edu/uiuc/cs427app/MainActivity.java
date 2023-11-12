@@ -2,22 +2,17 @@ package edu.uiuc.cs427app;
 
 
 import android.accounts.Account;
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
@@ -157,9 +152,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Button showWeather = new MaterialButton(this);
 
+                // record weather data now
+                Weather.weather(getApplicationContext(), cityname);
+
                 // Handles the redirection to city weather detials
                 showWeather.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
+                        Log.v("Render Start", "Weather activity launched.");
                         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
                         intent.putExtra("city", cityname);
                         intent.putExtra("account", account);
