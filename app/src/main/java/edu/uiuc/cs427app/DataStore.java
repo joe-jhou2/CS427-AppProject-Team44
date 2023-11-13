@@ -158,24 +158,38 @@ public class DataStore extends ContentProvider {
     }
     /**
      * Builds a UriMatcher that is used to determine which database request is being made.
-     * @ param uri
-     * @ return string used for db calls
+     * @param uri The Uri for which the type is being determined.
+     * @return A string representing the type of database request to be made.
      */
     @Override
     public String getType(Uri uri) {
+        // Use the UriMatcher to match the incoming Uri with predefined patterns
         switch(sUriMatcher.match(uri)){
+            // If the Uri matches the general CITY pattern
             case CITY:
+                // Return the content type for a list of cities
                 return CityEntry.CONTENT_TYPE;
+            // If the Uri matches the specific CITY_ID pattern
             case CITY_ID:
+                // Return the content item type for a single city
                 return CityEntry.CONTENT_ITEM_TYPE;
+            // If the Uri matches the general PREF pattern
             case PREF:
+                // Return the content type for a list of preferences
                 return PrefEntry.CONTENT_TYPE;
+            // If the Uri matches the specific PREF_ID pattern
             case PREF_ID:
+                // Return the content item type for a single preference
                 return PrefEntry.CONTENT_ITEM_TYPE;
+            // If the Uri matches the general WEATHER pattern
             case WEATHER:
+                // Return the content type for a list of weather entries
                 return WeatherEntry.CONTENT_TYPE;
+            // If the Uri matches the specific WEATHER_ID pattern
             case WEATHER_ID:
+                // Return the content item type for a single weather entry
                 return WeatherEntry.CONTENT_ITEM_TYPE;
+            // If the Uri does not match any predefined pattern, throw an exception
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
