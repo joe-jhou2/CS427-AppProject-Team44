@@ -26,19 +26,23 @@ public class Weather {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // Constructing the API URL with parameters
                 String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + solo_name + "&days=1" + "&aqi=yes";
-
+                // Creating an instance of OkHttpClient for making HTTP requests
                 OkHttpClient client = new OkHttpClient();
+                // Building a request with the constructed URL
                 Request request = new Request.Builder()
                         .url(apiUrl)
                         .build();
 
                 try {
+                    // Executing the HTTP request and getting the response
                     Response response = client.newCall(request).execute();
-
+                    // Checking if the response was successful
                     if (response.isSuccessful()) {
+                        // Extracting the response body as a string
                         String responseBody = response.body().string();
-
+                        // Parsing the response body as a JSON object
                         JSONObject json = new JSONObject(responseBody);
 
                         // Extract weather information from the JSON response
