@@ -41,7 +41,6 @@ public class WeatherActivity extends AppCompatActivity {
 
     private static final String API_KEY = "1c9ca48edcd6459aaa514033233110";
     private static String cityname;
-
     private Account account;
     private Handler handler = new Handler(Looper.getMainLooper());
 

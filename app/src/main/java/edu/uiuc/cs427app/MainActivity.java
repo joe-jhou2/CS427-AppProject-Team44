@@ -87,43 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        /*
-         TODO code to be implemented for delete city dialog
-        removeCity.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v){
 
-                        //launch a dialog to provide list of cities to delete and make it cancelable
-                        CharSequence[] cs = city_list.toArray(new CharSequence[city_list.size()]);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle("Choose a City to Delete:")
-                                .setCancelable(true)
-                                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener(){
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int i) {
-                                                dialog.dismiss();
-                                            }
-                                        }
-                                )
-                                .setSingleChoiceItems(cs, -1, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
-                                                +DataStore.CityEntry.COL_CITY+" = '"+cs[which]+"'";
-                                        //String query = "USERNAME = '" + username + "' AND CITY = '" + cityname + "'";
-                                        getContentResolver().delete(DataStore.CityEntry.CONTENT_URI, selection, null);
-
-                                        // Displaying a toast message
-                                        Toast.makeText(getBaseContext(), cs[which] + " removed", Toast.LENGTH_LONG).show();
-
-                                        dialog.dismiss();
-                                        recreate();
-                                        // Log.d("Theme Dialogz", "theme dialog dismissed.");
-                                    }
-                                });
-                        builder.create().show();
-                    }
-                });
-         */
 
 
         // This code implements the dynamic list of cities and buttons
@@ -147,13 +111,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // This creates the onClick listener tied to the button so that when clicks it creates the
                 // proper intent with cityname for the CityDetailsActivity
                 Button showDetails  = new MaterialButton(this);
-                Button showMap      = new MaterialButton(this);
+//                Button showMap      = new MaterialButton(this);
                 //Button removeCity   = new MaterialButton(this);
 
                 Button showWeather = new MaterialButton(this);
 
                 // record weather data now
-                Weather.weather(getApplicationContext(), cityname);
+                Weather.weather(getApplicationContext(), cityname,latitude,longitude);
 
                 // Handles the redirection to city weather detials
                 showWeather.setOnClickListener(new View.OnClickListener(){
@@ -177,16 +141,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-                //redirects to MapActivity
-                showMap.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v){
-                        Intent intent = new Intent(MainActivity.this , MapsActivity.class);
-                        intent.putExtra("city", cityname);
-                        intent.putExtra("lat",latitude);
-                        intent.putExtra("lon",longitude);
-                        startActivity(intent);
-                    }
-                });
+//                //redirects to MapActivity
+//                showMap.setOnClickListener(new View.OnClickListener() {
+//                    public void onClick(View v){
+//                        Intent intent = new Intent(MainActivity.this , MapsActivity.class);
+//                        intent.putExtra("city", cityname);
+//                        intent.putExtra("lat",latitude);
+//                        intent.putExtra("lon",longitude);
+//                        startActivity(intent);
+//                    }
+//                });
 
 
 
