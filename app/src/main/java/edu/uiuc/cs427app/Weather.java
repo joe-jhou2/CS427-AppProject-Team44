@@ -11,17 +11,28 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * Weather routine to add or update database with current weather information using "api.weatherapi".
+ */
 public class Weather {
-    public Weather() {
-
-    }
-    private Context context;
+    /**
+     * Weather server URL, used as source for weather information.
+     */
     private static final String FORECAST_URL = "https://api.weatherapi.com/v1/forecast.json";
-
+    /**
+     * API key to the "api.weatherapi" weather server.
+     */
     private static final String API_KEY = "1c9ca48edcd6459aaa514033233110";
 
-
-    public static void weather(Context context, String cityName,double latitude,double longitude) {
+    /**
+     * Routine to fetch current weather information for a given city and store metrics into database.
+     *
+     * @param context this application's context
+     * @param cityName name of city to query weather server
+     * @param latitude latitude of city to query weather server
+     * @param longitude longitude of city to query weather server
+     */
+    public static void fetch(Context context, String cityName, double latitude, double longitude) {
         String solo_name = cityName.split(",", 2)[0];
         new Thread(new Runnable() {
             @Override
@@ -102,16 +113,13 @@ public class Weather {
                             // inserting into database through content URI
                             context.getContentResolver().insert(DataStore.WeatherEntry.CONTENT_URI, values);
 
-                            // displaying a toast message
-//                            Toast.makeText(context.getBaseContext(), cityName+" Saved", Toast.LENGTH_LONG).show();
-
-                            //release the cursor and jump back to the Main Activity
+                            // release the cursor and jump back to the current Activity
                             cursor.close();
 
                         } else {
                             //pop a message about the duplicate city
-//                            Toast.makeText(context.getBaseContext(), cityName+" is a duplicate. Choose a new city.", Toast.LENGTH_LONG).show();
                             context.getContentResolver().update(DataStore.WeatherEntry.CONTENT_URI, values, selection, null);
+                            // release the cursor and jump back to the current Activity
                             cursor.close();
                         }
 

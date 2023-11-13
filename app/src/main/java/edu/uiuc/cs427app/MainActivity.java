@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Button showWeather = new MaterialButton(this);
 
                 // record weather data now
-                Weather.weather(getApplicationContext(), cityname,latitude,longitude);
+                Weather.fetch(getApplicationContext(), cityname, latitude, longitude);
 
                 // Handles the redirection to city weather detials
                 showWeather.setOnClickListener(new View.OnClickListener(){
@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.v("Render Start", "Weather activity launched.");
                         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
                         intent.putExtra("city", cityname);
+                        intent.putExtra("lat", latitude);
+                        intent.putExtra("lon", longitude);
                         intent.putExtra("account", account);
                         startActivity(intent);
                     }
