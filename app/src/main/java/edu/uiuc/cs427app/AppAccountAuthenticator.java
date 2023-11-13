@@ -41,6 +41,15 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
         mContext = context;
         userData = new HashMap<>();
     }
+    /**
+     * Adds a new user to the userData HashMap.
+     *
+     * @param username The username of the user to be added.
+     * @param password The password associated with the username.
+     */
+    public void addUser(String username, String password) {
+        userData.put(username, password);
+    }
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse accountAuthenticatorResponse, String accountType) {
