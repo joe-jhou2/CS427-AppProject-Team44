@@ -21,13 +21,13 @@ public class Weather {
     private static final String API_KEY = "1c9ca48edcd6459aaa514033233110";
 
 
-    public static void weather(Context context, String cityName) {
+    public static void weather(Context context, String cityName,double latitude,double longitude) {
         String solo_name = cityName.split(",", 2)[0];
         new Thread(new Runnable() {
             @Override
             public void run() {
                 // Constructing the API URL with parameters
-                String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + solo_name + "&days=1" + "&aqi=yes";
+                String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + latitude +","+longitude+ "&days=1" + "&aqi=yes";
                 // Creating an instance of OkHttpClient for making HTTP requests
                 OkHttpClient client = new OkHttpClient();
                 // Building a request with the constructed URL
