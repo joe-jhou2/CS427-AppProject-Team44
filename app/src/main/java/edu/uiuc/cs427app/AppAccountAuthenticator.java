@@ -51,6 +51,18 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
         userData.put(username, password);
     }
 
+    /**
+     * Validates the user's credentials.
+     *
+     * @param username The username entered by the user.
+     * @param password The password entered by the user.
+     * @return true if the credentials are valid, false otherwise.
+     */
+    public boolean validateUserCredentials(String username, String password) {
+        String storedPassword = userData.get(username);
+        return storedPassword != null && storedPassword.equals(password);
+    }
+
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse accountAuthenticatorResponse, String accountType) {
         return null;
