@@ -203,42 +203,55 @@ public class DataStore extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        // Get a writable database instance
         final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        // Variables to store the result of the insert operation
         long _id;
         Uri returnUri;
-
+        // Use a switch statement to determine the type of data to insert based on the URI
         switch(sUriMatcher.match(uri)){
             case CITY:
+                // Insert data into the CityEntry table
                 _id = db.insert(CityEntry.TABLE_NAME, null, values);
                 if(_id > 0){
+                    // If the insertion was successful, build and return the corresponding URI
                     returnUri =  CityEntry.buildCityUri(_id);
                 } else{
+                    // If the insertion was unsuccessful, throw an exception
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
                 break;
             case PREF:
+                // Insert data into the PrefEntry table
                 _id = db.insert(PrefEntry.TABLE_NAME, null, values);
                 if(_id > 0){
+                    // If the insertion was successful, build and return the corresponding URI
                     returnUri = PrefEntry.buildPrefUri(_id);
                 } else{
+                    // If the insertion was unsuccessful, throw an exception
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
                 break;
             case WEATHER:
+                // Insert data into the WeatherEntry table
                 _id = db.insert(WeatherEntry.TABLE_NAME, null, values);
                 if(_id > 0){
+                    // If the insertion was successful, build and return the corresponding URI
                     returnUri = WeatherEntry.buildWeatherUri(_id);
                 } else{
+                    // If the insertion was unsuccessful, throw an exception
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
                 break;
             default:
+                // If the URI does not match any known cases, throw an exception
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
         // Use this on the URI passed into the function to notify any observers that the uri has
         // changed.
         getContext().getContentResolver().notifyChange(uri, null);
+        // Return the URI after the insertion
         return returnUri;
     }
 
