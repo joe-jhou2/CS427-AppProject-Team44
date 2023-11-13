@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
  * Activity that serves as an Authentication Page, first activity presented to user upon using
  * application. Options to let new users sign up, returning users sign in, and select a theme upon
  * entering the application are used.
- *
  * For users to preview themes, a preview account is used on the backend to allow for previews. If a
  * theme preview is used the settings are passed onto any NEWLY created accounts or anyone SIGNING IN.
  */
@@ -129,6 +128,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         Button buttonSignIn = findViewById(R.id.buttonSignIn);
         Button themeButton = findViewById(R.id.themeButton);
 
+        // Set click listeners for buttons
         if (buttonSignUp != null) {
             buttonSignUp.setOnClickListener(this);
         }
@@ -149,6 +149,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         } else {
             // consider moving mUsername and mPassword initializing here
         }
+        // Set text fields with saved username and password, if available
         if (mUsername != null && mPassword != null) {
             mAccountNameView.setText(mUsername);
             mAccountPassView.setText(mPassword);
