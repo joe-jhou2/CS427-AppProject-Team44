@@ -65,6 +65,7 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse accountAuthenticatorResponse, String accountType) {
+        //I mplement the logic to edit properties of the account here
         return null;
     }
 
