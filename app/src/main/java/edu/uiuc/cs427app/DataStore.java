@@ -196,7 +196,7 @@ public class DataStore extends ContentProvider {
     }
 
     /**
-     * A wrapper for a database DELETE.
+     * A wrapper for a database INSERT.
      * @param uri The URI with content scheme.
      * @param values key/value pair data to update in db.
      * @return result URI
