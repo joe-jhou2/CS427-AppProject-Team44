@@ -31,6 +31,12 @@ public class CreateAccountActivityTest {
         onView(withId(R.id.inputUsername)).perform(typeText(testUsername), closeSoftKeyboard());
         onView(withId(R.id.inputPassword)).perform(typeText(testPassword), closeSoftKeyboard());
 
+        try {
+            Thread.sleep(2000);
+        } catch(InterruptedException e) {
+            System.out.println("got interrupted!");
+        }
+
         // Click on the signup button
         onView(withId(R.id.buttonSignUp)).perform(click());
     }
