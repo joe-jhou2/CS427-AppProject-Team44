@@ -23,9 +23,9 @@ public class TestUserLogin {
     @Rule
     public ActivityScenarioRule<CreateAccountActivity> activityRule = new ActivityScenarioRule<CreateAccountActivity>(CreateAccountActivity.class);
 
-    // Test methods will be added here
+    // Test that a valid sign in takes a user to the MainActivity
     @Test
-    public void testSignInFunctionality() {
+    public void testSignInSuccess() {
         // Enter Valid Inputs
         String testUsername = "riley";
         String testPassword = "team44";
@@ -48,4 +48,28 @@ public class TestUserLogin {
         try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
     }
 
+    // Test that a invalid sign in attempt. This should keep the user on the login page
+    @Test
+    public void testSignInFail() {
+        // Enter Valid Inputs
+        String testUsername = "riley";
+        String testPassword = "team43";
+
+        // Enter text in username and password fields
+        onView(withId(R.id.inputUsername)).perform(typeText(testUsername), closeSoftKeyboard());
+        onView(withId(R.id.inputPassword)).perform(typeText(testPassword), closeSoftKeyboard());
+
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+
+        // Click on the sign in button
+        onView(withId(R.id.buttonSignIn)).perform(click());
+
+        // Assert that we have did NOT make it to MainActivity, thus, the login was failed
+        String loginPageString = "Authentication Page";
+        onView(withId(R.id.textViewHeader)).check(matches(withText(loginPageString)));
+
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+    }
 }
