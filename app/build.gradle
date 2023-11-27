@@ -96,6 +96,10 @@ dependencies {
 
     // Mockito
     androidTestImplementation 'org.mockito:mockito-core:3.3.3'
+
+    // Use to implement UIAutomator tests
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:2.2.0"
+
 }
 
 
