@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreateAccountActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">CreateAccountActivity.java</span></div><h1>CreateAccountActivity.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+// TODO (post Milestone 3) privacy concerns -- disclose to users we are storing their data
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * Activity that serves as an Authentication Page, first activity presented to user upon using
+ * application. Options to let new users sign up, returning users sign in, and select a theme upon
+ * entering the application are used.
+ * For users to preview themes, a preview account is used on the backend to allow for previews. If a
+ * theme preview is used the settings are passed onto any NEWLY created accounts or anyone SIGNING IN.
+ */
+<span class="fc" id="L25">public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener {</span>
+    /**
+     * User's username input
+     */
+    private String mUsername;
+    /**
+     * User's password input
+     */
+    private String mPassword;
+
+    /**
+     * Preview account username
+     */
+    private static final String PREVIEW_USERNAME = &quot;PREVIEW&quot;;
+    /**
+     * Preview account password
+     */
+    private static final String PREVIEW_PASSWORD = &quot;PREVIEW&quot;;
+
+    /**
+     * A key for the theme, this is set by either a returning user's account
+     * settings OR upon using the layout selection.
+     */
+    private String themeKey;
+
+    /**
+     * The previewAccount is a &quot;constant&quot; account that will have some settings
+     * changed to display a theme preview.
+     */
+    private Account previewAccount;
+
+    /**
+     * Instance of the account manager for this activity.
+     */
+    private AccountManager mAccountManager;
+
+    /**
+     * Instance of the current account
+     */
+    private Account mCurrentAccount;
+
+    /**
+     * Instance of the account's username input view
+     */
+    private EditText mAccountNameView;
+
+    /**
+     * Instance of the account's password input view
+     */
+    private EditText mAccountPassView;
+
+    /**
+     * Initializes the activity for the authentication page.
+     *
+     * @param savedInstanceState saved instance states passed upon a recreate() request
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L83">        super.onCreate(savedInstanceState);</span>
+
+        // Initialize the app's account manager.
+<span class="fc" id="L86">        mAccountManager = AccountManager.get(this);</span>
+
+        // TODO (post Milestone 3) helper method THEME REFRESH - create helper to handle this initialization
+        // Checks if the login page was recreated -- if so, dynamically adjust the PREVIEW theme
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (savedInstanceState != null) {</span>
+            // retrieve account object
+<span class="nc" id="L92">            Account currentAccount = getAccountFromPreferences();</span>
+
+            // Apply the theme based on the user's preference
+<span class="nc" id="L95">            ThemeUtils.applyTheme(currentAccount, this);</span>
+
+            // save the theme to for the next user
+<span class="nc" id="L98">            themeKey = getThemePreferenceForAccount(this, currentAccount.name);</span>
+<span class="nc" id="L99">            Log.v(&quot;THEME&quot;, &quot;theme key is = &quot; + themeKey);</span>
+<span class="nc" id="L100">        } else {</span>
+            // Set default theme for the login activity
+<span class="fc" id="L102">            setTheme(R.style.Theme_Day);</span>
+        }
+
+        // TODO (post Milestone 3) helper method DUMMY ACCOUNT - create helper to handle this initialization
+        // Checks if the dummy account is instanced - if so pull it from the account manager OR create it
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (previewAccount != null) {</span>
+            // nothing to initialize
+        } else {
+            // Set default theme for the login activity
+<span class="fc" id="L111">            previewAccount = new Account(PREVIEW_USERNAME, this.getString(R.string.account_type));</span>
+
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (mAccountManager.addAccountExplicitly(previewAccount, PREVIEW_PASSWORD, null)) {</span>
+<span class="nc" id="L114">                Log.v(&quot;DummyAccount&quot;, &quot;Dummy account created.&quot;);//</span>
+            } else {
+<span class="fc" id="L116">                Log.v(&quot;DummyAccount&quot;, &quot;Dummy account exists.&quot;);//</span>
+            }
+        }
+
+        // Initialize the ACTIVITY PAGE
+<span class="fc" id="L121">        setContentView(R.layout.activity_login);</span>
+
+        // Identifying UI components to be used as input for AccountManager
+        // and buttons to initiate account creation / login
+<span class="fc" id="L125">        mAccountNameView = findViewById(R.id.inputUsername);</span>
+<span class="fc" id="L126">        mAccountPassView = findViewById(R.id.inputPassword);</span>
+<span class="fc" id="L127">        Button buttonSignUp = findViewById(R.id.buttonSignUp);</span>
+<span class="fc" id="L128">        Button buttonSignIn = findViewById(R.id.buttonSignIn);</span>
+<span class="fc" id="L129">        Button themeButton = findViewById(R.id.themeButton);</span>
+
+        // Set click listeners for buttons
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (buttonSignUp != null) {</span>
+<span class="fc" id="L133">            buttonSignUp.setOnClickListener(this);</span>
+        }
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (buttonSignIn != null) {</span>
+<span class="fc" id="L136">            buttonSignIn.setOnClickListener(this);</span>
+        }
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if (themeButton != null) {</span>
+<span class="fc" id="L139">            themeButton.setOnClickListener(this);</span>
+        }
+
+
+        // TODO (post Milestone 3) helper method USER INPUT - create helper to handle this initialization
+        // Passed saved fields from savedInstanced to new Instance of this activity
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        if (savedInstanceState != null) {</span>
+            // Restore value of members from saved state
+<span class="nc" id="L147">            mUsername = savedInstanceState.getString(&quot;saved_username&quot;);</span>
+<span class="nc" id="L148">            mPassword = savedInstanceState.getString(&quot;saved_password&quot;);</span>
+        } else {
+            // consider moving mUsername and mPassword initializing here
+        }
+        // Set text fields with saved username and password, if available
+<span class="pc bpc" id="L153" title="3 of 4 branches missed.">        if (mUsername != null &amp;&amp; mPassword != null) {</span>
+<span class="nc" id="L154">            mAccountNameView.setText(mUsername);</span>
+<span class="nc" id="L155">            mAccountPassView.setText(mPassword);</span>
+        }
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Upon clicking the specified buttons, the corresponding actions are carried out.
+     *
+     * @param view current view in activity
+     */
+    @Override
+    public void onClick(View view) {
+<span class="pc bpc" id="L166" title="2 of 4 branches missed.">        switch (view.getId()) {</span>
+            case R.id.buttonSignUp:
+<span class="fc" id="L168">                createAccount();</span>
+<span class="fc" id="L169">                break;</span>
+            case R.id.buttonSignIn:
+<span class="fc" id="L171">                signIn();</span>
+<span class="fc" id="L172">                break;</span>
+            case R.id.themeButton:
+<span class="nc" id="L174">                Log.d(&quot;Theme Dialog&quot;, &quot;processed layout selection&quot;);</span>
+<span class="nc" id="L175">                ThemeUtils.showThemeDialog(CreateAccountActivity.this, previewAccount);</span>
+<span class="nc" id="L176">                saveAccountInfoToPreferences(previewAccount);</span>
+                break;
+        }
+<span class="fc" id="L179">    }</span>
+
+    /**
+     * Upon closing this activity, specific instance states are passed across
+     * instances of this activity.
+     *
+     * @param outState bundle containing instances to be saved, i.e. passed on to next instance
+     *                 of this activity
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+<span class="fc" id="L190">        super.onSaveInstanceState(outState);</span>
+
+<span class="fc" id="L192">        outState.putString(&quot;saved_username&quot;, mUsername);</span>
+<span class="fc" id="L193">        outState.putString(&quot;saved_password&quot;, mPassword);</span>
+<span class="fc" id="L194">    }</span>
+
+    /**
+     * Creates an account by reading the username and password input into the authentication page.
+     */
+    private void createAccount() {
+        // Instance a new account to be added to the account manager
+<span class="fc" id="L201">        mUsername = mAccountNameView.getText().toString();</span>
+<span class="fc" id="L202">        mPassword = mAccountPassView.getText().toString();</span>
+<span class="fc" id="L203">        mCurrentAccount = new Account(mUsername, this.getString(R.string.account_type));</span>
+
+        // Checks if the account was successfully added to the account manager, if so,
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        if (mAccountManager.addAccountExplicitly(mCurrentAccount, mPassword, null)) {</span>
+<span class="nc" id="L207">            Toast.makeText(this, &quot;Account created! Please sign in with your username and password.&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L208">            Log.v(&quot;AccountCreate&quot;, &quot;account created, username=&quot;+ mUsername); // Account creation succeeded</span>
+
+<span class="nc" id="L210">            ThemeUtils.saveThemePreferenceForAccount(CreateAccountActivity.this, mCurrentAccount.name, themeKey);</span>
+<span class="nc" id="L211">            saveAccountInfoToPreferences(mCurrentAccount);</span>
+<span class="nc" id="L212">            ThemeUtils.applyTheme(mCurrentAccount, this);</span>
+
+<span class="nc" id="L214">            Toast.makeText(this, &quot;Account created! Choose your theme and then sign in with your username and password.&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L215">            return;</span>
+
+        } else {
+<span class="fc" id="L218">            Toast.makeText(this, &quot;Account already exists! Please sign in with your username and password.&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="fc" id="L219">            Log.v(&quot;AccountCreate&quot;, &quot;account NOT created, username=&quot;+ mUsername);// Account creation failed</span>
+        }
+<span class="fc" id="L221">    }</span>
+
+    /**
+     * Sign in to app using the input for username and password.
+     */
+    private void signIn() {
+<span class="fc" id="L227">        mUsername = mAccountNameView.getText().toString();</span>
+<span class="fc" id="L228">        mPassword = mAccountPassView.getText().toString();</span>
+
+        // TODO (post Milestone 3) validation of accounts - use account validateLocally()
+<span class="fc" id="L231">        Account[] accounts = mAccountManager.getAccountsByType(this.getString(R.string.account_type));</span>
+<span class="fc" id="L232">        boolean isSuccessful = false;</span>
+
+
+        /**
+         * Pull a list of accounts and search for the matching username. Once the username is
+         * matched, compare the password provided to the actual password.
+         */
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        for (Account account : accounts) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if (account.name.equals(mUsername)) {</span>
+                // Local authentication -- not real authentication or OAuth
+<span class="fc" id="L242">                String storedPassword = mAccountManager.getPassword(account);</span>
+<span class="fc" id="L243">                Log.d(&quot;SignInInfo&quot;, &quot;Account found: &quot; + account.name);</span>
+
+<span class="pc bpc" id="L245" title="1 of 4 branches missed.">                if (storedPassword != null &amp;&amp; storedPassword.equals(mPassword)) {</span>
+<span class="fc" id="L246">                    Log.d(&quot;SignInInfo&quot;, &quot;Passed password == stored password: &quot; + mPassword);</span>
+<span class="fc" id="L247">                    isSuccessful = true;</span>
+<span class="fc" id="L248">                    mCurrentAccount = account;</span>
+<span class="fc" id="L249">                    break;</span>
+                }
+            }
+        }
+
+        /**
+         * If the account credentials were verified the current theme is applied to the account and
+         * the user is signed into the app.
+         */
+        // TODO (post Milestone 3) helper method SIGN IN W/THEME APPLICATION - apply theme and sign into account
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (isSuccessful) {</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">            if (themeKey != null)</span>
+<span class="nc" id="L261">                ThemeUtils.saveThemePreferenceForAccount(CreateAccountActivity.this, mCurrentAccount.name, themeKey);</span>
+<span class="fc" id="L262">            Log.d(&quot;SignInInfo&quot;, &quot;Saving themeKey: &quot; + themeKey + &quot; for account: &quot;+mCurrentAccount.name);</span>
+<span class="fc" id="L263">            saveAccountInfoToPreferences(mCurrentAccount); // Save account to SharedPreferences</span>
+<span class="fc" id="L264">            ThemeUtils.applyTheme(mCurrentAccount, this);</span>
+
+
+            // Login worked -- go to MainActivity
+<span class="fc" id="L268">            Intent intent = new Intent(this, MainActivity.class);</span>
+<span class="fc" id="L269">            intent.putExtra(&quot;account&quot;, mCurrentAccount);</span>
+<span class="fc" id="L270">            startActivity(intent);</span>
+<span class="fc" id="L271">            Log.d(&quot;SignInInfo&quot;, &quot;Successfully logged into Account: &quot; + mCurrentAccount.name);</span>
+<span class="fc" id="L272">        } else {</span>
+<span class="fc" id="L273">            Toast.makeText(this, &quot;Sign in failed. Check username and password.&quot;, Toast.LENGTH_LONG).show();</span>
+        }
+<span class="fc" id="L275">    }</span>
+
+    /**
+     * Used to save account preferences for themes across difference users.
+     *
+     * @param account account to be saved and logged into preferences
+     */
+    private void saveAccountInfoToPreferences(Account account) {
+<span class="fc" id="L283">        SharedPreferences sharedPreferences = getSharedPreferences(&quot;app_preferences&quot;, MODE_PRIVATE);</span>
+<span class="fc" id="L284">        SharedPreferences.Editor editor = sharedPreferences.edit();</span>
+<span class="fc" id="L285">        editor.putString(&quot;account_name&quot;, account.name);</span>
+        // Add more info if necessary
+<span class="fc" id="L287">        editor.apply();</span>
+<span class="fc" id="L288">    }</span>
+
+    /**
+     * Pulls the theme preference from the shared preferences in the app.
+     *
+     * @param context this current context
+     * @param username account username
+     * @return key for the account's theme
+     */
+    private static String getThemePreferenceForAccount(Context context, String username) {
+<span class="nc" id="L298">        SharedPreferences sharedPreferences = context.getSharedPreferences(&quot;theme_preferences&quot;, Context.MODE_PRIVATE);</span>
+<span class="nc" id="L299">        return sharedPreferences.getString(username, &quot;Theme.Day&quot;);</span>
+    }
+
+    /**
+     * Retrieves the account from the shared preferences.
+     *
+     * @return account associated with the account name for the current user
+     */
+    private Account getAccountFromPreferences() {
+<span class="nc" id="L308">        SharedPreferences sharedPreferences = getSharedPreferences(&quot;app_preferences&quot;, MODE_PRIVATE);</span>
+<span class="nc" id="L309">        String accountName = sharedPreferences.getString(&quot;account_name&quot;, null);</span>
+        // Retrieve more info if necessary
+<span class="nc bnc" id="L311" title="All 2 branches missed.">        if (accountName != null) {</span>
+<span class="nc" id="L312">            return new Account(accountName, getString(R.string.account_type));</span>
+        }
+<span class="nc" id="L314">        return null;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>
