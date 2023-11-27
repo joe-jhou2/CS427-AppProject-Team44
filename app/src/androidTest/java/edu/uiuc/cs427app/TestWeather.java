@@ -10,12 +10,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.Espresso.pressBack;
 
-import static org.hamcrest.Matchers.containsString;
-
-import android.graphics.Rect;
 import android.widget.TextView;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -47,19 +43,19 @@ public class TestWeather {
         //Add city
         String city = "Chicago";
         addCity(city);
-        waitFor(2000);
+        pause(2000);
 
         //check if weather information matches
         onView(withText("WEATHER")).perform(click());
         onView(withText(city)).check(matches(isDisplayed()));
-        assertWeatherInfoDisplayed();
-        waitFor(2000);
+        checkWeatherInfo();
+        pause(2000);
 
         //go back and delete the city
         pressBack();
         onView(withId(R.id.buttonAddCity)).perform(click());
         onView(withText("DELETE")).perform(click());
-        waitFor(2000);
+        pause(2000);
         pressBack();
 
     }
@@ -72,19 +68,19 @@ public class TestWeather {
         //Add city
         String city = "Madison";
         addCity(city);
-        waitFor(2000);
+        pause(2000);
 
         //check if weather information matches
         onView(withText("WEATHER")).perform(click());
         onView(withText(city)).check(matches(isDisplayed()));
-        assertWeatherInfoDisplayed();
-        waitFor(2000);
+        checkWeatherInfo();
+        pause(2000);
 
         //go back and delete the city
         pressBack();
         onView(withId(R.id.buttonAddCity)).perform(click());
         onView(withText("DELETE")).perform(click());
-        waitFor(2000);
+        pause(2000);
         pressBack();
 
     }
@@ -93,7 +89,7 @@ public class TestWeather {
     private void login(String account, String password){
         onView(withId(R.id.inputUsername)).perform(typeText(account), closeSoftKeyboard());
         onView(withId(R.id.inputPassword)).perform(typeText(password), closeSoftKeyboard());
-        // Click on the sign in button
+        // Click on the sign up button
         onView(withId(R.id.buttonSignUp)).perform(click());
         // Click on the sign in button
         onView(withId(R.id.buttonSignIn)).perform(click());
@@ -125,7 +121,7 @@ public class TestWeather {
 
 
     // Function for Assertions for weather information
-    private void assertWeatherInfoDisplayed() {
+    private void checkWeatherInfo() {
         onView(withId(R.id.CityTemperature)).check(matches(isDisplayed()));
         onView(withId(R.id.CityWeather)).check(matches(isDisplayed()));
         onView(withId(R.id.humidityData)).check(matches(isDisplayed()));
@@ -136,9 +132,10 @@ public class TestWeather {
         onView(withId(R.id.windData)).check(matches(isDisplayed()));
     }
     //Function for wait
-    private void waitFor(long milliseconds) {
+    private void pause(int ms) {
         try {
-            Thread.sleep(milliseconds);
+            //wait time in milliseconds
+            Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
