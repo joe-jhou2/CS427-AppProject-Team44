@@ -41,7 +41,7 @@ public class TestWeather {
 
     @Test
     public void testWeather1() throws UiObjectNotFoundException {
-        login("sb7", "12345");
+        login("testWeather", "12345");
         onView(withId(R.id.buttonAddCity)).perform(click());
 
         //Add city
@@ -66,7 +66,7 @@ public class TestWeather {
 
     @Test
     public void testWeather2() throws UiObjectNotFoundException {
-        login("sb7", "12345");
+        login("testWeather", "12345");
         onView(withId(R.id.buttonAddCity)).perform(click());
 
         //Add city
