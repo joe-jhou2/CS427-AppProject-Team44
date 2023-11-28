@@ -46,6 +46,19 @@
             app:layout_constraintTop_toBottomOf="@+id/CityName" />
 
         <TextView
+            android:id="@+id/cityLatitude"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/cityLongitude"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:visibility="invisible" />
+
+
+        <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
             android:layout_height="89dp"
@@ -62,5 +75,6 @@
             android:orientation="vertical"
 
             />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
