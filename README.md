@@ -182,17 +182,18 @@ Nov-12-2013
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
+Nov-19-2013
 </br>
-| NetID          | Progress from last week         | Tasks for next week   |
-| ---------------| --------------------------------| ----------------------|
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
+| NetID          | Progress from last week                | Tasks for next week         |
+| ---------------| ---------------------------------------| ----------------------------|
+|   yibinh2      | Milestone3, task1, detail above        | Testing weather feature     |
+|   rileydm2     | Milestone3, lead task2, detail above   | Testing user login          |
+|   zhaol4       | Milestone3, task2, detail above        | Testing location feature    |
+|   jdhank2      | Milestone3, task2, detail above        | Testing adding a new city   |
+|   ytl5         | Milestone3, task1, detail above        | Testing user log off        |
+|   lwchave2     | Milestone3, lead task1, detail above   | Testing user sign up        |
+|   jueh4        | Milestone3, task3, detail above        | Mocking location test       |
+|   ktsoi3       | Milestone3, lead task3, detail above   | Testing remove existing city|
 </br>
 
 
@@ -201,6 +202,7 @@ Meeting notes: Explain the overall team progress and a summary of discussion
 Members present: List the NetID of the people who attended the meeting
 </br>
 Meeting notes: Explain the overall team progress and a summary of discussion
+Nov-28-2013
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
 | ---------------| --------------------------------| ----------------------|
