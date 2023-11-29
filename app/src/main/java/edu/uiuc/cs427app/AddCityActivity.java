@@ -86,7 +86,6 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
 
-//                updateLatLongTextViews(place.getLatLng().latitude, place.getLatLng().longitude);
 //                // Set the latitude TextView
 //                TextView latitudeView = findViewById(R.id.cityLatitude);
 //                latitudeView.setText("Latitude: " + latitude);
@@ -101,7 +100,6 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                         + place.getLatLng().latitude + "\n"
                         + "Longitude: "
                         + place.getLatLng().longitude;
-                //updateLatLongTextViews(latitude, longitude);
                 Toast.makeText(getBaseContext(), msg, Toast.LENGTH_LONG).show();
                 Log.d(TAG, msg);
             }
@@ -129,7 +127,6 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                 String cityname = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_CITY));
                 double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LATITUDE));
                 double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LONGITUDE));
-                //updateLatLongTextViews(latitude, longitude);
                 city_list.add(cityname);
                 LinearLayout row = new LinearLayout(this);
                 TextView city = new TextView(this);
@@ -188,7 +185,6 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
             values.put(DataStore.CityEntry.COL_CITY, cityname);
             values.put(DataStore.CityEntry.COL_LATITUDE, latitude);
             values.put(DataStore.CityEntry.COL_LONGITUDE, longitude);
-            updateLatLongTextViews(latitude, longitude);
             //query the db to see if the city is already there for the given user
             String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
                               +DataStore.CityEntry.COL_CITY+" = '"+cityname+"'";
@@ -216,12 +212,4 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
 
         }
     }
-    private void updateLatLongTextViews(double latitude, double longitude) {
-        TextView latitudeView = findViewById(R.id.cityLatitude);
-        latitudeView.setText("Latitude: " + latitude);
-
-        TextView longitudeView = findViewById(R.id.cityLongitude);
-        longitudeView.setText("Longitude: " + longitude);
-    }
-
 }

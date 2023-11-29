@@ -57,6 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 "Longitude: "+String.format("%.5f", longitude);
         TextView cityInfo = findViewById(R.id.cityNameLatLon);
         cityInfo.setText(msg);
+        TextView cityName = findViewById(R.id.cityName);
+        cityName.setText(cityname);
 
     }
 

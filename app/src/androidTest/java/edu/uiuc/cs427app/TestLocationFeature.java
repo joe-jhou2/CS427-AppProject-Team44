@@ -1,4 +1,5 @@
 package edu.uiuc.cs427app;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -31,6 +32,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -46,26 +48,18 @@ public class TestLocationFeature {
         //add city
         String city = "Chicago";
         addCity(city);
-
         pause(2000);
-        // Check if the latitude and longitude match the expected values for Chicago
-        onView(withText("WEATHER")).perform(click());
-        onView(withText(city)).check(matches(isDisplayed()));
+        onView(withText("MAP")).perform(click());
+        pause(2000);
+        onView(withId(R.id.cityName)).check(matches(withText(containsString(city))));
         pause(2000);
         pressBack();
         pause(2000);
-        String expectedLatitude = "41.8781136";
-        String expectedLongitude = "-87.6297982";
-//        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLatitude))));
-//        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLongitude))));
-
         //edit
         onView(withId(R.id.buttonAddCity)).perform(click());
         onView(withText("DELETE")).perform(click());
         pause(2000);
 
-//        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLatitude))));
-//        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLongitude))));
         pressBack();
 
         // Delay at the end
@@ -75,36 +69,30 @@ public class TestLocationFeature {
             e.printStackTrace();
         }
     }
-    //        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLatitude))));
-    //        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLongitude))));
 
+    @Test
+    public void test02Location() throws UiObjectNotFoundException {
+        login("testLocation", "12345");
+        onView(withId(R.id.buttonAddCity)).perform(click());
+        //add city
+        String city = "Seattle";
+        addCity(city);
+        pause(2000);
+        onView(withText("MAP")).perform(click());
+        pause(2000);
+        onView(withId(R.id.cityName)).check(matches(withText(containsString(city))));
+        pause(2000);
+        pressBack();
+        pause(2000);
+        //edit
+        onView(withId(R.id.buttonAddCity)).perform(click());
+        onView(withText("DELETE")).perform(click());
+        pause(2000);
 
+        pressBack();
+    }
 
-//    @Test
-//    public void test02Location() throws UiObjectNotFoundException {
-//        login("testLocation", "12345");
-//        onView(withId(R.id.buttonAddCity)).perform(click());
-//        //add city
-//        String city = "Seattle";
-//        addCity(city);
-//        pause(2000);
-//        // Check if the latitude and longitude match the expected values for Chicago
-//        onView(withText("WEATHER")).perform(click());
-//        onView(withText(city)).check(matches(isDisplayed()));
-//        pause(2000);
-//
-//        String expectedLatitude = "47.6061389";
-//        String expectedLongitude = "-122.3328481";
-//        onView(withId(R.id.cityLatitude)).check(matches(withText("Latitude: " + expectedLatitude)));
-//        onView(withId(R.id.cityLongitude)).check(matches(withText("Longitude: " + expectedLongitude)));
-//        onView(withId(R.id.buttonAddCity)).perform(click());
-//        onView(withText("DELETE")).perform(click());
-//        pressBack();
-//    }
-
-
-
-    private void login(String account, String password){
+    private void login(String account, String password) {
         onView(withId(R.id.inputUsername)).perform(typeText(account), closeSoftKeyboard());
         onView(withId(R.id.inputPassword)).perform(typeText(password), closeSoftKeyboard());
         // Click on the sign up button
@@ -112,6 +100,7 @@ public class TestLocationFeature {
         // Click on the sign in button
         onView(withId(R.id.buttonSignIn)).perform(click());
     }
+
     //Function to add new city
     private void addCity(String cityName) throws UiObjectNotFoundException {
         onView(withId(R.id.autocomplete_fragment)).perform(click());
