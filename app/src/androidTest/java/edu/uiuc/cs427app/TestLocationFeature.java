@@ -67,6 +67,13 @@ public class TestLocationFeature {
 //        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLatitude))));
 //        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLongitude))));
         pressBack();
+
+        // Delay at the end
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     //        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLatitude))));
     //        onView(withId(R.id.cityNameLatLon)).check(matches(withText(containsString(expectedLongitude))));

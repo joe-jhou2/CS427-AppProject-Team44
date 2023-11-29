@@ -58,6 +58,13 @@ public class TestWeather {
         pause(2000);
         pressBack();
 
+        // Delay at the end
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test
@@ -82,6 +89,13 @@ public class TestWeather {
         onView(withText("DELETE")).perform(click());
         pause(2000);
         pressBack();
+
+        // Delay at the end
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 

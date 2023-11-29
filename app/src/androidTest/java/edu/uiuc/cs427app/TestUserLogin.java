@@ -46,6 +46,13 @@ public class TestUserLogin {
 
         // Sleep to slow time
         try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+
+        // Delay at the end
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // Test that a invalid sign in attempt. This should keep the user on the login page
@@ -71,5 +78,12 @@ public class TestUserLogin {
 
         // Sleep to slow time
         try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+
+        // Delay at the end
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

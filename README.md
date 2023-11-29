@@ -206,10 +206,10 @@ Nov-28-2013
 </br>
 | NetID          | Progress from last week         | Tasks for next week   |
 | ---------------| --------------------------------| ----------------------|
+|  Final meeting |                                 |                       |
 |                |                                 |                       |
 |                |                                 |                       |
-|                |                                 |                       |
-|                |                                 |                       |
+|                |       Final meeting             |                       |
 |                |                                 |                       |
 |                |                                 |                       |
 |                |                                 |                       |
