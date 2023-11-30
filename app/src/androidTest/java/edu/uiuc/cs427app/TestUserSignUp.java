@@ -43,6 +43,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class TestUserSignUp {
 
+
     @Rule
     public ActivityScenarioRule<CreateAccountActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(CreateAccountActivity.class);

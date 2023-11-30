@@ -144,6 +144,7 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
         return null;
     }
 
+
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account, String s, Bundle bundle) throws NetworkErrorException {
         return null;
