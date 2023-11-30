@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
         mContext = context;
         userData = new HashMap<>();
     }
+
     /**
      * Adds a new user to the userData HashMap.
      *
@@ -49,6 +51,17 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
      */
     public void addUser(String username, String password) {
         userData.put(username, password);
+    }
+
+    /**
+     * Removes a user from the userData HashMap.
+     *
+     * @param username The username of the user to be removed.
+     */
+    public void deleteUser(String username) {
+        if (userData.containsKey(username)) {
+            userData.remove(username);
+        }
     }
 
     /**
@@ -65,7 +78,7 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse accountAuthenticatorResponse, String accountType) {
-        //I mplement the logic to edit properties of the account here
+        //Implement the logic to edit properties of the account here
         return null;
     }
 
@@ -104,6 +117,27 @@ public class AppAccountAuthenticator extends AbstractAccountAuthenticator {
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
     }
+
+    @Override
+    public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account) throws NetworkErrorException {
+        Log.v("authRemoval", "start removal process");
+        Bundle result = new Bundle();
+
+        //TODO remove redundant setting of removalAllowed
+        boolean removalAllowed = true;
+        if (userData.containsKey(account.name)) {
+            Log.v("authRemoval", "delete the user");
+            removalAllowed = true;
+            deleteUser(account.name);
+        } else {
+            Log.v("authRemoval", "user NOT DELETED");
+            removalAllowed = true;
+        }
+
+        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, removalAllowed);
+        return result;
+    }
+
 
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account, Bundle bundle) throws NetworkErrorException {
