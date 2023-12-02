@@ -26,7 +26,20 @@ public class TestUserLogoff {
     // Test that a valid signoff  takes a user to the MainActivity
     @Test
     public void testLogoffSuccess() {
-        // Assume the user is already logged in
+        // Log the user in
+        // Enter Valid Inputs
+        String testUsername = "riley";
+        String testPassword = "team44";
+
+        // Enter text in username and password fields
+        onView(withId(R.id.inputUsername)).perform(typeText(testUsername), closeSoftKeyboard());
+        onView(withId(R.id.inputPassword)).perform(typeText(testPassword), closeSoftKeyboard());
+
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+
+        // Click on the sign in button
+        onView(withId(R.id.buttonSignIn)).perform(click());
 
         // Sleep to slow time
         try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
