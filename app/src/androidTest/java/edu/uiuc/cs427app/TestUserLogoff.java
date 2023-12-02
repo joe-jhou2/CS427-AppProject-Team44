@@ -28,12 +28,18 @@ public class TestUserLogoff {
     public void testLogoffSuccess() {
         // Assume the user is already logged in
 
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+
         // Perform logoff action
         onView(withId(R.id.buttonSignUp)).perform(click());
 
         // Assert that we are back on the login page after logoff
         String loginPageString = "Authentication Page";
         onView(withId(R.id.textViewHeader)).check(matches(withText(loginPageString)));
+
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
 
         // Delay at the end
         try {
@@ -48,6 +54,8 @@ public class TestUserLogoff {
     public void testSignInFail() {
         // Assume the user is already logged in
 
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
         // Perform logoff action
         // This may involve clicking a logoff button or navigating to a logoff screen, depending on your app's design
         onView(withId(R.id.buttonSignUp)).perform(click());
@@ -59,6 +67,10 @@ public class TestUserLogoff {
         // Assert that we are still on the main page
         String mainPageString = "  CS427 Project App";
         onView(withId(R.id.textView3)).check(matches(withText(mainPageString)));
+
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+
         // Delay at the end
         try {
             Thread.sleep(1000);
