@@ -243,6 +243,7 @@
                     android:id="@+id/AirNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="PM2.5"
                     android:layout_below="@id/AirData"
                     android:layout_centerHorizontal="true"
                     android:textSize="20sp" />
@@ -294,6 +295,7 @@
                     android:id="@+id/PrecipitationNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="in next 1h"
                     android:layout_below="@id/PrecipitationData"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp" />
@@ -345,6 +347,7 @@
                     android:id="@+id/PrecipitationChanceNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="in next 1h"
                     android:layout_below="@id/PrecipitationChanceData"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp" />

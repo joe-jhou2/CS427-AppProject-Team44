@@ -81,7 +81,7 @@ public class DataStore extends ContentProvider {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
-
+    // TODO (post Milestone 4) add timestamp, long, and let columns to database for weather metric entries
     //defines the URI and table/column names for the weather information
     public static final class WeatherEntry implements BaseColumns {
         // Content URI represents the base location for the table
@@ -196,7 +196,7 @@ public class DataStore extends ContentProvider {
     }
 
     /**
-     * A wrapper for a database DELETE.
+     * A wrapper for a database INSERT.
      * @param uri The URI with content scheme.
      * @param values key/value pair data to update in db.
      * @return result URI

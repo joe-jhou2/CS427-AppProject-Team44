@@ -86,6 +86,14 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
 
+//                // Set the latitude TextView
+//                TextView latitudeView = findViewById(R.id.cityLatitude);
+//                latitudeView.setText("Latitude: " + latitude);
+//
+//                // Set the longitude TextView
+//                TextView longitudeView = findViewById(R.id.cityLongitude);
+//                longitudeView.setText("Longitude: " + longitude);
+
                 String msg = "Place: "
                         + place.getAddress() + "\n"
                         + "Latitude: "
@@ -177,7 +185,6 @@ public class AddCityActivity extends AppCompatActivity implements View.OnClickLi
             values.put(DataStore.CityEntry.COL_CITY, cityname);
             values.put(DataStore.CityEntry.COL_LATITUDE, latitude);
             values.put(DataStore.CityEntry.COL_LONGITUDE, longitude);
-
             //query the db to see if the city is already there for the given user
             String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"' AND "
                               +DataStore.CityEntry.COL_CITY+" = '"+cityname+"'";

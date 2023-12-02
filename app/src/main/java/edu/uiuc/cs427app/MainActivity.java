@@ -88,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-
-
         // This code implements the dynamic list of cities and buttons
         String selection = DataStore.CityEntry.COL_USERNAME + " = '" + username+"'";
         Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null,
@@ -111,13 +109,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // This creates the onClick listener tied to the button so that when clicks it creates the
                 // proper intent with cityname for the CityDetailsActivity
                 Button showDetails  = new MaterialButton(this);
-//                Button showMap      = new MaterialButton(this);
-                //Button removeCity   = new MaterialButton(this);
-
                 Button showWeather = new MaterialButton(this);
 
                 // record weather data now
-                Weather.weather(getApplicationContext(), cityname,latitude,longitude);
+                Weather.fetch(getApplicationContext(), cityname, latitude, longitude);
 
                 // Handles the redirection to city weather detials
                 showWeather.setOnClickListener(new View.OnClickListener(){
@@ -125,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.v("Render Start", "Weather activity launched.");
                         Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
                         intent.putExtra("city", cityname);
+                        intent.putExtra("lat", latitude);
+                        intent.putExtra("lon", longitude);
                         intent.putExtra("account", account);
                         startActivity(intent);
                     }
@@ -141,40 +138,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-//                //redirects to MapActivity
-//                showMap.setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View v){
-//                        Intent intent = new Intent(MainActivity.this , MapsActivity.class);
-//                        intent.putExtra("city", cityname);
-//                        intent.putExtra("lat",latitude);
-//                        intent.putExtra("lon",longitude);
-//                        startActivity(intent);
-//                    }
-//                });
-
-
-
                 // Configure buttons and text
                 city.setText(cityname);
                 city.setWidth(500);
 
                 showDetails.setText("Map");
                 showWeather.setText("Weather");
-                //showMap.setText("Map");
-                //removeCity.setText("Delete");
                 spacer.setWidth(30);
 
-                //showMap.setTooltipText("Show Map");
-                //showWeather.setTooltipText("Show Weather");
-                //removeCity.setTooltipText("Delete City");
-
-                //experimenting with adding icons to buttons or icon-only buttons
-//                showWeather.setIconResource(R.drawable.weather_cloudy);
-//                showWeather.setWidth(50);
-//                showWeather.setIconPadding(0);
-//                showWeather.setPaddingRelative(0, 0, 0, 0);
-//                showWeather.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_TOP);
-//                showWeather.setMinWidth(0);
 
                 // Set up layout
                 row.setOrientation(LinearLayout.HORIZONTAL);
@@ -185,9 +156,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 row.addView(showWeather);
                 row.addView(spacer); //adding a blank textview to space out the buttons
                 row.addView(showDetails);
-
-                //row.addView(showMap); //TODO uncomment this to add a direct button to maps
-                //row.addView(removeCity); //TODO replace delete city function with a dialog like for themes
                 linlay.addView(row);
                 cursor.moveToNext();
             }

@@ -50,13 +50,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         latitude = intent.getDoubleExtra("lat",-34);
         longitude = intent.getDoubleExtra("lon",151);
 
-        //display city information
+        //display city information on header of map
         String msg = cityname + "\n" +
                 "Latitude: " +String.format("%.5f", latitude)
                 + "\n" +
                 "Longitude: "+String.format("%.5f", longitude);
         TextView cityInfo = findViewById(R.id.cityNameLatLon);
         cityInfo.setText(msg);
+        TextView cityName = findViewById(R.id.cityName);
+        cityName.setText(cityname);
 
     }
 

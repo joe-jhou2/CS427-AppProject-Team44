@@ -36,13 +36,7 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
 
-    private static final String BASE_URL = "https://api.weatherapi.com/v1/current.json";
-    private static final String FORECAST_URL = "https://api.weatherapi.com/v1/forecast.json";
-
-    private static final String API_KEY = "1c9ca48edcd6459aaa514033233110";
-    private static String cityname;
     private Account account;
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +45,14 @@ public class WeatherActivity extends AppCompatActivity {
         ThemeUtils.applyTheme(account, this);
         setContentView(R.layout.activity_weather);
 
+        // Load in the passed values from the previous activity
         String cityName = getIntent().getStringExtra("city");
-//        String welcome = "Weather in " + cityName;
+        double latitude = getIntent().getDoubleExtra("lat",-34);
+        double longitude = getIntent().getDoubleExtra("lon",151);
+
         String date_and_time = new java.util.Date().toString();
-
-//        TextView welcomeMessage = findViewById(R.id.welcomeText);
-        TextView date = findViewById(R.id.date_and_time);
-//        welcomeMessage.setText(welcome);
-        date.setText(date_and_time);
-
         String solo_name = cityName.split(",", 2)[0];
+
 
         // Views to set upon initiation of this activity
         TextView cityNameView = findViewById(R.id.CityName);
@@ -75,7 +67,11 @@ public class WeatherActivity extends AppCompatActivity {
         TextView UVInfo = findViewById(R.id.UVData);
         TextView AirInfo = findViewById(R.id.AirData);
 
-        // testing setting weather data from fetcher
+        TextView date = findViewById(R.id.date_and_time);
+        date.setText(date_and_time);
+
+        // [MUST HAPPEN FIRST TO MAINTAIN APP RESPONSIVENESS]
+        // Set weather data using pre-fetched metrics in database
         String selection = DataStore.WeatherEntry.COL_CITY+" = '"+cityName+"'";
         Cursor cursor = getContentResolver().query(DataStore.WeatherEntry.CONTENT_URI, null,
                 selection, null, null);
@@ -113,89 +109,52 @@ public class WeatherActivity extends AppCompatActivity {
         }
         cursor.close();
 
+        // Update weather data if database metrics are outdated and set respective fields
+        // TODO (post Milestone 4) add timestamp to database for weather metric entries and use the
+        //  predetermined cutoff (say ~5 mins?) to determine if updating values is to take place
+        if (true) {
+            Log.v("Render Start", "Updating database with weather metrics from server.");
+            Weather.fetch(getApplicationContext(), cityName, latitude, longitude);
 
+            // Set weather data using pre-fetched metrics in database
+            selection = DataStore.WeatherEntry.COL_CITY+" = '"+cityName+"'";
+            cursor = getContentResolver().query(DataStore.WeatherEntry.CONTENT_URI, null,
+                    selection, null, null);
 
-        // FETCH LIVE if poll was > 10 mins?
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String apiUrl = FORECAST_URL + "?key=" + API_KEY + "&q=" + solo_name + "&days=1" + "&aqi=yes";
-//
-//                OkHttpClient client = new OkHttpClient();
-//                Request request = new Request.Builder()
-//                        .url(apiUrl)
-//                        .build();
-//
-//                try {
-//                    Response response = client.newCall(request).execute();
-//
-//                    if (response.isSuccessful()) {
-//                        String responseBody = response.body().string();
-//
-//                        JSONObject json = new JSONObject(responseBody);
-//
-//                        // Extract weather information from the JSON response
-//                        String city = json.getJSONObject("location").getString("name");
-//                        String temperature = json.getJSONObject("current").getString("temp_c");
-//
-//                        // This temperature range can exclude the current 'temperature' due to polling/predictions. Consider manually setting a min/max using the range and current temps
-//                        String temperatureMax = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("day").getString("maxtemp_c");
-//                        String temperatureMin = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("day").getString("mintemp_c");
-//
-//                        String weatherDescription = json.getJSONObject("current").getJSONObject("condition").getString("text");
-//                        System.out.println(weatherDescription);
-//
-//                        String wind = json.getJSONObject("current").getString("wind_mph").toString();
-//                        System.out.println(wind);
-//
-//                        String humidity = json.getJSONObject("current").getString("humidity").toString();
-//                        System.out.println(humidity);
-//
-//                        String dewPoint = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("dewpoint_c").toString();
-//                        System.out.println(dewPoint);
-//
-//                        String UV = json.getJSONObject("current").getString("uv").toString();
-//                        System.out.println(UV);
-//
-//                        String Air = json.getJSONObject("current").getJSONObject("air_quality").getString("pm2_5");
-//                        System.out.println(Air);
-//
-//                        String Precipitation = json.getJSONObject("current").getString("precip_in").toString();
-//                        System.out.println(Precipitation);
-//
-//                        String PrecipitationChance = json.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONArray("hour").getJSONObject(0).getString("chance_of_rain").toString();
-//                        System.out.println(PrecipitationChance);
-//
-//                        // Now, use Handler to post the UI update back on the main thread
-//                        handler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                cityNameView.setText(city);
-//                                weatherTemp.setText(temperature + "°C");
-//                                weatherTempRange.setText("H:" + temperatureMax + "°C" + " L:" + temperatureMin + "°C");
-//                                weatherType.setText(weatherDescription);
-//                                windInfo.setText(wind + " mph");
-//                                humidInfo.setText(humidity  + "%");
-//                                dewInfo.setText("dew point is " + dewPoint + "°C now");
-//                                UVInfo.setText(UV);
-//                                AirInfo.setText(Air);
-//                                PrecipitationInfo.setText(Precipitation + " inch");
-//                                PrecipitationChanceInfo.setText(PrecipitationChance + "%");
-//                                Log.v("Render Finish", "Weather metrics updated.");
-//                            }
-//                        });
-//                    } else {
-//                        // Handle API request error
-//                        // Optionally, use Handler to show an error message on the main thread
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    Log.e("WeatherActivity", "Network error: " + e.getMessage());
-//                    // Handle network or other errors
-//                    // Optionally, use Handler to show an error message on the main thread
-//                }
-//            }
-//        }).start();
+            if(cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    String cityStateName = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_CITY));
+                    String city = cityStateName.split(",", 2)[0];
+                    String temperature = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_TEMPERATURE));
+                    String temperatureMax = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_TEMPERATUREMAX));
+                    String temperatureMin = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_TEMPERATUREMIN));
+                    String weatherDescription = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_DESCRIPTION));
+                    String wind = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_WINDSPEED));
+                    String humidity = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_HUMIDITY));
+                    String dewPoint = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_DEWPOINT));
+                    String UV = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_UV));
+                    String Air = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_AIRINDEX));
+                    String precipitation = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_PRECIPITATION));
+                    String precipitationChance = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.WeatherEntry.COL_PRECIPITATIONCHANCE));
+
+                    cityNameView.setText(city);
+                    weatherTemp.setText(temperature + "°C");
+                    weatherTempRange.setText("H:" + temperatureMax + "°C" + " L:" + temperatureMin + "°C");
+                    weatherType.setText(weatherDescription);
+                    windInfo.setText(wind + " mph");
+                    humidInfo.setText(humidity  + "%");
+                    dewInfo.setText("dew point is " + dewPoint + "°C now");
+                    UVInfo.setText(UV);
+                    AirInfo.setText(Air);
+                    PrecipitationInfo.setText(precipitation + " inch");
+                    PrecipitationChanceInfo.setText(precipitationChance + "%");
+                    Log.v("Render Finish", "Weather metrics updated (post server calls & database updates).");
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+        }
+
     }
 
 }
