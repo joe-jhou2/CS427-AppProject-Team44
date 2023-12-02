@@ -25,10 +25,13 @@ import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
 
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class TestWeather {
@@ -37,7 +40,7 @@ public class TestWeather {
 
     @Test
     public void testWeather1() throws UiObjectNotFoundException {
-        login("testWeather", "12345");
+        login("TestWeatherFeature", "12345");
         onView(withId(R.id.buttonAddCity)).perform(click());
 
         //Add city
@@ -69,7 +72,7 @@ public class TestWeather {
 
     @Test
     public void testWeather2() throws UiObjectNotFoundException {
-        login("testWeather", "12345");
+        login("TestWeatherFeature", "12345");
         onView(withId(R.id.buttonAddCity)).perform(click());
 
         //Add city
