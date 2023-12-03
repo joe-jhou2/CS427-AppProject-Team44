@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataStore.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">DataStore.java</span></div><h1>DataStore.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import android.content.ContentProvider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+import android.provider.BaseColumns;
+
+public class DataStore extends ContentProvider {
+
+<span class="fc" id="L16">    public DataStore() {</span>
+<span class="fc" id="L17">    }</span>
+
+    //TODO  -issue with inserting a preference for user that already exists
+    //      - need to check if exists and perform either an update or an insert and delete
+
+
+    // defining authority so that other application can access the content provider
+    // however &quot;exported&quot; is set to false in the Manifest for this app, most of the
+    // functionality is not needed since we aren't exporting data and the app would
+    // work just fine with direct calls to the SQLite db
+    static final String PROVIDER_NAME = &quot;edu.uiuc.cs427app.provider&quot;;
+<span class="fc" id="L28">    private static final Uri BASE_CONTENT_URI = Uri.parse(&quot;content://&quot; + PROVIDER_NAME);</span>
+
+    //paths that can be appended to the URI, representing different tables
+    public static final String PATH_CITY = &quot;city&quot;;
+    public static final String PATH_PREF = &quot;pref&quot;;
+    public static final String PATH_WEATHER = &quot;weather&quot;;
+
+    //defines the URI and table/column names for the city information
+<span class="nc" id="L36">    public static final class CityEntry implements BaseColumns {</span>
+        // Content URI represents the base location for the table
+        public static final Uri CONTENT_URI =
+<span class="fc" id="L39">                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CITY).build();</span>
+
+        // These are special type prefixes that specify if a URI returns a list or a specific item
+<span class="fc" id="L42">        public static final String CONTENT_TYPE =</span>
+                &quot;vnd.android.cursor.dir/&quot; + CONTENT_URI  + &quot;/&quot; + PATH_CITY;
+<span class="fc" id="L44">        public static final String CONTENT_ITEM_TYPE =</span>
+                &quot;vnd.android.cursor.item/&quot; + CONTENT_URI + &quot;/&quot; + PATH_CITY;
+
+        // Define the table schema
+        public static final String TABLE_NAME = &quot;CITY_TABLE&quot;;
+        public static final String COL_USERNAME = &quot;USERNAME&quot;;
+        public static final String COL_CITY = &quot;CITY&quot;;
+        public static final String COL_STATE = &quot;STATE&quot;;
+        public static final String COL_LATITUDE = &quot;LATITUDE&quot;;
+        public static final String COL_LONGITUDE = &quot;LONGITUDE&quot;;
+
+        // Build a URI to find a specific city by it's identifier
+        public static Uri buildCityUri(long id){
+<span class="fc" id="L57">            return ContentUris.withAppendedId(CONTENT_URI, id);</span>
+        }
+    }
+
+    //defines the URI and table/column names for the user preference information
+    //we ended up not using this functionality
+<span class="nc" id="L63">    public static final class PrefEntry implements BaseColumns {</span>
+        // Content URI represents the base location for the table
+        public static final Uri CONTENT_URI =
+<span class="nc" id="L66">                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PREF).build();</span>
+
+        // These are special type prefixes that specify if a URI returns a list or a specific item
+<span class="nc" id="L69">        public static final String CONTENT_TYPE =</span>
+                &quot;vnd.android.cursor.dir/&quot; + CONTENT_URI  + &quot;/&quot; + PATH_PREF;
+<span class="nc" id="L71">        public static final String CONTENT_ITEM_TYPE =</span>
+                &quot;vnd.android.cursor.item/&quot; + CONTENT_URI + &quot;/&quot; + PATH_PREF;
+
+        // Define the table schema
+        public static final String TABLE_NAME = &quot;PREF_TABLE&quot;;
+        public static final String COL_USERNAME = &quot;USERNAME&quot;;
+        public static final String COL_THEMENAME = &quot;THEMENAME&quot;;
+
+        // Build a URI to find a specific pref by it's identifier
+        public static Uri buildPrefUri(long id){
+<span class="nc" id="L81">            return ContentUris.withAppendedId(CONTENT_URI, id);</span>
+        }
+    }
+    // TODO (post Milestone 4) add timestamp, long, and let columns to database for weather metric entries
+    //defines the URI and table/column names for the weather information
+<span class="nc" id="L86">    public static final class WeatherEntry implements BaseColumns {</span>
+        // Content URI represents the base location for the table
+        public static final Uri CONTENT_URI =
+<span class="fc" id="L89">                BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER).build();</span>
+
+        // These are special type prefixes that specify if a URI returns a list or a specific item
+<span class="fc" id="L92">        public static final String CONTENT_TYPE =</span>
+                &quot;vnd.android.cursor.dir/&quot; + CONTENT_URI  + &quot;/&quot; + PATH_WEATHER;
+<span class="fc" id="L94">        public static final String CONTENT_ITEM_TYPE =</span>
+                &quot;vnd.android.cursor.item/&quot; + CONTENT_URI + &quot;/&quot; + PATH_WEATHER;
+
+        // Define the table schema
+        public static final String TABLE_NAME = &quot;WEATHER_TABLE&quot;;
+        public static final String COL_CITY = &quot;CITY&quot;;
+        public static final String COL_TEMPERATURE = &quot;TEMPERATURE&quot;;
+        public static final String COL_TEMPERATUREMAX = &quot;TEMPERATUREMAX&quot;;
+        public static final String COL_TEMPERATUREMIN = &quot;TEMPERATUREMIN&quot;;
+        public static final String COL_DESCRIPTION = &quot;DESCRIPTION&quot;;
+        public static final String COL_WINDSPEED = &quot;WINDSPEED&quot;;
+        public static final String COL_HUMIDITY = &quot;HUMIDITY&quot;;
+        public static final String COL_DEWPOINT = &quot;DEWPOINT&quot;;
+        public static final String COL_UV = &quot;UV&quot;;
+        public static final String COL_AIRINDEX = &quot;AIRINDEX&quot;;
+        public static final String COL_PRECIPITATION = &quot;PRECIPITATION&quot;;
+        public static final String COL_PRECIPITATIONCHANCE = &quot;PRECIPITATIONCHANCE&quot;;
+
+        // Build a URI to find a specific city by it's identifier
+        public static Uri buildWeatherUri(long id){
+<span class="nc" id="L114">            return ContentUris.withAppendedId(CONTENT_URI, id);</span>
+        }
+    }
+
+    //define the different ID's used in the URI matcher so the matcher can build
+    //the appropriate database table
+    private static final int CITY = 10;
+    private static final int CITY_ID = 11;
+    private static final int PREF = 20;
+    private static final int PREF_ID = 21;
+    private static final int WEATHER = 30;
+    private static final int WEATHER_ID = 31;
+<span class="fc" id="L126">    private static final UriMatcher sUriMatcher = buildUriMatcher();</span>
+
+    // initializes the dbOpenHelper object which creates/returns the db for calls
+    private DatabaseHelper dbOpenHelper;
+
+
+    /**
+     * creates a new DB helper object which is used to access the db.
+     */
+    @Override
+    public boolean onCreate() {
+<span class="fc" id="L137">        dbOpenHelper = new DatabaseHelper(getContext());</span>
+<span class="fc" id="L138">        return true;</span>
+    }
+
+    /**
+     * Builds a UriMatcher that is used to determine which database request is being made.
+     */
+    public static UriMatcher buildUriMatcher(){
+<span class="fc" id="L145">        String content = PROVIDER_NAME;</span>
+
+        // All paths to the UriMatcher have a corresponding code to return
+        // when a match is found (the ints above).
+<span class="fc" id="L149">        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);</span>
+<span class="fc" id="L150">        matcher.addURI(content, PATH_CITY, CITY);</span>
+<span class="fc" id="L151">        matcher.addURI(content, PATH_CITY + &quot;/#&quot;, CITY_ID);</span>
+<span class="fc" id="L152">        matcher.addURI(content, PATH_PREF, PREF);</span>
+<span class="fc" id="L153">        matcher.addURI(content, PATH_PREF + &quot;/#&quot;, PREF_ID);</span>
+<span class="fc" id="L154">        matcher.addURI(content, PATH_WEATHER, WEATHER);</span>
+<span class="fc" id="L155">        matcher.addURI(content, PATH_WEATHER + &quot;/#&quot;, WEATHER_ID);</span>
+
+<span class="fc" id="L157">        return matcher;</span>
+    }
+    /**
+     * Builds a UriMatcher that is used to determine which database request is being made.
+     * @param uri The Uri for which the type is being determined.
+     * @return A string representing the type of database request to be made.
+     */
+    @Override
+    public String getType(Uri uri) {
+        // Use the UriMatcher to match the incoming Uri with predefined patterns
+<span class="nc bnc" id="L167" title="All 7 branches missed.">        switch(sUriMatcher.match(uri)){</span>
+            // If the Uri matches the general CITY pattern
+            case CITY:
+                // Return the content type for a list of cities
+<span class="nc" id="L171">                return CityEntry.CONTENT_TYPE;</span>
+            // If the Uri matches the specific CITY_ID pattern
+            case CITY_ID:
+                // Return the content item type for a single city
+<span class="nc" id="L175">                return CityEntry.CONTENT_ITEM_TYPE;</span>
+            // If the Uri matches the general PREF pattern
+            case PREF:
+                // Return the content type for a list of preferences
+<span class="nc" id="L179">                return PrefEntry.CONTENT_TYPE;</span>
+            // If the Uri matches the specific PREF_ID pattern
+            case PREF_ID:
+                // Return the content item type for a single preference
+<span class="nc" id="L183">                return PrefEntry.CONTENT_ITEM_TYPE;</span>
+            // If the Uri matches the general WEATHER pattern
+            case WEATHER:
+                // Return the content type for a list of weather entries
+<span class="nc" id="L187">                return WeatherEntry.CONTENT_TYPE;</span>
+            // If the Uri matches the specific WEATHER_ID pattern
+            case WEATHER_ID:
+                // Return the content item type for a single weather entry
+<span class="nc" id="L191">                return WeatherEntry.CONTENT_ITEM_TYPE;</span>
+            // If the Uri does not match any predefined pattern, throw an exception
+            default:
+<span class="nc" id="L194">                throw new UnsupportedOperationException(&quot;Unknown uri: &quot; + uri);</span>
+        }
+    }
+
+    /**
+     * A wrapper for a database INSERT.
+     * @param uri The URI with content scheme.
+     * @param values key/value pair data to update in db.
+     * @return result URI
+     */
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        // Get a writable database instance
+<span class="fc" id="L207">        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();</span>
+        // Variables to store the result of the insert operation
+        long _id;
+        Uri returnUri;
+        // Use a switch statement to determine the type of data to insert based on the URI
+<span class="pc bpc" id="L212" title="3 of 4 branches missed.">        switch(sUriMatcher.match(uri)){</span>
+            case CITY:
+                // Insert data into the CityEntry table
+<span class="fc" id="L215">                _id = db.insert(CityEntry.TABLE_NAME, null, values);</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">                if(_id &gt; 0){</span>
+                    // If the insertion was successful, build and return the corresponding URI
+<span class="fc" id="L218">                    returnUri =  CityEntry.buildCityUri(_id);</span>
+                } else{
+                    // If the insertion was unsuccessful, throw an exception
+<span class="nc" id="L221">                    throw new UnsupportedOperationException(&quot;Unable to insert rows into: &quot; + uri);</span>
+                }
+                break;
+            case PREF:
+                // Insert data into the PrefEntry table
+<span class="nc" id="L226">                _id = db.insert(PrefEntry.TABLE_NAME, null, values);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">                if(_id &gt; 0){</span>
+                    // If the insertion was successful, build and return the corresponding URI
+<span class="nc" id="L229">                    returnUri = PrefEntry.buildPrefUri(_id);</span>
+                } else{
+                    // If the insertion was unsuccessful, throw an exception
+<span class="nc" id="L232">                    throw new UnsupportedOperationException(&quot;Unable to insert rows into: &quot; + uri);</span>
+                }
+                break;
+            case WEATHER:
+                // Insert data into the WeatherEntry table
+<span class="nc" id="L237">                _id = db.insert(WeatherEntry.TABLE_NAME, null, values);</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">                if(_id &gt; 0){</span>
+                    // If the insertion was successful, build and return the corresponding URI
+<span class="nc" id="L240">                    returnUri = WeatherEntry.buildWeatherUri(_id);</span>
+                } else{
+                    // If the insertion was unsuccessful, throw an exception
+<span class="nc" id="L243">                    throw new UnsupportedOperationException(&quot;Unable to insert rows into: &quot; + uri);</span>
+                }
+                break;
+            default:
+                // If the URI does not match any known cases, throw an exception
+<span class="nc" id="L248">                throw new UnsupportedOperationException(&quot;Unknown uri: &quot; + uri);</span>
+        }
+
+        // Use this on the URI passed into the function to notify any observers that the uri has
+        // changed.
+<span class="fc" id="L253">        getContext().getContentResolver().notifyChange(uri, null);</span>
+        // Return the URI after the insertion
+<span class="fc" id="L255">        return returnUri;</span>
+    }
+
+    /**
+     * A wrapper for a database DELETE.
+     * @param uri The URI with content scheme.
+     * @param selection a filter, formatted as a SQL WHERE clause
+     * @param selectionArgs used to replace ?'s in selection.
+     * @return the number of rows deleted
+     */
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+<span class="fc" id="L267">        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();</span>
+        int rows; // Number of rows effected
+
+<span class="pc bpc" id="L270" title="3 of 4 branches missed.">        switch(sUriMatcher.match(uri)){</span>
+            case CITY:
+<span class="fc" id="L272">                rows = db.delete(CityEntry.TABLE_NAME, selection, selectionArgs);</span>
+<span class="fc" id="L273">                break;</span>
+            case PREF:
+<span class="nc" id="L275">                rows = db.delete(PrefEntry.TABLE_NAME, selection, selectionArgs);</span>
+<span class="nc" id="L276">                break;</span>
+            case WEATHER:
+<span class="nc" id="L278">                rows = db.delete(WeatherEntry.TABLE_NAME, selection, selectionArgs);</span>
+<span class="nc" id="L279">                break;</span>
+            default:
+<span class="nc" id="L281">                throw new UnsupportedOperationException(&quot;Unknown uri: &quot; + uri);</span>
+        }
+
+        // Because null could delete all rows:
+<span class="pc bpc" id="L285" title="2 of 4 branches missed.">        if(selection == null || rows != 0){</span>
+<span class="fc" id="L286">            getContext().getContentResolver().notifyChange(uri, null);</span>
+        }
+
+<span class="fc" id="L289">        return rows;</span>
+    }
+    /**
+     * A wrapper for a database UPDATE.
+     * @param uri The URI with content scheme.
+     * @param values key/value pair data to update in db.
+     * @param selection a filter, formatted as a SQL WHERE clause
+     * @param selectionArgs used to replace ?'s in selection.
+     * @return the number of rows updated
+     */
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+<span class="fc" id="L301">        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();</span>
+        int rows;
+
+<span class="pc bpc" id="L304" title="3 of 4 branches missed.">        switch(sUriMatcher.match(uri)){</span>
+            case CITY:
+<span class="nc" id="L306">                rows = db.update(CityEntry.TABLE_NAME, values, selection, selectionArgs);</span>
+<span class="nc" id="L307">                break;</span>
+            case PREF:
+<span class="nc" id="L309">                rows = db.update(PrefEntry.TABLE_NAME, values, selection, selectionArgs);</span>
+<span class="nc" id="L310">                break;</span>
+            case WEATHER:
+<span class="fc" id="L312">                rows = db.update(WeatherEntry.TABLE_NAME, values, selection, selectionArgs);</span>
+<span class="fc" id="L313">                break;</span>
+            default:
+<span class="nc" id="L315">                throw new UnsupportedOperationException(&quot;Unknown uri: &quot; + uri);</span>
+        }
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        if(rows != 0){</span>
+<span class="fc" id="L318">            getContext().getContentResolver().notifyChange(uri, null);</span>
+        }
+<span class="fc" id="L320">        return rows;</span>
+    }
+    /**
+     * A wrapper for a database QUERY.
+     * @param uri The URI with content scheme.
+     * @param projection a list of database columns to return.
+     * @param selection a filter, formatted as a SQL WHERE clause
+     * @param selectionArgs used to replace ?'s in selection.
+     * @param sortOrder how to order rows, formatted as SQL ORDER BY clause.
+     * @return a cursor with the result rows from query
+     */
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+<span class="fc" id="L333">        final SQLiteDatabase db = dbOpenHelper.getWritableDatabase();</span>
+        Cursor retCursor;
+<span class="pc bpc" id="L335" title="5 of 7 branches missed.">        switch(sUriMatcher.match(uri)){</span>
+            case CITY:
+<span class="fc" id="L337">                retCursor = db.query(</span>
+                        CityEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+<span class="fc" id="L346">                break;</span>
+            case CITY_ID:
+<span class="nc" id="L348">                long _id = ContentUris.parseId(uri);</span>
+<span class="nc" id="L349">                retCursor = db.query(</span>
+                        CityEntry.TABLE_NAME,
+                        projection,
+                        CityEntry._ID + &quot; = ?&quot;,
+<span class="nc" id="L353">                        new String[]{String.valueOf(_id)},</span>
+                        null,
+                        null,
+                        sortOrder
+                );
+<span class="nc" id="L358">                break;</span>
+            case PREF:
+<span class="nc" id="L360">                retCursor = db.query(</span>
+                        PrefEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+<span class="nc" id="L369">                break;</span>
+            case PREF_ID:
+<span class="nc" id="L371">                _id = ContentUris.parseId(uri);</span>
+<span class="nc" id="L372">                retCursor = db.query(</span>
+                        PrefEntry.TABLE_NAME,
+                        projection,
+                        PrefEntry._ID + &quot; = ?&quot;,
+<span class="nc" id="L376">                        new String[]{String.valueOf(_id)},</span>
+                        null,
+                        null,
+                        sortOrder
+                );
+<span class="nc" id="L381">                break;</span>
+            case WEATHER:
+<span class="fc" id="L383">                retCursor = db.query(</span>
+                        WeatherEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+<span class="fc" id="L392">                break;</span>
+            case WEATHER_ID:
+<span class="nc" id="L394">                _id = ContentUris.parseId(uri);</span>
+<span class="nc" id="L395">                retCursor = db.query(</span>
+                        WeatherEntry.TABLE_NAME,
+                        projection,
+                        WeatherEntry._ID + &quot; = ?&quot;,
+<span class="nc" id="L399">                        new String[]{String.valueOf(_id)},</span>
+                        null,
+                        null,
+                        sortOrder
+                );
+<span class="nc" id="L404">                break;</span>
+            default:
+<span class="nc" id="L406">                throw new UnsupportedOperationException(&quot;Unknown uri: &quot; + uri);</span>
+        }
+
+        // Set the notification URI for the cursor to the one passed into the function. This
+        // causes the cursor to register a content observer to watch for changes that happen to
+        // this URI and any of it's descendants. By descendants, we mean any URI that begins
+        // with this path.
+<span class="fc" id="L413">        retCursor.setNotificationUri(getContext().getContentResolver(), uri);</span>
+<span class="fc" id="L414">        return retCursor;</span>
+    }
+
+    /**
+     *  Helper class to define database table structure and methods to create a db.
+     *  Uses the column names from the contract classes above
+     */
+    private static class DatabaseHelper extends SQLiteOpenHelper {
+        // declaring version of the database
+        private static final int DATABASE_VERSION = 1;
+
+        // declaring name of the database
+        private static final String DATABASE_NAME = &quot;Team44DB&quot;;
+
+        // defining the structure of the City Table
+        static final String CREATE_DB_CITY_TABLE = &quot; CREATE TABLE &quot; + CityEntry.TABLE_NAME
+                + &quot; (&quot;+CityEntry._ID+&quot; INTEGER PRIMARY KEY AUTOINCREMENT&quot;
+                + &quot;, &quot;+CityEntry.COL_USERNAME+&quot; TEXT NOT NULL&quot;
+                + &quot;, &quot;+CityEntry.COL_CITY+&quot; TEXT NOT NULL&quot;
+                + &quot;, &quot;+CityEntry.COL_LATITUDE+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+CityEntry.COL_LONGITUDE+&quot; REAL NOT NULL&quot;
+                + &quot;);&quot;;
+        // defining the structure of the Pref Table
+        static final String CREATE_DB_PREF_TABLE = &quot; CREATE TABLE &quot; + PrefEntry.TABLE_NAME
+                + &quot; (&quot;+PrefEntry._ID+&quot; INTEGER PRIMARY KEY AUTOINCREMENT&quot;
+                + &quot;, &quot;+PrefEntry.COL_USERNAME+&quot; TEXT UNIQUE NOT NULL&quot;
+                + &quot;, &quot;+PrefEntry.COL_THEMENAME+&quot; TEXT NOT NULL&quot;
+                + &quot;);&quot;;
+        // defining the structure of the Weather Table
+        static final String CREATE_DB_WEATHER_TABLE = &quot; CREATE TABLE &quot; + WeatherEntry.TABLE_NAME
+                + &quot; (&quot;+WeatherEntry._ID+&quot; INTEGER PRIMARY KEY AUTOINCREMENT&quot;
+                + &quot;, &quot;+WeatherEntry.COL_CITY+&quot; TEXT NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_TEMPERATURE+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_TEMPERATUREMAX+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_TEMPERATUREMIN+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_DESCRIPTION+&quot; TEXT NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_WINDSPEED+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_HUMIDITY+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_DEWPOINT+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_UV+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_AIRINDEX+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_PRECIPITATION+&quot; REAL NOT NULL&quot;
+                + &quot;, &quot;+WeatherEntry.COL_PRECIPITATIONCHANCE+&quot; REAL NOT NULL&quot;
+                + &quot;);&quot;;
+
+        /**
+         * Default constructor.
+         * @param context The application context using this database.
+         */
+        DatabaseHelper(Context context) {
+<span class="fc" id="L464">            super(context, DATABASE_NAME, null, DATABASE_VERSION);</span>
+<span class="fc" id="L465">        }</span>
+
+        /**
+         * Called when the database is first created.
+         * @param db The database being created, which all SQL statements will be executed on.
+         */
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+<span class="nc" id="L473">            db.execSQL(CREATE_DB_CITY_TABLE);</span>
+<span class="nc" id="L474">            db.execSQL(CREATE_DB_PREF_TABLE);</span>
+<span class="nc" id="L475">            db.execSQL(CREATE_DB_WEATHER_TABLE);</span>
+<span class="nc" id="L476">        }</span>
+        /**
+         * Called whenever DATABASE_VERSION is incremented. This is used whenever schema changes need
+         * to be made or new tables are added. It just deletes the tables.
+         * @param db The database being updated.
+         * @param oldVersion The previous version of the database.
+         * @param newVersion The new version of the database.
+         */
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            // sql query to drop a table
+            // having similar name
+<span class="nc" id="L488">            db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + CityEntry.TABLE_NAME);</span>
+<span class="nc" id="L489">            db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + PrefEntry.TABLE_NAME);</span>
+<span class="nc" id="L490">            db.execSQL(&quot;DROP TABLE IF EXISTS &quot; + WeatherEntry.TABLE_NAME);</span>
+<span class="nc" id="L491">            onCreate(db);</span>
+<span class="nc" id="L492">        }</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

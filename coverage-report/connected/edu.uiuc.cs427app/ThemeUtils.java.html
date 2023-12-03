@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ThemeUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">ThemeUtils.java</span></div><h1>ThemeUtils.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
+import android.accounts.Account;
+import android.content.Context;
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.util.Log;
+
+<span class="nc" id="L11">public class ThemeUtils {</span>
+    private static final String THEME_PREFERENCES = &quot;theme_preferences&quot;;
+    private static final String DEFAULT_THEME = &quot;Theme.Day&quot;;
+
+    // apply theme includes background color, text font size, et.al.
+    public static void applyTheme(Account currentAccount, Context context) {
+        String themeKey;
+<span class="pc bpc" id="L18" title="1 of 2 branches missed.">        if (currentAccount != null) {</span>
+<span class="fc" id="L19">            themeKey = getThemePreferenceForAccount(context, currentAccount.name);</span>
+<span class="fc" id="L20">            ThemePreference themePreference = ThemePreference.fromKey(themeKey);</span>
+<span class="fc" id="L21">            context.setTheme(themePreference.styleRes);</span>
+        }
+<span class="fc" id="L23">    }</span>
+
+    // Method to show a dialog allowing the user to choose a theme.
+    public static void showThemeDialog(final Activity activity, final Account currentAccount) {
+        // 4 theme pre-designed
+<span class="nc" id="L28">        String[] themes = {&quot;Day&quot;, &quot;Night&quot;, &quot;Dawn&quot;, &quot;Dusk&quot;};</span>
+<span class="nc" id="L29">        String currentThemeKey = getThemePreferenceForAccount(activity, currentAccount.name);</span>
+<span class="nc" id="L30">        final ThemePreference currentTheme = ThemePreference.fromKey(currentThemeKey);</span>
+
+        // show up dialog window
+<span class="nc" id="L33">        AlertDialog.Builder builder = new AlertDialog.Builder(activity);</span>
+<span class="nc" id="L34">        builder.setTitle(&quot;Choose a theme:&quot;)</span>
+<span class="nc" id="L35">                .setSingleChoiceItems(themes, currentTheme.index, new DialogInterface.OnClickListener() {</span>
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+<span class="nc" id="L38">                        ThemePreference selectedTheme = ThemePreference.fromIndex(which);</span>
+<span class="nc" id="L39">                        saveThemePreferenceForAccount(activity, currentAccount.name, selectedTheme.key);</span>
+<span class="nc" id="L40">                        dialog.dismiss();</span>
+<span class="nc" id="L41">                        activity.recreate();</span>
+<span class="nc" id="L42">                        Log.d(&quot;Theme Dialogz&quot;, &quot;theme dialog dismissed.&quot;);</span>
+<span class="nc" id="L43">                    }</span>
+                });
+<span class="nc" id="L45">        builder.create().show();</span>
+<span class="nc" id="L46">    }</span>
+
+    // get user preference from user profile
+    private static String getThemePreferenceForAccount(Context context, String username) {
+<span class="fc" id="L50">        SharedPreferences sharedPreferences = context.getSharedPreferences(THEME_PREFERENCES, Context.MODE_PRIVATE);</span>
+<span class="fc" id="L51">        return sharedPreferences.getString(username, DEFAULT_THEME);</span>
+    }
+
+    // apply any preference change to user profile
+    public static void saveThemePreferenceForAccount(Context context, String username, String themeKey) {
+<span class="nc" id="L56">        SharedPreferences sharedPreferences = context.getSharedPreferences(THEME_PREFERENCES, Context.MODE_PRIVATE);</span>
+<span class="nc" id="L57">        SharedPreferences.Editor editor = sharedPreferences.edit();</span>
+<span class="nc" id="L58">        editor.putString(username, themeKey);</span>
+<span class="nc" id="L59">        editor.apply();</span>
+<span class="nc" id="L60">    }</span>
+
+<span class="fc" id="L62">    public enum ThemePreference {</span>
+<span class="fc" id="L63">        DAY(&quot;Theme.Day&quot;, R.style.Theme_Day, 0),</span>
+<span class="fc" id="L64">        NIGHT(&quot;Theme.Night&quot;, R.style.Theme_Night, 1),</span>
+<span class="fc" id="L65">        DAWN(&quot;Theme.Dawn&quot;, R.style.Theme_Dawn, 2),</span>
+<span class="fc" id="L66">        DUSK(&quot;Theme.Dusk&quot;, R.style.Theme_Dusk, 3);</span>
+
+        // Variables to store the theme's key, style resource ID, and index.
+        final String key;
+        final int styleRes;
+        final int index;
+
+        // Constructor to initialize the theme's attributes
+<span class="fc" id="L74">        ThemePreference(String key, int styleRes, int index) {</span>
+<span class="fc" id="L75">            this.key = key;</span>
+<span class="fc" id="L76">            this.styleRes = styleRes;</span>
+<span class="fc" id="L77">            this.index = index;</span>
+<span class="fc" id="L78">        }</span>
+
+        // Method to fetch a theme preference based on its key.
+        static ThemePreference fromKey(String key) {
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            for (ThemePreference pref : values()) {</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">                if (pref.key.equals(key)) {</span>
+<span class="fc" id="L84">                    return pref;</span>
+                }
+            }
+<span class="nc" id="L87">            return DAY; // Return the DAY theme as a default.</span>
+        }
+
+        static ThemePreference fromIndex(int index) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            for (ThemePreference pref : values()) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                if (pref.index == index) {</span>
+<span class="nc" id="L93">                    return pref;</span>
+                }
+            }
+<span class="nc" id="L96">            return DAY; // Return the DAY theme as a default.</span>
+        }
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>
