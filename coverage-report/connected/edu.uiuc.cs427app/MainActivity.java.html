@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">MainActivity.java</span></div><h1>MainActivity.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+
+import android.accounts.Account;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.ui.AppBarConfiguration;
+
+import com.google.android.libraries.places.api.Places;
+import com.google.android.material.button.MaterialButton;
+
+import java.util.ArrayList;
+
+import edu.uiuc.cs427app.databinding.ActivityMainBinding;
+
+<span class="fc" id="L26">public class MainActivity extends AppCompatActivity implements View.OnClickListener {</span>
+
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityMainBinding binding;
+    private Account account;
+    private String username;
+<span class="fc" id="L32">    private ArrayList&lt;String&gt; city_list = new ArrayList&lt;&gt;();</span>
+    protected SharedPreferences sharedPreferences;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L37">        super.onCreate(savedInstanceState);</span>
+
+        // Initialize Shared Preferences and apply the saved theme
+<span class="fc" id="L40">        sharedPreferences = getSharedPreferences(&quot;app_preferences&quot;, MODE_PRIVATE);</span>
+
+        // retrieve account object
+<span class="fc" id="L43">        Account currentAccount = getAccountFromPreferences();</span>
+
+        // Apply the theme based on the user's preference
+<span class="fc" id="L46">        ThemeUtils.applyTheme(currentAccount, this);</span>
+
+        // set the content view
+<span class="fc" id="L49">        setContentView(R.layout.activity_main);</span>
+
+        // Process the Intent payload that has opened this Activity and show the information accordingly
+<span class="fc" id="L52">        account = getIntent().getParcelableExtra(&quot;account&quot;);</span>
+<span class="fc" id="L53">        username = account.name;</span>
+
+        //Showing username in the main screen
+<span class="fc" id="L56">        this.setTitle(getString(R.string.app_name)+&quot;-&quot;+username);</span>
+
+<span class="fc" id="L58">        final String apiKey = &quot;AIzaSyBkx7JHMWNPp838wtFANglZzGEr0tFmr9E&quot;;</span>
+
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (apiKey.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L61">            Toast.makeText(this, getString(R.string.error_api_key), Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L62">            return;</span>
+        }
+
+        // Setup Places Client
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (!Places.isInitialized()) {</span>
+<span class="fc" id="L67">            Places.initialize(getApplicationContext(), apiKey);</span>
+        }
+
+        // Initializing the UI components
+        // The list of locations should be customized per user (change the implementation so that
+        // buttons are added to layout programmatically
+<span class="fc" id="L73">        Button buttonNew = findViewById(R.id.buttonAddCity);</span>
+<span class="fc" id="L74">        buttonNew.setOnClickListener(this);</span>
+
+<span class="fc" id="L76">        Button settingsButton = findViewById(R.id.settingsPage);</span>
+<span class="fc" id="L77">        settingsButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+
+                // If you're using shared preferences or any other method for session management,
+                // clear the session details here.
+
+                // Redirect to Authentication Page(Create AccountActivity in our case)
+<span class="nc" id="L85">                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);</span>
+<span class="nc" id="L86">                startActivity(intent);</span>
+<span class="nc" id="L87">            }</span>
+        });
+
+
+        // This code implements the dynamic list of cities and buttons
+<span class="fc" id="L92">        String selection = DataStore.CityEntry.COL_USERNAME + &quot; = '&quot; + username+&quot;'&quot;;</span>
+<span class="fc" id="L93">        Cursor cursor = getContentResolver().query(DataStore.CityEntry.CONTENT_URI, null,</span>
+                                                        selection, null, null);
+
+<span class="fc" id="L96">        LinearLayout linlay = findViewById(R.id.cityListLayout);</span>
+<span class="fc" id="L97">        linlay.setOrientation(LinearLayout.VERTICAL);</span>
+
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if(cursor.moveToFirst()) {</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">            while (!cursor.isAfterLast()) {</span>
+<span class="fc" id="L101">                String cityname = cursor.getString(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_CITY));</span>
+<span class="fc" id="L102">                double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LATITUDE));</span>
+<span class="fc" id="L103">                double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(DataStore.CityEntry.COL_LONGITUDE));</span>
+<span class="fc" id="L104">                city_list.add(cityname);</span>
+<span class="fc" id="L105">                LinearLayout row = new LinearLayout(this);</span>
+<span class="fc" id="L106">                TextView city = new TextView(this);</span>
+<span class="fc" id="L107">                TextView spacer = new TextView(this);</span>
+
+                // This creates the onClick listener tied to the button so that when clicks it creates the
+                // proper intent with cityname for the CityDetailsActivity
+<span class="fc" id="L111">                Button showDetails  = new MaterialButton(this);</span>
+<span class="fc" id="L112">                Button showWeather = new MaterialButton(this);</span>
+
+                // record weather data now
+<span class="fc" id="L115">                Weather.fetch(getApplicationContext(), cityname, latitude, longitude);</span>
+
+                // Handles the redirection to city weather detials
+<span class="fc" id="L118">                showWeather.setOnClickListener(new View.OnClickListener(){</span>
+                    public void onClick(View v){
+<span class="fc" id="L120">                        Log.v(&quot;Render Start&quot;, &quot;Weather activity launched.&quot;);</span>
+<span class="fc" id="L121">                        Intent intent = new Intent(MainActivity.this, WeatherActivity.class);</span>
+<span class="fc" id="L122">                        intent.putExtra(&quot;city&quot;, cityname);</span>
+<span class="fc" id="L123">                        intent.putExtra(&quot;lat&quot;, latitude);</span>
+<span class="fc" id="L124">                        intent.putExtra(&quot;lon&quot;, longitude);</span>
+<span class="fc" id="L125">                        intent.putExtra(&quot;account&quot;, account);</span>
+<span class="fc" id="L126">                        startActivity(intent);</span>
+<span class="fc" id="L127">                    }</span>
+                });
+                // Handles the redirection to city details
+<span class="fc" id="L130">                showDetails.setOnClickListener(new View.OnClickListener() {</span>
+                    public void onClick(View v){
+<span class="nc" id="L132">                        Intent intent = new Intent(MainActivity.this , MapsActivity.class);</span>
+<span class="nc" id="L133">                        intent.putExtra(&quot;city&quot;, cityname);</span>
+<span class="nc" id="L134">                        intent.putExtra(&quot;lat&quot;,latitude);</span>
+<span class="nc" id="L135">                        intent.putExtra(&quot;lon&quot;,longitude);</span>
+<span class="nc" id="L136">                        intent.putExtra(&quot;account&quot;, account);</span>
+<span class="nc" id="L137">                        startActivity(intent);</span>
+<span class="nc" id="L138">                    }</span>
+                });
+
+                // Configure buttons and text
+<span class="fc" id="L142">                city.setText(cityname);</span>
+<span class="fc" id="L143">                city.setWidth(500);</span>
+
+<span class="fc" id="L145">                showDetails.setText(&quot;Map&quot;);</span>
+<span class="fc" id="L146">                showWeather.setText(&quot;Weather&quot;);</span>
+<span class="fc" id="L147">                spacer.setWidth(30);</span>
+
+
+                // Set up layout
+<span class="fc" id="L151">                row.setOrientation(LinearLayout.HORIZONTAL);</span>
+<span class="fc" id="L152">                row.setPadding(20,0,0,0);</span>
+
+                //add items to the horizontal layout
+<span class="fc" id="L155">                row.addView(city);</span>
+<span class="fc" id="L156">                row.addView(showWeather);</span>
+<span class="fc" id="L157">                row.addView(spacer); //adding a blank textview to space out the buttons</span>
+<span class="fc" id="L158">                row.addView(showDetails);</span>
+<span class="fc" id="L159">                linlay.addView(row);</span>
+<span class="fc" id="L160">                cursor.moveToNext();</span>
+<span class="fc" id="L161">            }</span>
+        }
+<span class="fc" id="L163">        cursor.close();</span>
+
+<span class="fc" id="L165">    }</span>
+
+    //Sets the activity's theme based on the user's saved preference.
+    private Account getAccountFromPreferences() {
+<span class="fc" id="L169">        SharedPreferences sharedPreferences = getSharedPreferences(&quot;app_preferences&quot;, MODE_PRIVATE);</span>
+<span class="fc" id="L170">        String accountName = sharedPreferences.getString(&quot;account_name&quot;, null);</span>
+        // Retrieve more info if necessary
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (accountName != null) {</span>
+<span class="fc" id="L173">            return new Account(accountName, getString(R.string.account_type));</span>
+        }
+<span class="nc" id="L175">        return null;</span>
+    }
+
+    // Function to handle adding cities to the user's list
+    @Override
+    public void onClick(View view) {
+        Intent intent;
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        if (view.getId() == R.id.buttonAddCity) {</span>
+<span class="fc" id="L183">            intent = new Intent(this, AddCityActivity.class);</span>
+//            intent.putExtra(&quot;username&quot;, username);
+<span class="fc" id="L185">            intent.putExtra(&quot;account&quot;, account);</span>
+<span class="fc" id="L186">            startActivity(intent);</span>
+        }
+<span class="fc" id="L188">    }</span>
+
+    //Function to refresh the main page when back button is pressed (refreshes city list)
+    @Override
+    public void onRestart()
+    {
+<span class="fc" id="L194">        super.onRestart();</span>
+<span class="fc" id="L195">        finish();</span>
+<span class="fc" id="L196">        startActivity(getIntent());</span>
+<span class="fc" id="L197">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>

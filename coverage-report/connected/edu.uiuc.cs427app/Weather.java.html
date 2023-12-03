@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Weather.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">edu.uiuc.cs427app</a> &gt; <span class="el_source">Weather.java</span></div><h1>Weather.java</h1><pre class="source lang-java linenums">package edu.uiuc.cs427app;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
+
+import org.json.JSONObject;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+/**
+ * Weather routine to add or update database with current weather information using &quot;api.weatherapi&quot;.
+ */
+<span class="nc" id="L17">public class Weather {</span>
+    /**
+     * Weather server URL, used as source for weather information.
+     */
+    private static final String FORECAST_URL = &quot;https://api.weatherapi.com/v1/forecast.json&quot;;
+    /**
+     * API key to the &quot;api.weatherapi&quot; weather server.
+     */
+    private static final String API_KEY = &quot;1c9ca48edcd6459aaa514033233110&quot;;
+
+    /**
+     * Routine to fetch current weather information for a given city and store metrics into database.
+     *
+     * @param context this application's context
+     * @param cityName name of city to query weather server
+     * @param latitude latitude of city to query weather server
+     * @param longitude longitude of city to query weather server
+     */
+    public static void fetch(Context context, String cityName, double latitude, double longitude) {
+<span class="fc" id="L36">        String solo_name = cityName.split(&quot;,&quot;, 2)[0];</span>
+<span class="fc" id="L37">        new Thread(new Runnable() {</span>
+            @Override
+            public void run() {
+                // Constructing the API URL with parameters
+<span class="fc" id="L41">                String apiUrl = FORECAST_URL + &quot;?key=&quot; + API_KEY + &quot;&amp;q=&quot; + latitude +&quot;,&quot;+longitude+ &quot;&amp;days=1&quot; + &quot;&amp;aqi=yes&quot;;</span>
+                // Creating an instance of OkHttpClient for making HTTP requests
+<span class="fc" id="L43">                OkHttpClient client = new OkHttpClient();</span>
+                // Building a request with the constructed URL
+<span class="fc" id="L45">                Request request = new Request.Builder()</span>
+<span class="fc" id="L46">                        .url(apiUrl)</span>
+<span class="fc" id="L47">                        .build();</span>
+
+                try {
+                    // Executing the HTTP request and getting the response
+<span class="fc" id="L51">                    Response response = client.newCall(request).execute();</span>
+                    // Checking if the response was successful
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">                    if (response.isSuccessful()) {</span>
+                        // Extracting the response body as a string
+<span class="fc" id="L55">                        String responseBody = response.body().string();</span>
+                        // Parsing the response body as a JSON object
+<span class="fc" id="L57">                        JSONObject json = new JSONObject(responseBody);</span>
+
+                        // Extract weather information from the JSON response
+<span class="fc" id="L60">                        String city = json.getJSONObject(&quot;location&quot;).getString(&quot;name&quot;);</span>
+<span class="fc" id="L61">                        double temperature = json.getJSONObject(&quot;current&quot;).getDouble(&quot;temp_c&quot;);</span>
+
+                        // This temperature range can exclude the current 'temperature' due to polling/predictions. Consider manually setting a min/max using the range and current temps
+<span class="fc" id="L64">                        double temperatureMax = json.getJSONObject(&quot;forecast&quot;).getJSONArray(&quot;forecastday&quot;).getJSONObject(0).getJSONObject(&quot;day&quot;).getDouble(&quot;maxtemp_c&quot;);</span>
+<span class="fc" id="L65">                        double temperatureMin = json.getJSONObject(&quot;forecast&quot;).getJSONArray(&quot;forecastday&quot;).getJSONObject(0).getJSONObject(&quot;day&quot;).getDouble(&quot;mintemp_c&quot;);</span>
+
+<span class="fc" id="L67">                        String weatherDescription = json.getJSONObject(&quot;current&quot;).getJSONObject(&quot;condition&quot;).getString(&quot;text&quot;);</span>
+<span class="fc" id="L68">                        System.out.println(weatherDescription);</span>
+
+<span class="fc" id="L70">                        double wind = json.getJSONObject(&quot;current&quot;).getDouble(&quot;wind_mph&quot;);</span>
+<span class="fc" id="L71">                        System.out.println(wind);</span>
+
+<span class="fc" id="L73">                        double humidity = json.getJSONObject(&quot;current&quot;).getDouble(&quot;humidity&quot;);</span>
+<span class="fc" id="L74">                        System.out.println(humidity);</span>
+
+<span class="fc" id="L76">                        double dewPoint = json.getJSONObject(&quot;forecast&quot;).getJSONArray(&quot;forecastday&quot;).getJSONObject(0).getJSONArray(&quot;hour&quot;).getJSONObject(0).getDouble(&quot;dewpoint_c&quot;);</span>
+<span class="fc" id="L77">                        System.out.println(dewPoint);</span>
+
+<span class="fc" id="L79">                        double UV = json.getJSONObject(&quot;current&quot;).getDouble(&quot;uv&quot;);</span>
+<span class="fc" id="L80">                        System.out.println(UV);</span>
+
+<span class="fc" id="L82">                        double Air = json.getJSONObject(&quot;current&quot;).getJSONObject(&quot;air_quality&quot;).getDouble(&quot;pm2_5&quot;);</span>
+<span class="fc" id="L83">                        System.out.println(Air);</span>
+
+<span class="fc" id="L85">                        double Precipitation = json.getJSONObject(&quot;current&quot;).getDouble(&quot;precip_in&quot;);</span>
+<span class="fc" id="L86">                        System.out.println(Precipitation);</span>
+
+<span class="fc" id="L88">                        double PrecipitationChance = json.getJSONObject(&quot;forecast&quot;).getJSONArray(&quot;forecastday&quot;).getJSONObject(0).getJSONArray(&quot;hour&quot;).getJSONObject(0).getDouble(&quot;chance_of_rain&quot;);</span>
+<span class="fc" id="L89">                        System.out.println(PrecipitationChance);</span>
+
+                        // store data in database
+                        //setup up the ContentValues object with city data to send to the db
+<span class="fc" id="L93">                        ContentValues values = new ContentValues();</span>
+<span class="fc" id="L94">                        values.put(DataStore.WeatherEntry.COL_CITY, cityName);</span>
+<span class="fc" id="L95">                        values.put(DataStore.WeatherEntry.COL_TEMPERATURE, temperature);</span>
+<span class="fc" id="L96">                        values.put(DataStore.WeatherEntry.COL_TEMPERATUREMAX, temperatureMax);</span>
+<span class="fc" id="L97">                        values.put(DataStore.WeatherEntry.COL_TEMPERATUREMIN, temperatureMin);</span>
+<span class="fc" id="L98">                        values.put(DataStore.WeatherEntry.COL_DESCRIPTION, weatherDescription);</span>
+<span class="fc" id="L99">                        values.put(DataStore.WeatherEntry.COL_WINDSPEED, wind);</span>
+<span class="fc" id="L100">                        values.put(DataStore.WeatherEntry.COL_HUMIDITY, humidity);</span>
+<span class="fc" id="L101">                        values.put(DataStore.WeatherEntry.COL_DEWPOINT, dewPoint);</span>
+<span class="fc" id="L102">                        values.put(DataStore.WeatherEntry.COL_UV, UV);</span>
+<span class="fc" id="L103">                        values.put(DataStore.WeatherEntry.COL_AIRINDEX, Air);</span>
+<span class="fc" id="L104">                        values.put(DataStore.WeatherEntry.COL_PRECIPITATION, Precipitation);</span>
+<span class="fc" id="L105">                        values.put(DataStore.WeatherEntry.COL_PRECIPITATIONCHANCE, PrecipitationChance);</span>
+
+
+                        //query the db to see if the city is already there for the given user
+<span class="fc" id="L109">                        String selection = DataStore.WeatherEntry.COL_CITY+&quot; = '&quot;+cityName+&quot;'&quot;;</span>
+<span class="fc" id="L110">                        Cursor cursor = context.getContentResolver().query(DataStore.WeatherEntry.CONTENT_URI, null, selection, null, null);</span>
+                        //only insert the city if not already in the users citylist, i.e. the query result is empty
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">                        if (cursor.getCount()==0){</span>
+                            // inserting into database through content URI
+<span class="nc" id="L114">                            context.getContentResolver().insert(DataStore.WeatherEntry.CONTENT_URI, values);</span>
+
+                            // release the cursor and jump back to the current Activity
+<span class="nc" id="L117">                            cursor.close();</span>
+
+                        } else {
+                            //pop a message about the duplicate city
+<span class="fc" id="L121">                            context.getContentResolver().update(DataStore.WeatherEntry.CONTENT_URI, values, selection, null);</span>
+                            // release the cursor and jump back to the current Activity
+<span class="fc" id="L123">                            cursor.close();</span>
+                        }
+
+                    } else {
+                        // Handle API request error
+                        // Optionally, use Handler to show an error message on the main thread
+                    }
+<span class="nc" id="L130">                } catch (Exception e) {</span>
+<span class="nc" id="L131">                    e.printStackTrace();</span>
+<span class="nc" id="L132">                    Log.e(&quot;WeatherActivity&quot;, &quot;Network error: &quot; + e.getMessage());</span>
+                    // Handle network or other errors
+                    // Optionally, use Handler to show an error message on the main thread
+<span class="fc" id="L135">                }</span>
+<span class="fc" id="L136">            }</span>
+<span class="fc" id="L137">        }).start();</span>
+<span class="fc" id="L138">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 7.4.2</div></body></html>
