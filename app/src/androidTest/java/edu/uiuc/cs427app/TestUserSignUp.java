@@ -249,7 +249,7 @@ public class TestUserSignUp {
 
         // Sleep to slow time
         try {
-            Thread.sleep(waitTimer * 2);
+            Thread.sleep(waitTimer );
         } catch (InterruptedException e) {
             System.out.println("Interrupted!");
         }
@@ -264,6 +264,13 @@ public class TestUserSignUp {
                                 3),
                         isDisplayed()));
         materialButton.perform(click());
+
+        // Sleep to slow time
+        try {
+            Thread.sleep(waitTimer );
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted!");
+        }
 
         // Assert that the sign up failed
         // Assert that we remain on the Authentication Page
@@ -402,7 +409,7 @@ public class TestUserSignUp {
     @Before
     public void initializeEnvironment() {
         Log.v("INITIALIZE", "start initialization");
-        String testUsername = "helloEnvironment";
+        String testUsername = "existingUser";
         String testPassword = "password";
         Context context = ApplicationProvider.getApplicationContext();
         AccountManager accountManager = AccountManager.get(context);
@@ -419,8 +426,8 @@ public class TestUserSignUp {
     @After
     public void resetEnvironment() {
         Log.v("RESET", "start cleanup");
-        String removeUser1 = "newUser";
-        String removeUser2 = "helloEnvironment";
+        String removeUser1 = "existingUser";
+        String removeUser2 = "newUser";
         Context context = ApplicationProvider.getApplicationContext();
         AccountManager accountManager = AccountManager.get(context);
         Account accountToRemove1 = new Account(removeUser1, context.getString(R.string.account_type));
