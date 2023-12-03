@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Root;
@@ -34,6 +35,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +48,172 @@ public class TestUserSignUp {
     @Rule
     public ActivityScenarioRule<CreateAccountActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(CreateAccountActivity.class);
+
+    // Test that a user sign up fails upon submitting an empty account (e.g. empty)
+    @Test
+    public void testUserSignUpFailsEmpty() {
+        // Enter test inputs
+        String testUsername = "test";
+        String testPassword = "test";
+        String testToastMessage = "Username or password is missing! Please sign up with a valid username or password.";
+        String expectedActivitySignUp = "Authentication Page";
+        long waitTimer = 10000; // in millis (ms)
+
+        // Click on the sign up button
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.buttonSignUp), withText("sign up"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                3),
+                        isDisplayed()));
+        materialButton.perform(click());
+
+        // Assert that the sign up failed
+        // Assert that we remain on the Authentication Page
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.textViewHeader), withText("Authentication Page"),
+                        withParent(allOf(withId(R.id.login),
+                                withParent(IsInstanceOf.<View>instanceOf(ViewGroup.class)))),
+                        isDisplayed()));
+        textView.check(matches(withText(expectedActivitySignUp)));
+
+        // Assert that the toast message indicates a failed account creation
+        ViewInteraction toastMessage = onView(withText(testToastMessage)).inRoot(new ToastMatcher());
+        toastMessage.check(matches(isDisplayed()));
+
+        // Sleep to slow time
+        try {
+            Thread.sleep(waitTimer);
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted!");
+        }
+
+        // Enter text in username field
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.inputUsername),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                0),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText(testUsername), closeSoftKeyboard());
+
+        // Click on the sign up button
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.buttonSignUp), withText("sign up"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                3),
+                        isDisplayed()));
+        materialButton2.perform(click());
+
+        // Assert that the sign up failed
+        // Assert that we remain on the Authentication Page
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.textViewHeader), withText("Authentication Page"),
+                        withParent(allOf(withId(R.id.login),
+                                withParent(IsInstanceOf.<View>instanceOf(ViewGroup.class)))),
+                        isDisplayed()));
+        textView2.check(matches(withText(expectedActivitySignUp)));
+
+        // Assert that the toast message indicates a failed account creation
+        ViewInteraction toastMessage2 = onView(withText(testToastMessage)).inRoot(new ToastMatcher());
+        toastMessage2.check(matches(isDisplayed()));
+
+        // Sleep to slow time
+        try {
+            Thread.sleep(waitTimer);
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted!");
+        }
+
+        // Click username box
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.inputUsername), withText("test"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                0),
+                        isDisplayed()));
+        appCompatEditText2.perform(click());
+
+        // Remove text from username field
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.inputUsername), withText("test"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                0),
+                        isDisplayed()));
+        appCompatEditText3.perform(replaceText(""));
+
+        // Remove keyboard from view
+        ViewInteraction appCompatEditText4 = onView(
+                allOf(withId(R.id.inputUsername),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                0),
+                        isDisplayed()));
+        appCompatEditText4.perform(closeSoftKeyboard());
+
+        // Enter text in password field
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.inputPassword),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                1),
+                        isDisplayed()));
+        appCompatEditText5.perform(replaceText(testPassword), closeSoftKeyboard());
+
+        // Click on the sign up button
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.buttonSignUp), withText("sign up"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.login),
+                                        1),
+                                3),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        // Assert that the sign up failed
+        // Assert that we remain on the Authentication Page
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.textViewHeader), withText("Authentication Page"),
+                        withParent(allOf(withId(R.id.login),
+                                withParent(IsInstanceOf.<View>instanceOf(ViewGroup.class)))),
+                        isDisplayed()));
+        textView3.check(matches(withText(expectedActivitySignUp)));
+
+        // Assert that the toast message indicates a failed account creation
+        ViewInteraction toastMessage3 = onView(withText(testToastMessage)).inRoot(new ToastMatcher());
+        toastMessage3.check(matches(isDisplayed()));
+
+        // Sleep to slow time
+        try {
+            Thread.sleep(waitTimer);
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted!");
+        }
+
+        // Delay at the end
+        try {
+            Thread.sleep(waitTimer / 2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Test that a user sign up fails upon submitting an invalid account (e.g. existing)
     @Test
@@ -81,7 +249,7 @@ public class TestUserSignUp {
 
         // Sleep to slow time
         try {
-            Thread.sleep(waitTimer);
+            Thread.sleep(waitTimer * 2);
         } catch (InterruptedException e) {
             System.out.println("Interrupted!");
         }
@@ -134,7 +302,7 @@ public class TestUserSignUp {
         String testToastMessage = "Account created! Please sign in with your username and password.";
         String expectedActivitySignUp = "Authentication Page";
         String expectedActivitySignIn = "  CS427 Project App";
-        long waitTimer = 2000; // in millis (ms)
+        long waitTimer = 4000; // in millis (ms)
 
 
         // Enter text in username field
@@ -230,13 +398,36 @@ public class TestUserSignUp {
         }
     }
 
+    // Set up test environment with required accounts
+    @Before
+    public void initializeEnvironment() {
+        Log.v("INITIALIZE", "start initialization");
+        String testUsername = "helloEnvironment";
+        String testPassword = "password";
+        Context context = ApplicationProvider.getApplicationContext();
+        AccountManager accountManager = AccountManager.get(context);
+        Account accountToAdd = new Account(testUsername, context.getString(R.string.account_type));
+        // Checks if the account was successfully added to the account manager, if so,
+        if (accountManager.addAccountExplicitly(accountToAdd, testPassword, null)) {
+            Log.v("TestAccountCreate", "account created, username="+ testUsername); // Account creation succeeded
+        } else {
+            Log.v("TestAccountCreate", "account NOT created, username="+ testUsername);// Account creation failed
+        }
+    }
+
+    // Clean up environment of newly created accounts
     @After
     public void resetEnvironment() {
         Log.v("RESET", "start cleanup");
+        String removeUser1 = "newUser";
+        String removeUser2 = "helloEnvironment";
         Context context = ApplicationProvider.getApplicationContext();
         AccountManager accountManager = AccountManager.get(context);
-        Account accountToRemove = new Account("newUser", context.getString(R.string.account_type));
-        accountManager.removeAccount(accountToRemove, null, null, null);
+        Account accountToRemove1 = new Account(removeUser1, context.getString(R.string.account_type));
+        Account accountToRemove2 = new Account(removeUser2, context.getString(R.string.account_type));
+        accountManager.removeAccount(accountToRemove1, null, null, null);
+        accountManager.removeAccount(accountToRemove2, null, null, null);
+
     }
 
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -197,10 +198,19 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
      * Creates an account by reading the username and password input into the authentication page.
      */
     private void createAccount() {
-        // Instance a new account to be added to the account manager
+        // Collect account information for creation
         mUsername = mAccountNameView.getText().toString();
         mPassword = mAccountPassView.getText().toString();
-        mCurrentAccount = new Account(mUsername, this.getString(R.string.account_type));
+
+        // Instance a new account to be added to the account manager
+        // Check for empty fields before continuing further
+        if (mUsername.isEmpty() || mPassword.isEmpty()) {
+            Toast.makeText(this, "Username or password is missing! Please sign up with a valid username or password.", Toast.LENGTH_LONG).show();
+            Log.v("AccountCreate", "account NOT created, username or password missing.");// Account creation failed
+            return;
+        } else {
+            mCurrentAccount = new Account(mUsername, this.getString(R.string.account_type)); // create abstract account if input is valid
+        }
 
         // Checks if the account was successfully added to the account manager, if so,
         if (mAccountManager.addAccountExplicitly(mCurrentAccount, mPassword, null)) {

@@ -101,6 +101,9 @@ public class DeleteCityTest {
         // Delete City
         onView(withText("DELETE")).perform(click());
 
+        // Sleep to slow time
+        try {Thread.sleep(2000);} catch(InterruptedException e) {System.out.println("Interrupted!");}
+
         //Check that city is removed from the add/delete city page
         onView(withId(R.id.deleteCityListLayout)).check(matches(not(hasDescendant(withText("Los Angeles, CA, USA")))));
 
